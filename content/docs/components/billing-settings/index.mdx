@@ -1,0 +1,113 @@
+---
+title: Billing Settings
+---
+
+import { BillingSettingsDemo } from '@/registry/billingsdk/demo/billing-settings-demo';
+
+The Billing Settings component allows users to manage their billing preferences, including contact information, currency preferences, and notification settings.
+
+<Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
+  <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
+    <PreviewComponents registryName="billingsdk">
+      <BillingSettingsDemo />
+    </PreviewComponents>
+  </Tab>
+
+<Tab value="Code" className="mt-3">
+	<include
+		cwd
+		lang="tsx"
+		meta='title="src/registry/billingsdk/demo/billing-settings-demo.tsx"'
+	>
+		src/registry/billingsdk/demo/billing-settings-demo.tsx
+	</include>
+</Tab>
+
+</Tabs>
+
+```tsx
+import { BillingSettings } from '@/components/billingsdk/billing-settings';
+
+<BillingSettings
+	title="Billing Settings"
+	description="Manage your billing preferences and settings"
+	initialData={{
+		email: 'user@example.com',
+		name: 'John Doe',
+		autoRenewal: true,
+		invoiceEmails: true,
+		promotionalEmails: false,
+		currency: 'USD',
+		taxId: 'EU123456789',
+	}}
+	onSave={(data) => {
+		console.log('Saved billing settings:', data);
+	}}
+	onCancel={() => {
+		console.log('Cancelled billing settings changes');
+	}}
+/>;
+```
+
+## Props
+
+| Prop        | Type                  | Description                                       |
+| ----------- | --------------------- | ------------------------------------------------- |
+| className   | `string`              | Additional CSS classes to apply to the component  |
+| title       | `string`              | Title for the billing settings section            |
+| description | `string`              | Description for the billing settings section      |
+| initialData | `BillingSettingsData` | Initial data to populate the form                 |
+| onSave      | `(data) => void`      | Function called when the form is submitted        |
+| onCancel    | `() => void`          | Function called when the cancel button is clicked |
+
+### BillingSettingsData Object
+
+| Property          | Type      | Description                           |
+| ----------------- | --------- | ------------------------------------- |
+| email             | `string`  | User's billing email address          |
+| name              | `string`  | User's full name                      |
+| autoRenewal       | `boolean` | Whether subscription auto-renews      |
+| invoiceEmails     | `boolean` | Whether to receive invoice emails     |
+| promotionalEmails | `boolean` | Whether to receive promotional emails |
+| currency          | `string`  | Preferred currency for billing        |
+| taxId             | `string`  | Tax identification number (optional)  |
+
+```tsx
+<BillingSettings
+	title="Account Billing Settings"
+	description="Update your billing information and preferences"
+	initialData={{
+		email: 'billing@company.com',
+		name: 'Jane Smith',
+		autoRenewal: true,
+		invoiceEmails: true,
+		promotionalEmails: true,
+		currency: 'EUR',
+		taxId: 'DE123456789',
+	}}
+	onSave={(settings) => {
+		// Handle saving the settings
+		saveBillingSettings(settings);
+	}}
+	onCancel={() => {
+		// Handle cancel action
+		resetForm();
+	}}
+/>
+```
+
+<div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+	<div className="flex items-center justify-between">
+		<div>
+			<span className="text-sm text-gray-500 dark:text-gray-400">
+				Created by{' '}
+				<a
+					href="https://github.com/sapatmohit"
+					className="text-blue-600 hover:underline dark:text-blue-400"
+				>
+					Mohit Sapat
+				</a>
+			</span>
+		</div>
+	</div>
+</div>

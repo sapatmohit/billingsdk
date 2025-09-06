@@ -1,0 +1,125 @@
+---
+title: Alerts Banner
+---
+
+import { AlertsBannerDemo } from '@/registry/billingsdk/demo/alerts-banner-demo';
+
+The Alerts Banner component displays important notifications and warnings to users, such as high usage alerts or plan expiration warnings. It supports different alert types and includes action buttons and dismiss functionality.
+
+<Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
+  <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
+    <PreviewComponents registryName="billingsdk">
+      <AlertsBannerDemo />
+    </PreviewComponents>
+  </Tab>
+
+<Tab value="Code" className="mt-3">
+	<include
+		cwd
+		lang="tsx"
+		meta='title="src/registry/billingsdk/demo/alerts-banner-demo.tsx"'
+	>
+		src/registry/billingsdk/demo/alerts-banner-demo.tsx
+	</include>
+</Tab>
+
+</Tabs>
+
+```tsx
+import { AlertsBanner } from '@/components/billingsdk/alerts-banner';
+
+<AlertsBanner
+	alerts={[
+		{
+			id: '1',
+			type: 'warning',
+			title: 'High Usage Alert',
+			message:
+				"You've used 90% of your API quota. Upgrade to avoid service interruption.",
+			actionText: 'Upgrade Plan',
+			onAction: () => console.log('Upgrade clicked'),
+			dismissible: true,
+		},
+	]}
+	onDismiss={(id) => console.log('Dismissed alert', id)}
+/>;
+```
+
+## Props
+
+| Prop      | Type                   | Description                                      |
+| --------- | ---------------------- | ------------------------------------------------ |
+| className | `string`               | Additional CSS classes to apply to the component |
+| alerts    | `AlertItem[]`          | Array of alerts to display                       |
+| onDismiss | `(id: string) => void` | Function called when an alert is dismissed       |
+
+### AlertItem Object
+
+| Property    | Type                                          | Description                                              |
+| ----------- | --------------------------------------------- | -------------------------------------------------------- |
+| id          | `string`                                      | Unique identifier for the alert                          |
+| type        | `"warning" \| "info" \| "success" \| "error"` | Type of alert                                            |
+| title       | `string`                                      | Title of the alert                                       |
+| message     | `string`                                      | Message content of the alert                             |
+| actionText  | `string`                                      | Text for the action button (optional)                    |
+| onAction    | `() => void`                                  | Function called when action button is clicked (optional) |
+| dismissible | `boolean`                                     | Whether the alert can be dismissed (default: true)       |
+
+```tsx
+<AlertsBanner
+	alerts={[
+		{
+			id: 'usage-warning',
+			type: 'warning',
+			title: 'High Usage Alert',
+			message:
+				"You've used 90% of your API quota. Upgrade to avoid service interruption.",
+			actionText: 'Upgrade Plan',
+			onAction: () => {
+				// Handle upgrade action
+				router.push('/billing/upgrade');
+			},
+			dismissible: true,
+		},
+		{
+			id: 'new-feature',
+			type: 'info',
+			title: 'New Feature Available',
+			message: 'Check out our new analytics dashboard for better insights.',
+			actionText: 'View Dashboard',
+			onAction: () => {
+				// Handle view dashboard action
+				router.push('/analytics');
+			},
+			dismissible: true,
+		},
+		{
+			id: 'payment-success',
+			type: 'success',
+			title: 'Payment Successful',
+			message: 'Your payment of $29.00 has been processed successfully.',
+			dismissible: true,
+		},
+	]}
+	onDismiss={(alertId) => {
+		// Handle alert dismissal
+		dismissAlert(alertId);
+	}}
+/>
+```
+
+<div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+	<div className="flex items-center justify-between">
+		<div>
+			<span className="text-sm text-gray-500 dark:text-gray-400">
+				Created by{' '}
+				<a
+					href="https://github.com/sapatmohit"
+					className="text-blue-600 hover:underline dark:text-blue-400"
+				>
+					Mohit Sapat
+				</a>
+			</span>
+		</div>
+	</div>
+</div>

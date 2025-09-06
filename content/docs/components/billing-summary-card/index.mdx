@@ -1,0 +1,90 @@
+---
+title: Billing Summary Card
+---
+
+import { BillingSummaryCardDemo } from '@/registry/billingsdk/demo/billing-summary-card-demo';
+
+The Billing Summary Card component displays a user's current subscription plan, pricing information, renewal date, and payment method. It also provides an upgrade button for users to change their plan.
+
+<Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
+  <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
+    <PreviewComponents registryName="billingsdk">
+      <BillingSummaryCardDemo />
+    </PreviewComponents>
+  </Tab>
+
+<Tab value="Code" className="mt-3">
+	<include
+		cwd
+		lang="tsx"
+		meta='title="src/registry/billingsdk/demo/billing-summary-card-demo.tsx"'
+	>
+		src/registry/billingsdk/demo/billing-summary-card-demo.tsx
+	</include>
+</Tab>
+
+</Tabs>
+
+```tsx
+import { BillingSummaryCard } from '@/components/billingsdk/billing-summary-card';
+
+<BillingSummaryCard
+	plan={{
+		name: 'Pro',
+		price: '$29',
+		period: 'month',
+		renewalDate: 'Oct 15, 2025',
+		paymentMethod: 'Visa ending in 4242',
+	}}
+	onUpgrade={() => console.log('Upgrade clicked')}
+/>;
+```
+
+## Props
+
+| Prop      | Type         | Description                                        |
+| --------- | ------------ | -------------------------------------------------- |
+| className | `string`     | Additional CSS classes to apply to the card        |
+| plan      | `Plan`       | Object containing plan information                 |
+| onUpgrade | `() => void` | Function called when the upgrade button is clicked |
+
+### Plan Object
+
+| Property      | Type     | Description                            |
+| ------------- | -------- | -------------------------------------- |
+| name          | `string` | Name of the current plan               |
+| price         | `string` | Price of the plan                      |
+| period        | `string` | Billing period (e.g., "month", "year") |
+| renewalDate   | `string` | Date when the subscription renews      |
+| paymentMethod | `string` | Description of the payment method      |
+
+```tsx
+<BillingSummaryCard
+	plan={{
+		name: 'Enterprise',
+		price: '$99',
+		period: 'month',
+		renewalDate: 'Nov 1, 2025',
+		paymentMethod: 'Mastercard ending in 5555',
+	}}
+	onUpgrade={() => {
+		// Handle upgrade logic
+	}}
+/>
+```
+
+<div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+	<div className="flex items-center justify-between">
+		<div>
+			<span className="text-sm text-gray-500 dark:text-gray-400">
+				Created by{' '}
+				<a
+					href="https://github.com/sapatmohit"
+					className="text-blue-600 hover:underline dark:text-blue-400"
+				>
+					Mohit Sapat
+				</a>
+			</span>
+		</div>
+	</div>
+</div>
