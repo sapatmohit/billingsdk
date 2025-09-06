@@ -24,6 +24,14 @@ import { UpdatePlanDialogDemo } from '@/components/update-plan-dialog-demo';
 import UsageMeterCircleDemo from '@/components/usage-meter-circle-demo';
 import UsageMeterLinearDemo from '@/components/usage-meter-linear-demo';
 import UsageTableDemo from '@/components/usage-table-demo';
+// Billing & Usage Components
+import AlertsBannerDemo from '@/components/billingsdk/alerts-banner-demo';
+import BillingSettingsDemo from '@/components/billingsdk/billing-settings-demo';
+import BillingSummaryCardDemo from '@/components/billingsdk/billing-summary-card-demo';
+import DetailedUsageTableDemo from '@/components/billingsdk/detailed-usage-table-demo';
+import InvoiceHistoryTableDemo from '@/components/billingsdk/invoice-history-table-demo';
+import PaymentMethodCardDemo from '@/components/billingsdk/payment-method-card-demo';
+import UpcomingChargesDemo from '@/components/billingsdk/upcoming-charges-demo';
 import * as TabsComponents from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
@@ -60,5 +68,13 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		PaymentMethodSelectorDemo,
 		PaymentMethodManagerDemo,
 		PaymentSuccessDialogDemo,
+		// Billing & Usage Components
+		AlertsBannerDemo,
+		BillingSettingsDemo,
+		BillingSummaryCardDemo,
+		DetailedUsageTableDemo,
+		InvoiceHistoryTableDemo,
+		PaymentMethodCardDemo,
+		UpcomingChargesDemo,
 	};
 }
