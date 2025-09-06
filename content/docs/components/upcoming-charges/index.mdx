@@ -1,0 +1,115 @@
+---
+title: Upcoming Charges
+---
+
+import { UpcomingChargesDemo } from '@/registry/billingsdk/demo/upcoming-charges-demo';
+
+The Upcoming Charges component displays information about upcoming billing cycles, including the next billing date, total amount, and a breakdown of individual charges.
+
+<Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
+  <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
+    <PreviewComponents registryName="billingsdk">
+      <UpcomingChargesDemo />
+    </PreviewComponents>
+  </Tab>
+
+<Tab value="Code" className="mt-3">
+	<include
+		cwd
+		lang="tsx"
+		meta='title="src/registry/billingsdk/demo/upcoming-charges-demo.tsx"'
+	>
+		src/registry/billingsdk/demo/upcoming-charges-demo.tsx
+	</include>
+</Tab>
+
+</Tabs>
+
+```tsx
+import { UpcomingCharges } from '@/components/billingsdk/upcoming-charges';
+
+<UpcomingCharges
+	title="Next Billing Cycle"
+	description="Your upcoming charges for the next billing period"
+	nextBillingDate="Oct 15, 2025"
+	totalAmount="$39.50"
+	charges={[
+		{
+			id: '1',
+			description: 'Pro Plan (Monthly)',
+			amount: '$29.00',
+			date: 'Oct 15, 2025',
+			type: 'recurring',
+		},
+		{
+			id: '2',
+			description: 'Additional Storage (10GB)',
+			amount: '$5.00',
+			date: 'Oct 15, 2025',
+			type: 'prorated',
+		},
+	]}
+/>;
+```
+
+## Props
+
+| Prop            | Type           | Description                                      |
+| --------------- | -------------- | ------------------------------------------------ |
+| className       | `string`       | Additional CSS classes to apply to the component |
+| title           | `string`       | Title for the upcoming charges section           |
+| description     | `string`       | Description for the upcoming charges section     |
+| nextBillingDate | `string`       | Date of the next billing cycle                   |
+| totalAmount     | `string`       | Total amount for the next billing cycle          |
+| charges         | `ChargeItem[]` | Array of upcoming charges                        |
+
+### ChargeItem Object
+
+| Property    | Type                                      | Description                      |
+| ----------- | ----------------------------------------- | -------------------------------- |
+| id          | `string`                                  | Unique identifier for the charge |
+| description | `string`                                  | Description of the charge        |
+| amount      | `string`                                  | Amount of the charge             |
+| date        | `string`                                  | Date of the charge               |
+| type        | `"prorated" \| "recurring" \| "one-time"` | Type of charge                   |
+
+```tsx
+<UpcomingCharges
+	title="Upcoming Charges"
+	description="Charges for your next billing cycle"
+	nextBillingDate="November 1, 2025"
+	totalAmount="$149.99"
+	charges={[
+		{
+			id: 'ch_001',
+			description: 'Enterprise Plan (Annual)',
+			amount: '$119.99',
+			date: 'Nov 1, 2025',
+			type: 'recurring',
+		},
+		{
+			id: 'ch_002',
+			description: 'Additional Team Seats (5 seats)',
+			amount: '$30.00',
+			date: 'Nov 1, 2025',
+			type: 'prorated',
+		},
+	]}
+/>
+```
+
+<div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+	<div className="flex items-center justify-between">
+		<div>
+			<span className="text-sm text-gray-500 dark:text-gray-400">
+				Created by{' '}
+				<a
+					href="https://github.com/sapatmohit"
+					className="text-blue-600 hover:underline dark:text-blue-400"
+				>
+					Mohit Sapat
+				</a>
+			</span>
+		</div>
+	</div>
+</div>
