@@ -4,7 +4,7 @@ title: Payment Method Manager 2
 
 import { PaymentMethodManager2Demo } from '@/registry/billingsdk/demo/payment-method-manager-2-demo';
 
-The Payment Method Manager 2 component displays saved payment methods and provides actions to add, remove, or set a default payment method.
+The Payment Method Manager 2 component displays saved payment methods and provides actions to add, remove, edit, or set a default payment method.
 
 <Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
@@ -13,107 +13,44 @@ The Payment Method Manager 2 component displays saved payment methods and provid
     </PreviewComponents>
   </Tab>
 
-<Tab value="Code" className="mt-3">
-	<include
-		cwd
-		lang="tsx"
-		meta='title="src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx"'
-	>
-		src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx
-	</include>
-</Tab>
-
+  <Tab value="Code" className="mt-3">
+    <include
+      cwd
+      lang="tsx"
+      meta='title="src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx"'
+    >
+      src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx
+    </include>
+  </Tab>
 </Tabs>
-
-```tsx
-import { PaymentMethodCard } from '@/components/billingsdk/payment-method-card';
-
-<PaymentMethodCard
-	title="Saved Payment Methods"
-	description="Manage your payment methods"
-	paymentMethods={[
-		{
-			id: '1',
-			type: 'credit',
-			brand: 'Visa',
-			last4: '4242',
-			expiry: '12/2027',
-			isDefault: true,
-		},
-		{
-			id: '2',
-			type: 'credit',
-			brand: 'Mastercard',
-			last4: '5555',
-			expiry: '08/2026',
-			isDefault: false,
-		},
-	]}
-	onAdd={() => console.log('Add payment method')}
-	onRemove={(id) => console.log('Remove payment method', id)}
-	onSetDefault={(id) => console.log('Set default payment method', id)}
-/>;
-```
-
 ## Props
 
 | Prop           | Type                   | Description                                                  |
 | -------------- | ---------------------- | ------------------------------------------------------------ |
-| className      | `string`               | Additional CSS classes to apply to the component             |
-| title          | `string`               | Title for the payment methods section                        |
-| description    | `string`               | Description for the payment methods section                  |
-| paymentMethods | `PaymentMethod[]`      | Array of saved payment methods                               |
+| paymentMethods | `PaymentMethod2[]`     | Array of saved payment methods                               |
 | onAdd          | `() => void`           | Function called when add payment method button is clicked    |
+| onEdit         | `(id: string) => void` | Function called when edit payment method button is clicked   |
 | onRemove       | `(id: string) => void` | Function called when remove payment method button is clicked |
 | onSetDefault   | `(id: string) => void` | Function called when set default button is clicked           |
+| onViewDetails  | `(id: string) => void` | Function called when view details button is clicked          |
+| className      | `string`               | Additional CSS classes to apply to the component             |
+| isLoading      | `boolean`              | Whether the component is in a loading state                  |
+| error          | `string \| null`       | Error message to display if there was an error               |
 
-### PaymentMethod Object
+### Payment Method 2 Object
 
-| Property  | Type                | Description                                    |
-| --------- | ------------------- | ---------------------------------------------- |
-| id        | `string`            | Unique identifier for the payment method       |
-| type      | `"credit" \| "ach"` | Type of payment method                         |
-| brand     | `string` (optional) | Brand of the card (e.g., "Visa", "Mastercard") |
-| last4     | `string`            | Last 4 digits of the payment method            |
-| expiry    | `string` (optional) | Expiration date (for cards)                    |
-| isDefault | `boolean`           | Whether this is the default payment method     |
-
-```tsx
-<PaymentMethodCard
-	title="Payment Methods"
-	description="Your saved payment methods"
-	paymentMethods={[
-		{
-			id: 'pm_123',
-			type: 'credit',
-			brand: 'American Express',
-			last4: '1234',
-			expiry: '05/2028',
-			isDefault: true,
-		},
-		{
-       id: 'pm_456',
-       type: 'ach',
--      last4: '8765',
-+      bankName: 'Chase',
-+      routing: '*****123',
-       isDefault: false,
-     },
-	]}
-	onAdd={() => {
-		// Redirect to payment method addition flow
-		router.push('/settings/billing/add-payment-method');
-	}}
-	onRemove={(paymentMethodId) => {
-		// Remove the payment method
-		removePaymentMethod(paymentMethodId);
-	}}
-	onSetDefault={(paymentMethodId) => {
-		// Set as default payment method
-		setDefaultPaymentMethod(paymentMethodId);
-	}}
-/>
-```
+| Property       | Type                                  | Description                                    |
+| -------------- | ------------------------------------- | ---------------------------------------------- |
+| id             | `string`                              | Unique identifier for the payment method       |
+| type           | `"credit" \| "ach"`                   | Type of payment method                         |
+| last4          | `string`                              | Last 4 digits of the payment method            |
+| expiry         | `string` (optional)                   | Expiration date (for cards)                    |
+| isDefault      | `boolean`                             | Whether this is the default payment method     |
+| brand          | `string` (optional)                   | Brand of the card (e.g., "Visa", "Mastercard") |
+| bankName       | `string` (optional)                   | Name of the bank (for ACH accounts)            |
+| cardholderName | `string` (optional)                   | Name of the cardholder                         |
+| createdAt      | `string`                              | Date when the payment method was created       |
+| status         | `"active" \| "expired" \| "inactive"` | Status of the payment method                   |
 
 <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
 	<div className="flex items-center justify-between">

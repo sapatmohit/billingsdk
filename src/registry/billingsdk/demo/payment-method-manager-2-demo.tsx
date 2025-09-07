@@ -1,9 +1,28 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
 import {
 	PaymentMethodManager2,
 	type PaymentMethod2,
 } from '@/registry/billingsdk/payment-method-manager-2';
+import { Building, CreditCard } from 'lucide-react';
 import { useState } from 'react';
 
 export function PaymentMethodManager2Demo() {
@@ -74,10 +93,20 @@ export function PaymentMethodManager2Demo() {
 		},
 	]);
 
+	// State for add payment method dialog
+	const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+	const [newPaymentMethod, setNewPaymentMethod] = useState({
+		type: 'credit' as 'credit' | 'ach',
+		brand: '',
+		bankName: '',
+		last4: '',
+		expiry: '',
+		cardholderName: '',
+	});
+
 	const handleAdd = () => {
-		console.log('Add payment method');
-		// In a real app, this would redirect to a payment method addition flow
-		alert('Redirecting to add payment method flow...');
+		// Open the add payment method dialog
+		setIsAddDialogOpen(true);
 	};
 
 	const handleEdit = (id: string) => {
@@ -108,6 +137,55 @@ export function PaymentMethodManager2Demo() {
 		// In a real app, this might fetch additional details or open a detailed view
 	};
 
+	// Handle form input changes
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setNewPaymentMethod((prev) => ({ ...prev, [name]: value }));
+	};
+
+	// Handle select changes
+	const handleSelectChange = (name: string, value: string) => {
+		if (name === 'type') {
+			setNewPaymentMethod((prev) => ({
+				...prev,
+				[name]: value as 'credit' | 'ach',
+			}));
+		} else {
+			setNewPaymentMethod((prev) => ({ ...prev, [name]: value }));
+		}
+	};
+
+	// Handle form submission
+	const handleAddSubmit = () => {
+		// Create a new payment method object
+		const newMethod: PaymentMethod2 = {
+			id: `pm_${Date.now()}`, // Generate a unique ID
+			type: newPaymentMethod.type,
+			last4: newPaymentMethod.last4,
+			expiry: newPaymentMethod.expiry,
+			isDefault: paymentMethods.length === 0, // First payment method is default
+			brand: newPaymentMethod.brand || undefined,
+			bankName: newPaymentMethod.bankName || undefined,
+			cardholderName: newPaymentMethod.cardholderName,
+			createdAt: new Date().toISOString().split('T')[0], // Today's date
+			status: 'active',
+		};
+
+		// Add the new payment method to the list
+		setPaymentMethods((prev) => [...prev, newMethod]);
+
+		// Close the dialog and reset the form
+		setIsAddDialogOpen(false);
+		setNewPaymentMethod({
+			type: 'credit',
+			brand: '',
+			bankName: '',
+			last4: '',
+			expiry: '',
+			cardholderName: '',
+		});
+	};
+
 	return (
 		<div className="p-4">
 			<PaymentMethodManager2
@@ -118,6 +196,130 @@ export function PaymentMethodManager2Demo() {
 				onSetDefault={handleSetDefault}
 				onViewDetails={handleViewDetails}
 			/>
+
+			{/* Add Payment Method Dialog */}
+			<Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+				<DialogContent className="sm:max-w-md">
+					<DialogHeader>
+						<DialogTitle className="flex items-center gap-2">
+							{newPaymentMethod.type === 'credit' ? (
+								<CreditCard className="h-5 w-5" />
+							) : (
+								<Building className="h-5 w-5" />
+							)}
+							Add Payment Method
+						</DialogTitle>
+						<DialogDescription>
+							Add a new payment method to your account.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="py-4 space-y-4">
+						<div className="space-y-2">
+							<Label htmlFor="type">Payment Type</Label>
+							<Select
+								value={newPaymentMethod.type}
+								onValueChange={(value) => handleSelectChange('type', value)}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Select type" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="credit">Credit Card</SelectItem>
+									<SelectItem value="ach">Bank Account</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
+
+						{newPaymentMethod.type === 'credit' ? (
+							<>
+								<div className="space-y-2">
+									<Label htmlFor="brand">Card Brand</Label>
+									<Select
+										value={newPaymentMethod.brand}
+										onValueChange={(value) =>
+											handleSelectChange('brand', value)
+										}
+									>
+										<SelectTrigger>
+											<SelectValue placeholder="Select brand" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="Visa">Visa</SelectItem>
+											<SelectItem value="Mastercard">Mastercard</SelectItem>
+											<SelectItem value="American Express">
+												American Express
+											</SelectItem>
+											<SelectItem value="Discover">Discover</SelectItem>
+										</SelectContent>
+									</Select>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="last4">Last 4 Digits</Label>
+									<Input
+										id="last4"
+										name="last4"
+										value={newPaymentMethod.last4}
+										onChange={handleInputChange}
+										placeholder="4242"
+										maxLength={4}
+									/>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="expiry">Expiry (MM/YY)</Label>
+									<Input
+										id="expiry"
+										name="expiry"
+										value={newPaymentMethod.expiry}
+										onChange={handleInputChange}
+										placeholder="12/27"
+									/>
+								</div>
+							</>
+						) : (
+							<>
+								<div className="space-y-2">
+									<Label htmlFor="bankName">Bank Name</Label>
+									<Input
+										id="bankName"
+										name="bankName"
+										value={newPaymentMethod.bankName}
+										onChange={handleInputChange}
+										placeholder="Bank of America"
+									/>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="last4">Last 4 Digits</Label>
+									<Input
+										id="last4"
+										name="last4"
+										value={newPaymentMethod.last4}
+										onChange={handleInputChange}
+										placeholder="4321"
+										maxLength={4}
+									/>
+								</div>
+							</>
+						)}
+
+						<div className="space-y-2">
+							<Label htmlFor="cardholderName">Cardholder Name</Label>
+							<Input
+								id="cardholderName"
+								name="cardholderName"
+								value={newPaymentMethod.cardholderName}
+								onChange={handleInputChange}
+								placeholder="John Doe"
+							/>
+						</div>
+					</div>
+					<DialogFooter>
+						<Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+							Cancel
+						</Button>
+						<Button onClick={handleAddSubmit}>Add Payment Method</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
 }

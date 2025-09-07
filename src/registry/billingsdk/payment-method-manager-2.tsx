@@ -110,13 +110,13 @@ function PaymentMethodItem({
 	};
 
 	// Get status color variant for badge
-	const getStatusVariant = (status: string) => {
+	const getStatusVariant = (status: PaymentMethod2['status']) => {
 		switch (status) {
 			case 'active':
 				return 'default';
 			case 'expired':
 				return 'destructive';
-			default:
+			case 'inactive':
 				return 'secondary';
 		}
 	};
@@ -129,13 +129,16 @@ function PaymentMethodItem({
 	// Format expiry date
 	const formatExpiry = (expiry?: string) => {
 		if (!expiry) return 'N/A';
-		const [month, year] = expiry.split('/');
-		return `${month}/${year.slice(-2)}`;
+		const norm = expiry.replace(/\s+/g, '').replace('-', '/');
+		const [month, year] = norm.split('/');
+		if (!month || !year) return expiry;
+		return `${month.padStart(2, '0')}/${year.slice(-2)}`;
 	};
 
 	const handleEditSubmit = () => {
 		// In a real app, this would call an API to update the payment method
 		console.log('Updating payment method:', method.id, editForm);
+		onEdit(method.id);
 		setIsEditing(false);
 	};
 
@@ -162,7 +165,7 @@ function PaymentMethodItem({
 									{method.isDefault && (
 										<Badge
 											variant="default"
-											className="gap-1 text-xs py-0.5 px-1.5 bg-blue-500 hover:bg-blue-500"
+											className="gap-1 text-xs py-0.5 px-1.5"
 										>
 											<CheckCircle2 className="h-3 w-3" />
 											Default
@@ -171,7 +174,7 @@ function PaymentMethodItem({
 								</div>
 								<CardDescription className="text-xs mt-1">
 									{method.type === 'credit'
-										? `${method.brand} ending in ${method.last4}`
+										? `${method.brand || 'Card'} ending in ${method.last4}`
 										: `${method.bankName || 'Bank'} account ending in ${
 												method.last4
 										  }`}
@@ -236,7 +239,10 @@ function PaymentMethodItem({
 						<div className="flex justify-between text-sm">
 							<span className="text-muted-foreground">Added</span>
 							<span className="font-medium">
-								{new Date(method.createdAt).toLocaleDateString()}
+								{(() => {
+									const d = new Date(method.createdAt);
+									return isNaN(d.getTime()) ? '—' : d.toLocaleDateString();
+								})()}
 							</span>
 						</div>
 					</div>
@@ -527,7 +533,7 @@ interface ErrorStateProps {
 function ErrorState({ error }: ErrorStateProps) {
 	return (
 		<Card className="col-span-full border-destructive/20 bg-destructive/5 rounded-xl">
-			<CardContent className="py-6">
+			<CardContent className="py-6" role="alert" aria-live="polite">
 				<div className="flex items-center gap-3">
 					<AlertCircle className="h-5 w-5 text-destructive flex-shrink-0" />
 					<div>
@@ -581,9 +587,8 @@ export function PaymentMethodManager2({
 	const filteredAndSortedMethods = React.useMemo(() => {
 		let result = [...paymentMethods];
 
-		// Filter by search term
 		if (searchTerm) {
-			const term = searchTerm.toLowerCase();
+			const term = searchTerm.trim().toLowerCase();
 			result = result.filter(
 				(method) =>
 					(method.brand || '').toLowerCase().includes(term) ||
@@ -593,7 +598,6 @@ export function PaymentMethodManager2({
 			);
 		}
 
-		// Sort: default first, then by type, then by creation date (newest first)
 		result.sort((a, b) => {
 			if (a.isDefault && !b.isDefault) return -1;
 			if (!a.isDefault && b.isDefault) return 1;
@@ -643,6 +647,8 @@ export function PaymentMethodManager2({
 					<div className="relative max-w-md">
 						<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 						<Input
+							type="search"
+							aria-label="Search payment methods"
 							placeholder="Search payment methods..."
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
