@@ -32,32 +32,25 @@ import dynamic from 'next/dynamic';
 
 // Dynamic imports for demo-heavy components to reduce bundle size
 const AlertsBannerDemo = dynamic(
-	() => import('@/components/billingsdk/alerts-banner-demo'),
-	{ ssr: false }
+	() => import('@/components/billingsdk/alerts-banner-demo')
 );
 const BillingSettingsDemo = dynamic(
-	() => import('@/components/billingsdk/billing-settings-demo'),
-	{ ssr: false }
+	() => import('@/components/billingsdk/billing-settings-demo')
 );
 const BillingSummaryCardDemo = dynamic(
-	() => import('@/components/billingsdk/billing-summary-card-demo'),
-	{ ssr: false }
+	() => import('@/components/billingsdk/billing-summary-card-demo')
 );
 const DetailedUsageTableDemo = dynamic(
-	() => import('@/components/billingsdk/detailed-usage-table-demo'),
-	{ ssr: false }
+	() => import('@/components/billingsdk/detailed-usage-table-demo')
 );
 const InvoiceHistory2Demo = dynamic(
-	() => import('@/components/billingsdk/invoice-history-2-demo'),
-	{ ssr: false }
+	() => import('@/components/billingsdk/invoice-history-2-demo')
 );
 const PaymentMethodManager2Demo = dynamic(
-	() => import('@/components/billingsdk/payment-method-manager-2-demo'),
-	{ ssr: false }
+	() => import('@/components/billingsdk/payment-method-manager-2-demo')
 );
 const UpcomingChargesDemo = dynamic(
-	() => import('@/components/billingsdk/upcoming-charges-demo'),
-	{ ssr: false }
+	() => import('@/components/billingsdk/upcoming-charges-demo')
 );
 
 // use this function to get MDX components, you will need it for rendering MDX
