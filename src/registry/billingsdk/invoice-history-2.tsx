@@ -12,6 +12,7 @@ import {
 import {
 	Table,
 	TableBody,
+	TableCaption,
 	TableCell,
 	TableHead,
 	TableHeader,
@@ -29,9 +30,6 @@ export interface Invoice {
 	status: 'paid' | 'refunded' | 'open' | 'void';
 	invoiceUrl?: string;
 }
-
-// Updated Action type to accept either a string URL or a callback function
-type Action = string | (() => void) | null | undefined;
 
 export interface InvoiceHistory2Props {
 	className?: string;
@@ -93,6 +91,7 @@ export function InvoiceHistory2({
 			<CardContent>
 				<div className="overflow-x-auto">
 					<Table>
+						<TableCaption className="sr-only">Invoice history</TableCaption>
 						<TableHeader>
 							<TableRow>
 								<TableHead>Date</TableHead>
@@ -107,7 +106,7 @@ export function InvoiceHistory2({
 								<TableRow>
 									<TableCell
 										colSpan={5}
-										className="text-center text-muted-foreground"
+										className="h-24 text-center text-muted-foreground"
 									>
 										No invoices found
 									</TableCell>
@@ -134,7 +133,7 @@ export function InvoiceHistory2({
 													aria-label={getActionAriaLabel(invoice)}
 												>
 													<Download className="h-4 w-4 mr-1" />
-													{invoice.invoiceUrl ? 'View' : 'PDF'}
+													{invoice.invoiceUrl ? 'View' : 'Download'}
 												</Button>
 											)}
 										</TableCell>

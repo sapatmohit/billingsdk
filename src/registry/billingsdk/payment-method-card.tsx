@@ -1,16 +1,6 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { CreditCard, Plus, Star, Trash2 } from 'lucide-react';
+import { Building, CreditCard, Edit3, Star, Trash2 } from 'lucide-react';
 
 export interface PaymentMethod {
 	id: string;
@@ -29,105 +19,173 @@ export interface PaymentMethodCardProps {
 	onAdd?: () => void;
 	onRemove?: (id: string) => void;
 	onSetDefault?: (id: string) => void;
+	onEdit?: (id: string) => void;
 }
-
-export function PaymentMethodCard({
-	className,
-	title = 'Payment Methods',
+const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
+	title,
 	description,
 	paymentMethods,
 	onAdd,
 	onRemove,
 	onSetDefault,
-}: PaymentMethodCardProps) {
+	onEdit,
+}) => {
 	return (
-		<Card className={cn('w-full', className)}>
-			<CardHeader className="pb-4">
-				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-					<div>
-						<CardTitle className="text-lg">{title}</CardTitle>
-						{description && <CardDescription>{description}</CardDescription>}
-					</div>
-					<Button onClick={onAdd} size="sm">
-						<Plus className="h-4 w-4 mr-2" />
-						Add Payment Method
-					</Button>
-				</div>
-			</CardHeader>
-			<CardContent>
-				{paymentMethods.length === 0 ? (
-					<div className="text-center py-8 text-muted-foreground">
-						<CreditCard className="h-12 w-12 mx-auto mb-4" />
-						<p>No payment methods added yet</p>
-					</div>
-				) : (
-					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-						{paymentMethods.map((method) => (
-							<div
-								key={method.id}
-								className={cn(
-									'rounded-lg border p-4 relative',
-									method.isDefault && 'border-primary bg-primary/5'
+		<div className="payment-method-card">
+			<h2>{title}</h2>
+			<p>{description}</p>
+
+			{onAdd && (
+				<button className="add-button" onClick={onAdd}>
+					Add Payment Method
+				</button>
+			)}
+
+			<div className="payment-methods">
+				{paymentMethods.map((method) => (
+					<div key={method.id} className={`payment-method ${method.type}`}>
+						<div className="method-details">
+							<div className="method-type">
+								{method.type === 'credit' ? (
+									<CreditCard className="w-5 h-5" />
+								) : (
+									<Building className="w-5 h-5" />
 								)}
-							>
-								{method.isDefault && (
-									<div className="absolute -top-2 -right-2">
-										<Badge variant="default">
-											<Star className="h-3 w-3 mr-1" />
-											Default
-										</Badge>
-									</div>
-								)}
-								<div className="flex items-center gap-3 mb-4">
-									<div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-										<CreditCard className="h-5 w-5" />
-									</div>
-									<div>
-										<p className="font-medium">
-											{method.brand
-												? method.brand
-												: method.type === 'ach'
-												? 'Bank Account'
-												: 'Card'}
-										</p>
-										<p className="text-sm text-muted-foreground">
-											**** **** **** {method.last4}
-										</p>
-									</div>
-								</div>
-								{method.expiry && (
-									<div className="text-sm mb-4">
-										<span className="text-muted-foreground">Expires: </span>
-										<span>{method.expiry}</span>
-									</div>
-								)}
-								<div className="flex gap-2">
-									{!method.isDefault && (
-										<Button
-											variant="outline"
-											size="sm"
-											className="flex-1"
-											onClick={() => onSetDefault?.(method.id)}
-										>
-											<Star className="h-4 w-4 mr-1" />
-											Set Default
-										</Button>
-									)}
-									<Button
-										variant="outline"
-										size="sm"
-										className="flex-1"
-										onClick={() => onRemove?.(method.id)}
-									>
-										<Trash2 className="h-4 w-4 mr-1" />
-										Remove
-									</Button>
-								</div>
+								<span>
+									{method.type === 'credit' ? 'Credit Card' : 'ACH Account'}
+								</span>
 							</div>
-						))}
+							<div className="method-info">
+								{method.type === 'credit' && (
+									<>
+										<div>
+											<strong>Brand:</strong> {method.brand}
+										</div>
+										<div>
+											<strong>Last 4:</strong> {method.last4}
+										</div>
+										<div>
+											<strong>Expiry:</strong> {method.expiry}
+										</div>
+									</>
+								)}
+								{method.type === 'ach' && (
+									<div>
+										<strong>Last 4:</strong> {method.last4}
+									</div>
+								)}
+							</div>
+						</div>
+
+						<div className="method-actions">
+							<button
+								className="edit-button"
+								onClick={() => onEdit?.(method.id)}
+							>
+								<Edit3 className="w-4 h-4" />
+							</button>
+							<button
+								className="delete-button"
+								onClick={() => onRemove?.(method.id)}
+							>
+								<Trash2 className="w-4 h-4" />
+							</button>
+							<button
+								className="set-default-button"
+								onClick={() => onSetDefault?.(method.id)}
+							>
+								<Star className="w-4 h-4" /> Set Default
+							</button>
+						</div>
 					</div>
-				)}
-			</CardContent>
-		</Card>
+				))}
+			</div>
+
+			<style jsx>{`
+				.payment-method-card {
+					/* Enhanced Typography */
+					font-family: Arial, sans-serif;
+					color: #333;
+				}
+
+				.payment-methods {
+					display: flex;
+					gap: 20px;
+					margin-top: 20px;
+				}
+
+				.payment-method {
+					/* Differentiate Card Types */
+					border: 1px solid #ddd;
+					padding: 20px;
+					border-radius: 8px;
+					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+					transition: transform 0.2s;
+
+					&:hover {
+						transform: scale(1.02); /* Hover Effect */
+					}
+
+					&.credit {
+						background-color: #f9f9f9; /* Color Scheme */
+					}
+
+					&.ach {
+						background-color: #eef; /* Color Scheme */
+					}
+				}
+
+				.method-details {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+				}
+
+				.method-type {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+				}
+
+				.method-actions button {
+					/* Interactive Elements */
+					background: none;
+					border: none;
+					cursor: pointer;
+					margin-right: 10px;
+
+					&:hover {
+						color: #007bff; /* Hover Effect */
+					}
+				}
+
+				.set-default-button {
+					background-color: #007bff;
+					color: white;
+					padding: 5px 10px;
+					border-radius: 4px;
+
+					&:hover {
+						background-color: #0056b3; /* Hover Effect */
+					}
+				}
+
+				.add-button {
+					background-color: #28a745;
+					color: white;
+					border: none;
+					padding: 10px 15px;
+					border-radius: 4px;
+					cursor: pointer;
+					margin-bottom: 20px;
+
+					&:hover {
+						background-color: #218838;
+					}
+				}
+			`}</style>
+		</div>
 	);
-}
+};
+
+export default PaymentMethodCard;

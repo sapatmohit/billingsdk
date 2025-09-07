@@ -1,0 +1,20 @@
+{
+	"name": "payment-method-manager-2",
+	"type": "registry:block",
+	"title": "Payment Method Manager 2",
+	"description": "A redesigned payment method manager with enhanced functionality and improved UI/UX",
+	"dependencies": ["lucide-react"],
+	"registryDependencies": [
+		"card",
+		"badge",
+		"button",
+		"dialog",
+		"separator",
+		"tooltip",
+		"utils"
+	],
+	"files": [
+		"src/registry/billingsdk/payment-method-manager-2.tsx",
+		"src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx"
+	]
+}

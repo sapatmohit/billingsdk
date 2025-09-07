@@ -9,7 +9,6 @@ import InvoiceHistoryDemo from '@/components/invoice-history-demo';
 import { PaymentMethodManagerDemo } from '@/components/payment-method-manager-demo';
 import { PaymentMethodSelectorDemo } from '@/components/payment-method-selector-demo';
 import { PaymentSuccessDialogDemo } from '@/components/payment-success-dialog-demo';
-import { PreviewComponents } from '@/components/preview/preview-components';
 import { PricingTableFiveDemo } from '@/components/pricing-table-five-demo';
 import { PricingTableFiveDemoMinimal } from '@/components/pricing-table-five-minimal-demo';
 import { PricingTableFourDemo } from '@/components/pricing-table-four-demo';
@@ -31,6 +30,7 @@ import type { MDXComponents } from 'mdx/types';
 import dynamic from 'next/dynamic';
 
 // Dynamic imports for demo-heavy components to reduce bundle size
+// For Server Components, we don't use { ssr: false }
 const AlertsBannerDemo = dynamic(
 	() => import('@/components/billingsdk/alerts-banner-demo')
 );
@@ -51,6 +51,11 @@ const PaymentMethodManager2Demo = dynamic(
 );
 const UpcomingChargesDemo = dynamic(
 	() => import('@/components/billingsdk/upcoming-charges-demo')
+);
+const PreviewComponents = dynamic(() =>
+	import('@/components/preview/preview-components').then(
+		(mod) => mod.PreviewComponents
+	)
 );
 
 // use this function to get MDX components, you will need it for rendering MDX
@@ -94,5 +99,5 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		UpcomingChargesDemo,
 		// place this last so callers can override
 		...components,
-	};
+	} satisfies MDXComponents;
 }

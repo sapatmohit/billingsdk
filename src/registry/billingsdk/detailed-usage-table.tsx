@@ -10,6 +10,7 @@ import {
 import {
 	Table,
 	TableBody,
+	TableCaption,
 	TableCell,
 	TableHead,
 	TableHeader,
@@ -52,7 +53,7 @@ export function DetailedUsageTable({
 				<div className="h-2 w-full rounded-full bg-muted">
 					<div
 						className={cn('h-2 rounded-full', bgColor)}
-						style={{ width: `${Math.min(percentage, 100)}%` }}
+						style={{ width: `${Math.max(0, Math.min(percentage, 100))}%` }}
 					/>
 				</div>
 				<span className="text-xs w-10">{Math.round(percentage)}%</span>
@@ -69,6 +70,9 @@ export function DetailedUsageTable({
 			<CardContent>
 				<div className="overflow-x-auto">
 					<Table>
+						<TableCaption className="sr-only">
+							Detailed usage of resources
+						</TableCaption>
 						<TableHeader>
 							<TableRow>
 								<TableHead className="w-[200px]">Resource</TableHead>
@@ -78,31 +82,46 @@ export function DetailedUsageTable({
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{resources.map((resource) => {
-								// Calculate percentage if not provided, protecting against divide-by-zero
-								const percentage =
-									resource.percentage ??
-									(resource.limit > 0
-										? (resource.used / resource.limit) * 100
-										: 0);
+							{resources.length === 0 ? (
+								<TableRow>
+									<TableCell
+										colSpan={4}
+										className="h-24 text-center text-muted-foreground"
+									>
+										No resources found
+									</TableCell>
+								</TableRow>
+							) : (
+								resources.map((resource, index) => {
+									// Calculate percentage if not provided, protecting against divide-by-zero
+									const percentage =
+										resource.percentage ??
+										(resource.limit > 0
+											? (resource.used / resource.limit) * 100
+											: 0);
 
-								return (
-									<TableRow key={resource.name}>
-										<TableCell className="font-medium">
-											{resource.name}
-										</TableCell>
-										<TableCell className="text-right font-mono">
-											{formatNumber(resource.used)} {resource.unit}
-										</TableCell>
-										<TableCell className="text-right font-mono">
-											{formatNumber(resource.limit)} {resource.unit}
-										</TableCell>
-										<TableCell className="text-right">
-											{getPercentageBar(percentage)}
-										</TableCell>
-									</TableRow>
-								);
-							})}
+									const unit = resource.unit ? ` ${resource.unit}` : '';
+
+									return (
+										<TableRow key={resource.name || index}>
+											<TableCell className="font-medium">
+												{resource.name}
+											</TableCell>
+											<TableCell className="text-right font-mono">
+												{formatNumber(resource.used)}
+												{unit}
+											</TableCell>
+											<TableCell className="text-right font-mono">
+												{formatNumber(resource.limit)}
+												{unit}
+											</TableCell>
+											<TableCell className="text-right">
+												{getPercentageBar(percentage)}
+											</TableCell>
+										</TableRow>
+									);
+								})
+							)}
 						</TableBody>
 					</Table>
 				</div>

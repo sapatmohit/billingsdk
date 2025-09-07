@@ -39,6 +39,7 @@ module.exports = {
 			{
 				userAgent: '*',
 				allow: '/',
+				disallow: ['/llms.mdx', '/llms.mdx/*', '/llms-full.txt'],
 			},
 		],
 	},
