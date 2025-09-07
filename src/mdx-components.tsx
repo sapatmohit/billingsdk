@@ -32,6 +32,9 @@ import DetailedUsageTableDemo from '@/components/billingsdk/detailed-usage-table
 import InvoiceHistoryTableDemo from '@/components/billingsdk/invoice-history-table-demo';
 import PaymentMethodCardDemo from '@/components/billingsdk/payment-method-card-demo';
 import UpcomingChargesDemo from '@/components/billingsdk/upcoming-charges-demo';
+// Custom Usage Meter Components
+import CustomUsageMeterCircleDemo from '@/components/custom-usage-meter-circle-demo';
+import CustomUsageMeterLinearDemo from '@/components/custom-usage-meter-linear-demo';
 import * as TabsComponents from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
@@ -58,6 +61,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		UpdatePlanCardDemo,
 		UsageMeterLinearDemo,
 		UsageMeterCircleDemo,
+		CustomUsageMeterCircleDemo,
+		CustomUsageMeterLinearDemo,
 		BannerDemo,
 		BannerDemoTwo,
 		BannerDemoThree,
