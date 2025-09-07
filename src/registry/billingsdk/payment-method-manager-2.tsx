@@ -20,6 +20,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import {
 	Tooltip,
@@ -42,7 +43,7 @@ import {
 	Star,
 	Trash2,
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 export interface PaymentMethod2 {
 	id: string;
@@ -87,6 +88,10 @@ function PaymentMethodItem({
 }: PaymentMethodItemProps) {
 	const [isRemoving, setIsRemoving] = useState(false);
 	const [showDetails, setShowDetails] = useState(false);
+	const [isEditing, setIsEditing] = useState(false);
+	const [editForm, setEditForm] = useState({
+		cardholderName: method.cardholderName || '',
+	});
 
 	const handleRemove = () => {
 		setIsRemoving(true);
@@ -126,6 +131,12 @@ function PaymentMethodItem({
 		if (!expiry) return 'N/A';
 		const [month, year] = expiry.split('/');
 		return `${month}/${year.slice(-2)}`;
+	};
+
+	const handleEditSubmit = () => {
+		// In a real app, this would call an API to update the payment method
+		console.log('Updating payment method:', method.id, editForm);
+		setIsEditing(false);
 	};
 
 	return (
@@ -277,7 +288,7 @@ function PaymentMethodItem({
 									<Button
 										variant="outline"
 										size="sm"
-										onClick={() => onEdit(method.id)}
+										onClick={() => setIsEditing(true)}
 										className="h-8 w-8 p-0 rounded-full hover:bg-muted"
 										aria-label={`Edit ${
 											method.type === 'credit' ? 'credit card' : 'bank account'
@@ -377,6 +388,58 @@ function PaymentMethodItem({
 						<Button variant="destructive" onClick={confirmRemove}>
 							Remove
 						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+
+			{/* Edit Dialog */}
+			<Dialog open={isEditing} onOpenChange={setIsEditing}>
+				<DialogContent className="sm:max-w-md">
+					<DialogHeader>
+						<DialogTitle className="flex items-center gap-2">
+							<Pencil className="h-5 w-5" />
+							Edit Payment Method
+						</DialogTitle>
+						<DialogDescription>
+							Update the details for your{' '}
+							{method.type === 'credit' ? 'credit card' : 'bank account'} ending
+							in {method.last4}.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="py-4 space-y-4">
+						<div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+							{method.type === 'credit' ? (
+								<CreditCard className="h-5 w-5 text-muted-foreground" />
+							) : (
+								<Building className="h-5 w-5 text-muted-foreground" />
+							)}
+							<div>
+								<p className="text-sm font-medium">
+									{method.type === 'credit' ? 'Credit Card' : 'Bank Account'}
+								</p>
+								<p className="text-xs text-muted-foreground">
+									Ending in {method.last4}
+								</p>
+							</div>
+						</div>
+
+						<div className="space-y-2">
+							<Label htmlFor="cardholderName">Cardholder Name</Label>
+							<Input
+								id="cardholderName"
+								value={editForm.cardholderName}
+								onChange={(e) =>
+									setEditForm({ ...editForm, cardholderName: e.target.value })
+								}
+								placeholder="Enter cardholder name"
+							/>
+						</div>
+					</div>
+					<DialogFooter>
+						<DialogClose asChild>
+							<Button variant="outline">Cancel</Button>
+						</DialogClose>
+						<Button onClick={handleEditSubmit}>Save Changes</Button>
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
@@ -515,7 +578,7 @@ export function PaymentMethodManager2({
 	};
 
 	// Filter and sort payment methods
-	const filteredAndSortedMethods = useMemo(() => {
+	const filteredAndSortedMethods = React.useMemo(() => {
 		let result = [...paymentMethods];
 
 		// Filter by search term

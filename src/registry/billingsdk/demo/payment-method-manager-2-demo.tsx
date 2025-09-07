@@ -82,8 +82,8 @@ export function PaymentMethodManager2Demo() {
 
 	const handleEdit = (id: string) => {
 		console.log('Edit payment method', id);
-		// In a real app, this would redirect to a payment method edit flow
-		alert(`Redirecting to edit payment method ${id}...`);
+		// In a real app, this would open a dialog or redirect to a payment method edit flow
+		alert(`Opening edit dialog for payment method ${id}...`);
 	};
 
 	const handleRemove = (id: string) => {
