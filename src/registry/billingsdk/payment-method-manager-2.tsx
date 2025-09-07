@@ -42,7 +42,7 @@ import {
 	Star,
 	Trash2,
 } from 'lucide-react';
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 export interface PaymentMethod2 {
 	id: string;
@@ -492,7 +492,7 @@ export function PaymentMethodManager2({
 }: PaymentMethodManager2Props) {
 	// State for search and filters
 	const [searchTerm, setSearchTerm] = useState('');
-	
+
 	// Handlers
 	const handleAdd = () => {
 		if (onAdd) onAdd();
@@ -517,31 +517,31 @@ export function PaymentMethodManager2({
 	// Filter and sort payment methods
 	const filteredAndSortedMethods = useMemo(() => {
 		let result = [...paymentMethods];
-		
+
 		// Filter by search term
 		if (searchTerm) {
 			const term = searchTerm.toLowerCase();
 			result = result.filter(
 				(method) =>
-					method.brand?.toLowerCase().includes(term) ||
-					method.bankName?.toLowerCase().includes(term) ||
-					method.last4.includes(term) ||
-					method.cardholderName?.toLowerCase().includes(term)
+					(method.brand || '').toLowerCase().includes(term) ||
+					(method.bankName || '').toLowerCase().includes(term) ||
+					(method.last4 || '').toString().includes(term) ||
+					(method.cardholderName || '').toLowerCase().includes(term)
 			);
 		}
-		
+
 		// Sort: default first, then by type, then by creation date (newest first)
 		result.sort((a, b) => {
 			if (a.isDefault && !b.isDefault) return -1;
 			if (!a.isDefault && b.isDefault) return 1;
-			
+
 			if (a.type !== b.type) {
 				return a.type === 'credit' ? -1 : 1;
 			}
-			
+
 			return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 		});
-		
+
 		return result;
 	}, [paymentMethods, searchTerm]);
 
@@ -607,9 +607,12 @@ export function PaymentMethodManager2({
 											</div>
 										</div>
 										<div>
-											<h3 className="text-lg font-semibold">No matching payment methods</h3>
+											<h3 className="text-lg font-semibold">
+												No matching payment methods
+											</h3>
 											<p className="text-muted-foreground mt-1">
-												No payment methods match your search. Try different keywords.
+												No payment methods match your search. Try different
+												keywords.
 											</p>
 										</div>
 									</CardContent>

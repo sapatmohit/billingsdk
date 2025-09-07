@@ -9,6 +9,7 @@
 		"badge",
 		"button",
 		"dialog",
+		"input",
 		"separator",
 		"tooltip",
 		"utils"

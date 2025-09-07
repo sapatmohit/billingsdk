@@ -1,11 +1,13 @@
 'use client';
 
 import { Building, CreditCard, Edit3, Star, Trash2 } from 'lucide-react';
+import type { FC } from 'react';
 
 export interface PaymentMethod {
 	id: string;
 	type: 'credit' | 'ach';
 	brand?: string;
+	bankName?: string;
 	last4: string;
 	expiry?: string;
 	isDefault: boolean;
@@ -21,7 +23,8 @@ export interface PaymentMethodCardProps {
 	onSetDefault?: (id: string) => void;
 	onEdit?: (id: string) => void;
 }
-const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
+
+const PaymentMethodCard: FC<PaymentMethodCardProps> = ({
 	title,
 	description,
 	paymentMethods,
@@ -81,21 +84,38 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
 							<button
 								className="edit-button"
 								onClick={() => onEdit?.(method.id)}
+								aria-label={`Edit ${
+									method.type === 'credit'
+										? method.brand || 'credit card'
+										: method.bankName || 'bank account'
+								} ending in ${method.last4}`}
 							>
 								<Edit3 className="w-4 h-4" />
 							</button>
 							<button
 								className="delete-button"
 								onClick={() => onRemove?.(method.id)}
+								aria-label={`Delete ${
+									method.type === 'credit'
+										? method.brand || 'credit card'
+										: method.bankName || 'bank account'
+								} ending in ${method.last4}`}
 							>
 								<Trash2 className="w-4 h-4" />
 							</button>
-							<button
-								className="set-default-button"
-								onClick={() => onSetDefault?.(method.id)}
-							>
-								<Star className="w-4 h-4" /> Set Default
-							</button>
+							{!method.isDefault && (
+								<button
+									className="set-default-button"
+									onClick={() => onSetDefault?.(method.id)}
+									aria-label={`Set ${
+										method.type === 'credit'
+											? method.brand || 'credit card'
+											: method.bankName || 'bank account'
+									} ending in ${method.last4} as default payment method`}
+								>
+									<Star className="w-4 h-4" /> Set Default
+								</button>
+							)}
 						</div>
 					</div>
 				))}
@@ -103,7 +123,6 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
 
 			<style jsx>{`
 				.payment-method-card {
-					/* Enhanced Typography */
 					font-family: Arial, sans-serif;
 					color: #333;
 				}
@@ -112,27 +131,24 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
 					display: flex;
 					gap: 20px;
 					margin-top: 20px;
+					flex-wrap: wrap;
 				}
 
 				.payment-method {
-					/* Differentiate Card Types */
 					border: 1px solid #ddd;
 					padding: 20px;
 					border-radius: 8px;
 					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 					transition: transform 0.2s;
-
-					&:hover {
-						transform: scale(1.02); /* Hover Effect */
-					}
-
-					&.credit {
-						background-color: #f9f9f9; /* Color Scheme */
-					}
-
-					&.ach {
-						background-color: #eef; /* Color Scheme */
-					}
+				}
+				.payment-method:hover {
+					transform: scale(1.02);
+				}
+				.payment-method.credit {
+					background-color: #f9f9f9;
+				}
+				.payment-method.ach {
+					background-color: #eef;
 				}
 
 				.method-details {
@@ -148,15 +164,13 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
 				}
 
 				.method-actions button {
-					/* Interactive Elements */
 					background: none;
 					border: none;
 					cursor: pointer;
 					margin-right: 10px;
-
-					&:hover {
-						color: #007bff; /* Hover Effect */
-					}
+				}
+				.method-actions button:hover {
+					color: #007bff;
 				}
 
 				.set-default-button {
@@ -164,10 +178,9 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
 					color: white;
 					padding: 5px 10px;
 					border-radius: 4px;
-
-					&:hover {
-						background-color: #0056b3; /* Hover Effect */
-					}
+				}
+				.set-default-button:hover {
+					background-color: #0056b3;
 				}
 
 				.add-button {
@@ -178,10 +191,9 @@ const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({
 					border-radius: 4px;
 					cursor: pointer;
 					margin-bottom: 20px;
-
-					&:hover {
-						background-color: #218838;
-					}
+				}
+				.add-button:hover {
+					background-color: #218838;
 				}
 			`}</style>
 		</div>
