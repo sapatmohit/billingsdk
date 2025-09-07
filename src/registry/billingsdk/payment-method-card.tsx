@@ -14,7 +14,7 @@ import { CreditCard, Plus, Star, Trash2 } from 'lucide-react';
 
 export interface PaymentMethod {
 	id: string;
-	type: 'credit' | 'debit' | 'ach';
+	type: 'credit' | 'ach';
 	brand?: string;
 	last4: string;
 	expiry?: string;

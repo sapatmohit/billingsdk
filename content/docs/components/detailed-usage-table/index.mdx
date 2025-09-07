@@ -4,7 +4,7 @@ title: Detailed Usage Table
 
 import { DetailedUsageTableDemo } from '@/registry/billingsdk/demo/detailed-usage-table-demo';
 
-The Detailed Usage Table component provides a comprehensive breakdown of resource consumption with columns for resource name, used amount, limit, and percentage utilization.
+The Detailed Usage Table component provides a comprehensive breakdown of resource consumption with columns for resource name, used amount, limit, and percentage utilization. The percentage field is now optional and will be automatically calculated if not provided.
 
 <Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
@@ -36,11 +36,11 @@ import { DetailedUsageTable } from '@/components/billingsdk/detailed-usage-table
 			name: 'API Calls',
 			used: 12300,
 			limit: 20000,
-			percentage: 61.5,
+			// percentage will be automatically calculated as 61.5%
 			unit: 'calls',
 		},
 		{ name: 'Storage', used: 850, limit: 1000, percentage: 85, unit: 'GB' },
-		{ name: 'Team Members', used: 4, limit: 5, percentage: 80, unit: 'users' },
+		{ name: 'Team Members', used: 4, limit: 5, unit: 'users' }, // percentage will be automatically calculated as 80%
 	]}
 />;
 ```
@@ -56,13 +56,13 @@ import { DetailedUsageTable } from '@/components/billingsdk/detailed-usage-table
 
 ### UsageResource Object
 
-| Property   | Type     | Description                    |
-| ---------- | -------- | ------------------------------ |
-| name       | `string` | Name of the resource           |
-| used       | `number` | Amount of the resource used    |
-| limit      | `number` | Total limit for the resource   |
-| percentage | `number` | Percentage of resource used    |
-| unit       | `string` | Unit of measurement (optional) |
+| Property   | Type                | Description                                                            |
+| ---------- | ------------------- | ---------------------------------------------------------------------- |
+| name       | `string`            | Name of the resource                                                   |
+| used       | `number`            | Amount of the resource used                                            |
+| limit      | `number`            | Total limit for the resource                                           |
+| percentage | `number` _optional_ | Percentage of resource used (automatically calculated if not provided) |
+| unit       | `string`            | Unit of measurement (optional)                                         |
 
 ```tsx
 <DetailedUsageTable
@@ -73,7 +73,7 @@ import { DetailedUsageTable } from '@/components/billingsdk/detailed-usage-table
 			name: 'API Requests',
 			used: 45210,
 			limit: 50000,
-			percentage: 90.4,
+			// percentage will be automatically calculated as 90.4%
 			unit: 'requests',
 		},
 		{
@@ -83,12 +83,12 @@ import { DetailedUsageTable } from '@/components/billingsdk/detailed-usage-table
 			percentage: 75,
 			unit: 'GB',
 		},
-		{ name: 'Team Seats', used: 8, limit: 10, percentage: 80, unit: 'seats' },
+		{ name: 'Team Seats', used: 8, limit: 5, unit: 'seats' }, // percentage will be automatically calculated as 160%
 		{
 			name: 'Bandwidth',
 			used: 1850,
 			limit: 2000,
-			percentage: 92.5,
+			// percentage will be automatically calculated as 92.5%
 			unit: 'GB',
 		},
 	]}

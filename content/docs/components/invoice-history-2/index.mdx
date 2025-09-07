@@ -1,15 +1,15 @@
 ---
-title: Invoice History Table
+title: Invoice History 2
 ---
 
-import { InvoiceHistoryTableDemo } from '@/registry/billingsdk/demo/invoice-history-table-demo';
+import { InvoiceHistory2Demo } from '@/registry/billingsdk/demo/invoice-history-2-demo';
 
-The Invoice History Table component displays a list of past invoices with details such as date, description, amount, status, and a download button for PDF invoices.
+The Invoice History 2 component displays a list of past invoices with details such as date, description, amount, status, and action buttons for viewing or downloading invoices. The component now supports optional invoice URLs and flexible action handling.
 
 <Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
     <PreviewComponents registryName="billingsdk">
-      <InvoiceHistoryTableDemo />
+      <InvoiceHistory2Demo />
     </PreviewComponents>
   </Tab>
 
@@ -17,18 +17,18 @@ The Invoice History Table component displays a list of past invoices with detail
 	<include
 		cwd
 		lang="tsx"
-		meta='title="src/registry/billingsdk/demo/invoice-history-table-demo.tsx"'
+		meta='title="src/registry/billingsdk/demo/invoice-history-2-demo.tsx"'
 	>
-		src/registry/billingsdk/demo/invoice-history-table-demo.tsx
+		src/registry/billingsdk/demo/invoice-history-2-demo.tsx
 	</include>
 </Tab>
 
 </Tabs>
 
 ```tsx
-import { InvoiceHistoryTable } from '@/components/billingsdk/invoice-history-table';
+import { InvoiceHistory2 } from '@/components/billingsdk/invoice-history-2';
 
-<InvoiceHistoryTable
+<InvoiceHistory2
 	title="Billing History"
 	description="Your past invoices and payment records"
 	invoices={[
@@ -38,13 +38,15 @@ import { InvoiceHistoryTable } from '@/components/billingsdk/invoice-history-tab
 			description: 'Pro Plan (Monthly)',
 			amount: '$29.00',
 			status: 'paid',
+			invoiceUrl: 'https://example.com/invoice/1', // Optional URL for direct viewing
 		},
 		{
 			id: '2',
 			date: '2025-07-15',
-			description: 'Pro Plan (Monthly)',
+			// description is now optional
 			amount: '$29.00',
 			status: 'paid',
+			// Action will use onDownload callback when invoiceUrl is not provided
 		},
 	]}
 	onDownload={(id) => console.log(`Download invoice ${id}`)}
@@ -63,16 +65,17 @@ import { InvoiceHistoryTable } from '@/components/billingsdk/invoice-history-tab
 
 ### Invoice Object
 
-| Property    | Type                                              | Description                       |
-| ----------- | ------------------------------------------------- | --------------------------------- |
-| id          | `string`                                          | Unique identifier for the invoice |
-| date        | `string`                                          | Date of the invoice               |
-| description | `string`                                          | Description of the invoice        |
-| amount      | `string`                                          | Amount of the invoice             |
-| status      | `"paid" \| "pending" \| "overdue" \| "cancelled"` | Status of the invoice             |
+| Property    | Type                                       | Description                                         |
+| ----------- | ------------------------------------------ | --------------------------------------------------- |
+| id          | `string`                                   | Unique identifier for the invoice                   |
+| date        | `string`                                   | Date of the invoice                                 |
+| description | `string` _optional_                        | Description of the invoice                          |
+| amount      | `string`                                   | Amount of the invoice                               |
+| status      | `"paid" \| "refunded" \| "open" \| "void"` | Status of the invoice                               |
+| invoiceUrl  | `string` _optional_                        | URL to view the invoice directly (takes precedence) |
 
 ```tsx
-<InvoiceHistoryTable
+<InvoiceHistory2
 	title="Invoice History"
 	description="All your billing records"
 	invoices={[
@@ -82,20 +85,22 @@ import { InvoiceHistoryTable } from '@/components/billingsdk/invoice-history-tab
 			description: 'Enterprise Plan (Annual)',
 			amount: '$1188.00',
 			status: 'paid',
+			invoiceUrl: 'https://example.com/invoice/inv-001',
 		},
 		{
 			id: 'inv-002',
 			date: '2025-08-15',
 			description: 'Enterprise Plan (Annual)',
 			amount: '$1188.00',
-			status: 'paid',
+			status: 'refunded',
 		},
 		{
 			id: 'inv-003',
 			date: '2025-07-15',
-			description: 'Enterprise Plan (Annual)',
+			// description is optional
 			amount: '$1188.00',
-			status: 'overdue',
+			status: 'open',
+			invoiceUrl: 'https://example.com/invoice/inv-003',
 		},
 	]}
 	onDownload={(invoiceId) => {

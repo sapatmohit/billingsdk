@@ -1,15 +1,15 @@
 ---
-title: Payment Method Card
+title: Payment Method Manager 2
 ---
 
-import { PaymentMethodCardDemo } from '@/registry/billingsdk/demo/payment-method-card-demo';
+import { PaymentMethodManager2Demo } from '@/registry/billingsdk/demo/payment-method-manager-2-demo';
 
-The Payment Method Card component displays saved payment methods and provides actions to add, remove, or set a default payment method.
+The Payment Method Manager 2 component displays saved payment methods and provides actions to add, remove, or set a default payment method.
 
 <Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
     <PreviewComponents registryName="billingsdk">
-      <PaymentMethodCardDemo />
+      <PaymentMethodManager2Demo />
     </PreviewComponents>
   </Tab>
 
@@ -17,9 +17,9 @@ The Payment Method Card component displays saved payment methods and provides ac
 	<include
 		cwd
 		lang="tsx"
-		meta='title="src/registry/billingsdk/demo/payment-method-card-demo.tsx"'
+		meta='title="src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx"'
 	>
-		src/registry/billingsdk/demo/payment-method-card-demo.tsx
+		src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx
 	</include>
 </Tab>
 
@@ -69,14 +69,14 @@ import { PaymentMethodCard } from '@/components/billingsdk/payment-method-card';
 
 ### PaymentMethod Object
 
-| Property  | Type                           | Description                                    |
-| --------- | ------------------------------ | ---------------------------------------------- |
-| id        | `string`                       | Unique identifier for the payment method       |
-| type      | `"credit" \| "debit" \| "ach"` | Type of payment method                         |
-| brand     | `string`                       | Brand of the card (e.g., "Visa", "Mastercard") |
-| last4     | `string`                       | Last 4 digits of the payment method            |
-| expiry    | `string`                       | Expiration date (for cards)                    |
-| isDefault | `boolean`                      | Whether this is the default payment method     |
+| Property  | Type                | Description                                    |
+| --------- | ------------------- | ---------------------------------------------- |
+| id        | `string`            | Unique identifier for the payment method       |
+| type      | `"credit" \| "ach"` | Type of payment method                         |
+| brand     | `string` (optional) | Brand of the card (e.g., "Visa", "Mastercard") |
+| last4     | `string`            | Last 4 digits of the payment method            |
+| expiry    | `string` (optional) | Expiration date (for cards)                    |
+| isDefault | `boolean`           | Whether this is the default payment method     |
 
 ```tsx
 <PaymentMethodCard
@@ -92,11 +92,13 @@ import { PaymentMethodCard } from '@/components/billingsdk/payment-method-card';
 			isDefault: true,
 		},
 		{
-			id: 'pm_456',
-			type: 'ach',
-			last4: '8765',
-			isDefault: false,
-		},
+       id: 'pm_456',
+       type: 'ach',
+-      last4: '8765',
++      bankName: 'Chase',
++      routing: '*****123',
+       isDefault: false,
+     },
 	]}
 	onAdd={() => {
 		// Redirect to payment method addition flow

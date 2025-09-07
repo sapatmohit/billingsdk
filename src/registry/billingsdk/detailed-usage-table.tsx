@@ -21,7 +21,7 @@ export interface UsageResource {
 	name: string;
 	used: number;
 	limit: number;
-	percentage: number;
+	percentage?: number;
 	unit?: string;
 }
 
@@ -78,20 +78,31 @@ export function DetailedUsageTable({
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{resources.map((resource, index) => (
-								<TableRow key={index}>
-									<TableCell className="font-medium">{resource.name}</TableCell>
-									<TableCell className="text-right font-mono">
-										{formatNumber(resource.used)} {resource.unit}
-									</TableCell>
-									<TableCell className="text-right font-mono">
-										{formatNumber(resource.limit)} {resource.unit}
-									</TableCell>
-									<TableCell className="text-right">
-										{getPercentageBar(resource.percentage)}
-									</TableCell>
-								</TableRow>
-							))}
+							{resources.map((resource) => {
+								// Calculate percentage if not provided, protecting against divide-by-zero
+								const percentage =
+									resource.percentage ??
+									(resource.limit > 0
+										? (resource.used / resource.limit) * 100
+										: 0);
+
+								return (
+									<TableRow key={resource.name}>
+										<TableCell className="font-medium">
+											{resource.name}
+										</TableCell>
+										<TableCell className="text-right font-mono">
+											{formatNumber(resource.used)} {resource.unit}
+										</TableCell>
+										<TableCell className="text-right font-mono">
+											{formatNumber(resource.limit)} {resource.unit}
+										</TableCell>
+										<TableCell className="text-right">
+											{getPercentageBar(percentage)}
+										</TableCell>
+									</TableRow>
+								);
+							})}
 						</TableBody>
 					</Table>
 				</div>

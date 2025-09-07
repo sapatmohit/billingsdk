@@ -2,7 +2,7 @@
 
 import { PaymentMethodCard } from '@/registry/billingsdk/payment-method-card';
 
-export function PaymentMethodCardDemo() {
+export function PaymentMethodManager2Demo() {
 	return (
 		<PaymentMethodCard
 			title="Saved Payment Methods"

@@ -25,25 +25,45 @@ import UsageMeterCircleDemo from '@/components/usage-meter-circle-demo';
 import UsageMeterLinearDemo from '@/components/usage-meter-linear-demo';
 import UsageTableDemo from '@/components/usage-table-demo';
 // Billing & Usage Components
-import AlertsBannerDemo from '@/components/billingsdk/alerts-banner-demo';
-import BillingSettingsDemo from '@/components/billingsdk/billing-settings-demo';
-import BillingSummaryCardDemo from '@/components/billingsdk/billing-summary-card-demo';
-import DetailedUsageTableDemo from '@/components/billingsdk/detailed-usage-table-demo';
-import InvoiceHistoryTableDemo from '@/components/billingsdk/invoice-history-table-demo';
-import PaymentMethodCardDemo from '@/components/billingsdk/payment-method-card-demo';
-import UpcomingChargesDemo from '@/components/billingsdk/upcoming-charges-demo';
-// Custom Usage Meter Components
-import CustomUsageMeterCircleDemo from '@/components/custom-usage-meter-circle-demo';
-import CustomUsageMeterLinearDemo from '@/components/custom-usage-meter-linear-demo';
 import * as TabsComponents from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for demo-heavy components to reduce bundle size
+const AlertsBannerDemo = dynamic(
+	() => import('@/components/billingsdk/alerts-banner-demo'),
+	{ ssr: false }
+);
+const BillingSettingsDemo = dynamic(
+	() => import('@/components/billingsdk/billing-settings-demo'),
+	{ ssr: false }
+);
+const BillingSummaryCardDemo = dynamic(
+	() => import('@/components/billingsdk/billing-summary-card-demo'),
+	{ ssr: false }
+);
+const DetailedUsageTableDemo = dynamic(
+	() => import('@/components/billingsdk/detailed-usage-table-demo'),
+	{ ssr: false }
+);
+const InvoiceHistory2Demo = dynamic(
+	() => import('@/components/billingsdk/invoice-history-2-demo'),
+	{ ssr: false }
+);
+const PaymentMethodManager2Demo = dynamic(
+	() => import('@/components/billingsdk/payment-method-manager-2-demo'),
+	{ ssr: false }
+);
+const UpcomingChargesDemo = dynamic(
+	() => import('@/components/billingsdk/upcoming-charges-demo'),
+	{ ssr: false }
+);
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
 	return {
 		...defaultMdxComponents,
-		...components,
 		...TabsComponents,
 		PreviewComponents,
 		PricingTableOneDemo,
@@ -61,8 +81,6 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		UpdatePlanCardDemo,
 		UsageMeterLinearDemo,
 		UsageMeterCircleDemo,
-		CustomUsageMeterCircleDemo,
-		CustomUsageMeterLinearDemo,
 		BannerDemo,
 		BannerDemoTwo,
 		BannerDemoThree,
@@ -78,8 +96,10 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		BillingSettingsDemo,
 		BillingSummaryCardDemo,
 		DetailedUsageTableDemo,
-		InvoiceHistoryTableDemo,
-		PaymentMethodCardDemo,
+		InvoiceHistory2Demo,
+		PaymentMethodManager2Demo,
 		UpcomingChargesDemo,
+		// place this last so callers can override
+		...components,
 	};
 }

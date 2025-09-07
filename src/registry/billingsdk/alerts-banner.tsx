@@ -20,6 +20,8 @@ function Alert({
 	className,
 	children,
 }: AlertProps) {
+	const isDestructive = variant === 'destructive';
+
 	return (
 		<div
 			className={cn(
@@ -29,6 +31,8 @@ function Alert({
 					: 'bg-background text-foreground border',
 				className
 			)}
+			role={isDestructive ? 'alert' : 'status'}
+			aria-live={isDestructive ? 'assertive' : 'polite'}
 		>
 			<div className="flex items-start">
 				<div className="flex-1">
@@ -144,6 +148,8 @@ export function AlertsBanner({
 								size="sm"
 								className="absolute right-2 top-2 h-6 w-6 p-0"
 								onClick={() => handleDismiss(alert.id)}
+								type="button"
+								aria-label={`Dismiss ${alert.title} alert`}
 							>
 								<X className="h-4 w-4" />
 							</Button>
