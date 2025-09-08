@@ -1,6 +1,9 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /llms.mdx
+Disallow: /llms.mdx/*
+Disallow: /llms-full.txt
 
 # Host
 Host: https://billingsdk.com
