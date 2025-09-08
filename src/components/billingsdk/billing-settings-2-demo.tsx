@@ -1,3 +1,5 @@
-import { BillingSettings2Demo } from '@/registry/billingsdk/demo/billing-settings-2-demo';
+import BillingSettings2Demo from '@/registry/billingsdk/demo/billing-settings-2-demo';
 
-export default BillingSettings2Demo;
+const BillingSetting2Demo = BillingSettings2Demo;
+
+export default BillingSetting2Demo;
