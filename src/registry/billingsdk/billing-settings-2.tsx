@@ -1,284 +1,251 @@
-'use client';
+"use client"
 
-import { Button } from '@/components/ui/button';
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Calendar, CreditCard, Mail, User } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Switch } from "@/components/ui/switch"
+import { Badge } from "@/components/ui/badge"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ChevronDown, CreditCard, Plus } from "lucide-react"
 
-const billingSettingsSchema = z.object({
-	email: z.string().email({ message: 'Please enter a valid email address.' }),
-	name: z.string().min(1, { message: 'Name is required.' }),
-	autoRenewal: z.boolean(),
-	invoiceEmails: z.boolean(),
-	promotionalEmails: z.boolean(),
-	currency: z.string().min(1, { message: 'Currency is required.' }),
-	taxId: z.string().optional(),
-});
+const tabs = [
+  { id: "general", label: "General" },
+  { id: "payment", label: "Payment" },
+  { id: "invoices", label: "Invoices" },
+  { id: "limits", label: "Limits" },
+]
 
-export type BillingSettingsProps = z.infer<typeof billingSettingsSchema>;
-
-export interface BillingSettingsData {
-	email: string;
-	name: string;
-	autoRenewal: boolean;
-	invoiceEmails: boolean;
-	promotionalEmails: boolean;
-	currency: string;
-	taxId?: string;
+interface CardInfo {
+  id: string
+  last4: string
+  brand: string
+  expiry: string
+  primary?: boolean
 }
 
-export interface BillingSettings2ComponentProps {
-	className?: string;
-	title?: string;
-	description?: string;
-	initialData?: BillingSettingsData;
-	onSave?: (data: BillingSettingsData) => void;
-	onCancel?: () => void;
+interface BillingSettingsProps {
+  
+  activeTab: string
+  onTabChange: (tab: string) => void
+
+  
+  emailNotifications: boolean
+  onEmailNotificationsChange: (value: boolean) => void
+
+  usageAlerts: boolean
+  onUsageAlertsChange: (value: boolean) => void
+
+  invoiceReminders: boolean
+  onInvoiceRemindersChange: (value: boolean) => void
+
+  
+  cards: CardInfo[]
+  onAddCard: () => void
+
+  
+  invoiceFormat: "PDF" | "HTML"
+  onInvoiceFormatChange: (format: "PDF" | "HTML") => void
+  onEditBillingAddress: () => void
+
+  
+  overageProtection: boolean
+  onOverageProtectionChange: (value: boolean) => void
+
+  usageLimitAlerts: boolean
+  onUsageLimitAlertsChange: (value: boolean) => void
+  className?: string
 }
 
-export function BillingSettings2({
-	className,
-	title = 'Billing Settings 2',
-	description,
-	initialData,
-	onSave,
-	onCancel,
-}: BillingSettings2ComponentProps) {
-	const form = useForm<BillingSettingsProps>({
-		resolver: zodResolver(billingSettingsSchema),
-		defaultValues: {
-			email: initialData?.email || '',
-			name: initialData?.name || '',
-			autoRenewal: initialData?.autoRenewal ?? true,
-			invoiceEmails: initialData?.invoiceEmails ?? true,
-			promotionalEmails: initialData?.promotionalEmails ?? false,
-			currency: initialData?.currency || 'USD',
-			taxId: initialData?.taxId || '',
-		},
-	});
+interface SettingItemProps {
+  title: string
+  description: string
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
+}
 
-	function onSubmit(data: BillingSettingsProps) {
-		onSave?.(data);
-	}
+function SettingItem({ title, description, checked, onCheckedChange }: SettingItemProps) {
+  return (
+    <div className="flex items-start justify-between py-4 gap-4 w-full">
+      <div className="space-y-1 flex-1 min-w-0">
+        <h3 className="font-medium text-foreground">{title}</h3>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </div>
+      <Switch checked={checked} onCheckedChange={onCheckedChange} className="flex-shrink-0" />
+    </div>
+  )
+}
 
-	return (
-		<Card className={cn('w-full', className)}>
-			<CardHeader>
-				<CardTitle className="flex items-center gap-2">
-					<CreditCard className="h-5 w-5" />
-					{title}
-				</CardTitle>
-				{description && <CardDescription>{description}</CardDescription>}
-			</CardHeader>
-			<CardContent>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-						<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-							<FormField
-								control={form.control}
-								name="name"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="flex items-center gap-2">
-											<User className="h-4 w-4" />
-											Full Name
-										</FormLabel>
-										<FormControl>
-											<Input placeholder="Enter your full name" {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+interface TabNavigationProps {
+  activeTab: string
+  onTabChange: (tab: string) => void
+}
 
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="flex items-center gap-2">
-											<Mail className="h-4 w-4" />
-											Billing Email
-										</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Enter your billing email"
-												{...field}
-											/>
-										</FormControl>
-										<FormDescription>
-											Invoices will be sent to this email address
-										</FormDescription>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
+  return (
+    <div className="flex flex-wrap gap-1 rounded-lg bg-muted p-1">
+      {tabs.map((tab) => (
+        <button
+          key={tab.id}
+          onClick={() => {
+            console.log("[v0] Tab button clicked:", tab.id)
+            onTabChange(tab.id)
+          }}
+          className={`flex-1 min-w-0 rounded-md px-2 py-1.5 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+            activeTab === tab.id
+              ? "bg-background text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+          }`}
+        >
+          <span className="truncate">{tab.label}</span>
+        </button>
+      ))}
+    </div>
+  )
+}
 
-							<FormField
-								control={form.control}
-								name="currency"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="flex items-center gap-2">
-											<CreditCard className="h-4 w-4" />
-											Currency
-										</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
-											<FormControl>
-												<SelectTrigger>
-													<SelectValue placeholder="Select currency" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												<SelectItem value="USD">USD - US Dollar</SelectItem>
-												<SelectItem value="EUR">EUR - Euro</SelectItem>
-												<SelectItem value="GBP">GBP - British Pound</SelectItem>
-												<SelectItem value="JPY">JPY - Japanese Yen</SelectItem>
-												<SelectItem value="CAD">
-													CAD - Canadian Dollar
-												</SelectItem>
-												<SelectItem value="AUD">
-													AUD - Australian Dollar
-												</SelectItem>
-											</SelectContent>
-										</Select>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+export function BillingSettings({
+  activeTab,
+  onTabChange,
+  emailNotifications,
+  onEmailNotificationsChange,
+  usageAlerts,
+  onUsageAlertsChange,
+  invoiceReminders,
+  onInvoiceRemindersChange,
+  cards,
+  onAddCard,
+  invoiceFormat,
+  onInvoiceFormatChange,
+  onEditBillingAddress,
+  overageProtection,
+  onOverageProtectionChange,
+  usageLimitAlerts,
+  onUsageLimitAlertsChange,
+  className,
+}: BillingSettingsProps) {
+  const renderGeneralContent = () => (
+    <div className="space-y-0 divide-y divide-border">
+      <SettingItem
+        title="Email notifications"
+        description="Receive billing updates via email"
+        checked={emailNotifications}
+        onCheckedChange={onEmailNotificationsChange}
+      />
+      <SettingItem
+        title="Usage alerts"
+        description="Get notified when approaching limits"
+        checked={usageAlerts}
+        onCheckedChange={onUsageAlertsChange}
+      />
+      <SettingItem
+        title="Invoice reminders"
+        description="Remind me before auto-renewal"
+        checked={invoiceReminders}
+        onCheckedChange={onInvoiceRemindersChange}
+      />
+    </div>
+  )
 
-							<FormField
-								control={form.control}
-								name="taxId"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="flex items-center gap-2">
-											<CreditCard className="h-4 w-4" />
-											Tax ID (Optional)
-										</FormLabel>
-										<FormControl>
-											<Input placeholder="Enter your tax ID" {...field} />
-										</FormControl>
-										<FormDescription>
-											For VAT or other tax purposes
-										</FormDescription>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
+  const renderPaymentContent = () => (
+    <div className="space-y-4">
+      {cards.map((card) => (
+        <div key={card.id} className="flex items-center justify-between rounded-lg border p-3 sm:p-4 gap-3">
+          <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+            <CreditCard className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center space-x-2">
+                <span className="font-mono text-xs sm:text-sm truncate">•••• •••• •••• {card.last4}</span>
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">
+                {card.brand} • Expires {card.expiry}
+              </p>
+            </div>
+          </div>
+          {card.primary && <Badge variant="secondary" className="flex-shrink-0 text-xs">Primary</Badge>}
+        </div>
+      ))}
+      <Button variant="outline" className="w-full bg-transparent" onClick={onAddCard}>
+        <Plus className="mr-2 h-4 w-4" />
+        <span className="hidden sm:inline">Add new card</span>
+        <span className="sm:hidden">Add card</span>
+      </Button>
+    </div>
+  )
 
-						<div className="space-y-4">
-							<FormField
-								control={form.control}
-								name="autoRenewal"
-								render={({ field }) => (
-									<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-										<div className="space-y-0.5">
-											<FormLabel className="text-base flex items-center gap-2">
-												<Calendar className="h-4 w-4" />
-												Auto-Renewal
-											</FormLabel>
-											<FormDescription>
-												Automatically renew your subscription
-											</FormDescription>
-										</div>
-										<FormControl>
-											<Switch
-												checked={field.value}
-												onCheckedChange={field.onChange}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
+  const renderInvoicesContent = () => (
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="space-y-1 min-w-0 flex-1">
+          <h3 className="font-medium text-foreground">Invoice format</h3>
+          <p className="text-sm text-muted-foreground">Choose PDF or HTML format</p>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="w-full sm:w-20 bg-transparent">
+              {invoiceFormat}
+              <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => onInvoiceFormatChange("PDF")}>PDF</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onInvoiceFormatChange("HTML")}>HTML</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="space-y-1 min-w-0 flex-1">
+          <h3 className="font-medium text-foreground">Billing address</h3>
+          <p className="text-sm text-muted-foreground">Update your billing address</p>
+        </div>
+        <Button variant="outline" onClick={onEditBillingAddress} className="w-full sm:w-auto">
+          Edit
+        </Button>
+      </div>
+    </div>
+  )
 
-							<FormField
-								control={form.control}
-								name="invoiceEmails"
-								render={({ field }) => (
-									<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-										<div className="space-y-0.5">
-											<FormLabel className="text-base">
-												Invoice Emails
-											</FormLabel>
-											<FormDescription>
-												Receive emails when invoices are generated
-											</FormDescription>
-										</div>
-										<FormControl>
-											<Switch
-												checked={field.value}
-												onCheckedChange={field.onChange}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
+  const renderLimitsContent = () => (
+    <div className="space-y-0 divide-y divide-border">
+      <SettingItem
+        title="Overage protection"
+        description="Prevent accidental overages"
+        checked={overageProtection}
+        onCheckedChange={onOverageProtectionChange}
+      />
+      <SettingItem
+        title="Usage limit alerts"
+        description="Alert at 80% and 95% usage"
+        checked={usageLimitAlerts}
+        onCheckedChange={onUsageLimitAlertsChange}
+      />
+    </div>
+  )
 
-							<FormField
-								control={form.control}
-								name="promotionalEmails"
-								render={({ field }) => (
-									<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-										<div className="space-y-0.5">
-											<FormLabel className="text-base">
-												Promotional Emails
-											</FormLabel>
-											<FormDescription>
-												Receive occasional updates about new features and offers
-											</FormDescription>
-										</div>
-										<FormControl>
-											<Switch
-												checked={field.value}
-												onCheckedChange={field.onChange}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-						</div>
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "general":
+        return renderGeneralContent()
+      case "payment":
+        return renderPaymentContent()
+      case "invoices":
+        return renderInvoicesContent()
+      case "limits":
+        return renderLimitsContent()
+      default:
+        return renderGeneralContent()
+    }
+  }
 
-						<div className="flex justify-end gap-3">
-							<Button type="button" variant="outline" onClick={onCancel}>
-								Cancel
-							</Button>
-							<Button type="submit">Save Changes</Button>
-						</div>
-					</form>
-				</Form>
-			</CardContent>
-		</Card>
-	);
+  return (
+    <Card className={`mx-auto md:min-w-xl max-w-2xl overflow-hidden ${className || ''}`}>
+      <CardHeader className="space-y-4">
+        <CardTitle className="text-lg sm:text-xl">Billing settings</CardTitle>
+        <TabNavigation activeTab={activeTab} onTabChange={onTabChange} />
+      </CardHeader>
+      <CardContent className="px-3 sm:px-6 overflow-hidden">
+        <div className="w-full">
+          {renderTabContent()}
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
