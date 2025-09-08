@@ -2,13 +2,17 @@
 title: Usage Meter Linear
 description: Displays usage progress with an animated linear bar, remaining quota, status badges, and size variants..
 ---
+
+import UsageMeterLinearDemo from '@/components/usage-meter-linear-demo';
+import CustomUsageMeterLinearDemo from '@/components/custom-usage-meter-linear-demo';
+
 You can change the progress color of the usage meter to `default` or `usage`.
 
 ## Default Usage Meter Linear
 
 <Tabs items={['Preview', 'Code']} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
-    <PreviewComponents registryName="usage-meter-circle">
+    <PreviewComponents registryName="billingsdk">
       <UsageMeterLinearDemo />
     </PreviewComponents>
   </Tab>
@@ -21,52 +25,52 @@ You can change the progress color of the usage meter to `default` or `usage`.
 
 ## Installation
 
-<Tabs items={['shadcn', 'billingSDK']} defaultValue="shadcn" className="bg-transparent border-none">
-  <Tab value="shadcn" className="border-none bg-transparent p-0 mt-3">
-    <Tabs items={['npx', 'pnpm', 'yarn']} defaultValue="npx" groupId="installation-tabs">
-      <Tab value="npx">
-        ```bash
-        npx shadcn@latest add @billingsdk/usage-meter-linear
-        ```
-      </Tab>
-      <Tab value="pnpm">
-        ```bash
-        pnpm dlx shadcn@latest add @billingsdk/usage-meter-linear
-        ```
-      </Tab>
-      <Tab value="yarn">
-        ```bash
-        yarn dlx shadcn@latest add @billingsdk/usage-meter-linear
-        ```
-      </Tab>
-    </Tabs>
-  </Tab>
-  <Tab value="billingSDK" className="border-none bg-transparent p-0 mt-3">
-    <Tabs items={['npx', 'pnpm', 'yarn']} defaultValue="npx" groupId="billingsdk-cli-tabs">
-      <Tab value="npx">
-        ```bash
-        npx @billingsdk/cli add usage-meter-linear
-        ```
-      </Tab>
-      <Tab value="pnpm">
-        ```bash
-        pnpm dlx @billingsdk/cli add usage-meter-linear
-        ```
-      </Tab>
-      <Tab value="yarn">
-        ```bash
-        yarn dlx @billingsdk/cli add usage-meter-linear
-        ```
-      </Tab>
-    </Tabs>
-  </Tab>
+<Tabs
+	items={['shadcn', 'billingSDK']}
+	defaultValue="shadcn"
+	className="bg-transparent border-none"
+>
+	<Tab value="shadcn" className="border-none bg-transparent p-0 mt-3">
+		<Tabs
+			items={['npx', 'pnpm', 'yarn']}
+			defaultValue="npx"
+			groupId="installation-tabs"
+		>
+			<Tab value="npx">
+				```bash npx shadcn@latest add @billingsdk/usage-meter-linear ```
+			</Tab>
+			<Tab value="pnpm">
+				```bash pnpm dlx shadcn@latest add @billingsdk/usage-meter-linear ```
+			</Tab>
+			<Tab value="yarn">
+				```bash yarn dlx shadcn@latest add @billingsdk/usage-meter-linear ```
+			</Tab>
+		</Tabs>
+	</Tab>
+	<Tab value="billingSDK" className="border-none bg-transparent p-0 mt-3">
+		<Tabs
+			items={['npx', 'pnpm', 'yarn']}
+			defaultValue="npx"
+			groupId="billingsdk-cli-tabs"
+		>
+			<Tab value="npx">
+				```bash npx @billingsdk/cli add usage-meter-linear ```
+			</Tab>
+			<Tab value="pnpm">
+				```bash pnpm dlx @billingsdk/cli add usage-meter-linear ```
+			</Tab>
+			<Tab value="yarn">
+				```bash yarn dlx @billingsdk/cli add usage-meter-linear ```
+			</Tab>
+		</Tabs>
+	</Tab>
 </Tabs>
 
 ## Custom Usage Meter Linear
 
 <Tabs items={['Preview', 'Code']} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
-    <PreviewComponents registryName="usage-meter-circle">
+    <PreviewComponents registryName="billingsdk">
       <CustomUsageMeterLinearDemo />
     </PreviewComponents>
   </Tab>
@@ -80,8 +84,9 @@ You can change the progress color of the usage meter to `default` or `usage`.
 ## Usage
 
 ```tsx
-import { UsageMeter } from "@/components/billingsdk/usage-meter";
+import { UsageMeter } from '@/components/billingsdk/usage-meter';
 ```
+
 ```tsx
 // Default Usage Meter Linear
 <UsageMeter
@@ -110,21 +115,27 @@ import { UsageMeter } from "@/components/billingsdk/usage-meter";
 
 ## Props
 
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `usage` | `number` | ✅ | The usage of the user |
-| `limit` | `number` | ✅ | The limit of the user |
-| `className` | `string` | ❌ | Additional CSS classes for styling |
-| `title` | `string` | ❌ | Custom title for the usage meter |
-| `description` | `string` | ❌ | Custom description for the usage meter |
-| `variant` | `"linear" \| "circle"` | ❌ | Variant of the usage meter (default: "linear") |
-| `size` | `"sm" \| "md" \| "lg"` | ❌ | Size of the usage meter (default: "md") |
-| `progressColor` | `"default" \| "usage"` | ❌ | Color of the progress bar (default: "default") |
+| Prop            | Type                   | Required | Description                                    |
+| --------------- | ---------------------- | -------- | ---------------------------------------------- |
+| `usage`         | `number`               | ✅       | The usage of the user                          |
+| `limit`         | `number`               | ✅       | The limit of the user                          |
+| `className`     | `string`               | ❌       | Additional CSS classes for styling             |
+| `title`         | `string`               | ❌       | Custom title for the usage meter               |
+| `description`   | `string`               | ❌       | Custom description for the usage meter         |
+| `variant`       | `"linear" \| "circle"` | ❌       | Variant of the usage meter (default: "linear") |
+| `size`          | `"sm" \| "md" \| "lg"` | ❌       | Size of the usage meter (default: "md")        |
+| `progressColor` | `"default" \| "usage"` | ❌       | Color of the progress bar (default: "default") |
 
 ## Theming
 
 The usage meter circle component is styled using the `shadcn/ui` library. You can customize the colors and fonts by overriding the CSS variables. You can also get the theme from the [Theming](/docs/theming) page.
 
-
 ## Example
-<include cwd lang="tsx" meta='title="src/components/usage-meter-linear-demo.tsx"'>src/components/usage-meter-linear-demo.tsx</include>
+
+<include
+	cwd
+	lang="tsx"
+	meta='title="src/components/usage-meter-linear-demo.tsx"'
+>
+	src/components/usage-meter-linear-demo.tsx
+</include>

@@ -3,13 +3,16 @@ title: Usage Meter Circle
 description: Displays usage progress in a circular meter with an animated ring, status badges, and size variants.
 ---
 
+import UsageMeterCircleDemo from '@/components/usage-meter-circle-demo';
+import CustomUsageMeterCircleDemo from '@/components/custom-usage-meter-circle-demo';
+
 You can change the progress color of the usage meter to `default` or `usage`.
 
 ## Default Usage Meter Circle
 
 <Tabs items={['Preview', 'Code']} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
-    <PreviewComponents registryName="usage-meter-circle">
+    <PreviewComponents registryName="billingsdk">
       <UsageMeterCircleDemo />
     </PreviewComponents>
   </Tab>
@@ -73,7 +76,7 @@ You can change the progress color of the usage meter to `default` or `usage`.
 
 <Tabs items={['Preview', 'Code']} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
-    <PreviewComponents registryName="usage-meter-circle">
+    <PreviewComponents registryName="billingsdk">
       <CustomUsageMeterCircleDemo />
     </PreviewComponents>
   </Tab>
