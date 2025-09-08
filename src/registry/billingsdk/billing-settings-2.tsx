@@ -54,7 +54,7 @@ export interface BillingSettingsData {
 	taxId?: string;
 }
 
-export interface BillingSettingsComponentProps {
+export interface BillingSettings2ComponentProps {
 	className?: string;
 	title?: string;
 	description?: string;
@@ -63,14 +63,14 @@ export interface BillingSettingsComponentProps {
 	onCancel?: () => void;
 }
 
-export function BillingSettings({
+export function BillingSettings2({
 	className,
-	title = 'Billing Settings',
+	title = 'Billing Settings 2',
 	description,
 	initialData,
 	onSave,
 	onCancel,
-}: BillingSettingsComponentProps) {
+}: BillingSettings2ComponentProps) {
 	const form = useForm<BillingSettingsProps>({
 		resolver: zodResolver(billingSettingsSchema),
 		defaultValues: {

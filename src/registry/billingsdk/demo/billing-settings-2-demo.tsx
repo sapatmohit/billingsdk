@@ -1,11 +1,11 @@
 'use client';
 
-import { BillingSettings } from '@/registry/billingsdk/billing-settings';
+import { BillingSettings2 } from '@/registry/billingsdk/billing-settings-2';
 
-export function BillingSettingsDemo() {
+export function BillingSettings2Demo() {
 	return (
-		<BillingSettings
-			title="Billing Settings"
+		<BillingSettings2
+			title="Billing Settings 2"
 			description="Manage your billing preferences and settings"
 			initialData={{
 				email: 'user@example.com',

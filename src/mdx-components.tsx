@@ -29,13 +29,11 @@ import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import dynamic from 'next/dynamic';
 
-// Dynamic imports for demo-heavy components to reduce bundle size
-// For Server Components, we don't use { ssr: false }
 const AlertsBannerDemo = dynamic(
 	() => import('@/components/billingsdk/alerts-banner-demo')
 );
-const BillingSettingsDemo = dynamic(
-	() => import('@/components/billingsdk/billing-settings-demo')
+const BillingSettings2Demo = dynamic(
+	() => import('@/components/billingsdk/billing-settings-2-demo')
 );
 const BillingSummaryCardDemo = dynamic(
 	() => import('@/components/billingsdk/billing-summary-card-demo')
@@ -91,7 +89,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		PaymentSuccessDialogDemo,
 		// Billing & Usage Components
 		AlertsBannerDemo,
-		BillingSettingsDemo,
+		BillingSettings2Demo,
 		BillingSummaryCardDemo,
 		DetailedUsageTableDemo,
 		InvoiceHistory2Demo,
