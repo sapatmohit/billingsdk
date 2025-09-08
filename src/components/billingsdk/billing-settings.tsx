@@ -1,1 +1,2 @@
-export * from '@/registry/billingsdk/billing-settings';
+"use client";
+export { BillingSettings } from "@/registry/billingsdk/billing-settings"

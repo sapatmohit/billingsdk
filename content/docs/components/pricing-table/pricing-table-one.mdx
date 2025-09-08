@@ -36,7 +36,7 @@ description: The Pricing Table One component provides a clean and modern design 
 
 <Tabs items={['shadcn', 'billingSDK']} defaultValue="shadcn" className="bg-transparent border-none">
   <Tab value="shadcn" className="border-none bg-transparent p-0 mt-3">
-    <Tabs items={['npx', 'pnpm', 'yarn']} defaultValue="npx" groupId="installation-tabs">
+    <Tabs items={['npx', 'pnpm', 'yarn', 'bun']} defaultValue="npx" groupId="installation-tabs">
       <Tab value="npx">
         ```bash
         npx shadcn@latest add @billingsdk/pricing-table-one
@@ -49,13 +49,18 @@ description: The Pricing Table One component provides a clean and modern design 
       </Tab>
       <Tab value="yarn">
         ```bash
-        npx shadcn@latest add @billingsdk/pricing-table-one
+        yarn dlx shadcn@latest add @billingsdk/pricing-table-one
+        ```
+      </Tab>
+      <Tab value="bun">
+        ```bash
+        bunx shadcn@latest add @billingsdk/pricing-table-one
         ```
       </Tab>
     </Tabs>
   </Tab>
   <Tab value="billingSDK" className="border-none bg-transparent p-0 mt-3">
-    <Tabs items={['npx', 'pnpm', 'yarn']} defaultValue="npx" groupId="billingsdk-cli-tabs">
+    <Tabs items={['npx', 'pnpm', 'yarn', 'bun']} defaultValue="npx" groupId="billingsdk-cli-tabs">
       <Tab value="npx">
         ```bash
         npx @billingsdk/cli add pricing-table-one
@@ -68,7 +73,12 @@ description: The Pricing Table One component provides a clean and modern design 
       </Tab>
       <Tab value="yarn">
         ```bash
-        npx @billingsdk/cli add pricing-table-one
+        yarn dlx @billingsdk/cli add pricing-table-one
+        ```
+      </Tab>
+      <Tab value="bun">
+        ```bash
+        bunx @billingsdk/cli add pricing-table-one
         ```
       </Tab>
     </Tabs>

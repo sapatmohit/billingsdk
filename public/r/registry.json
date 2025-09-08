@@ -39,7 +39,8 @@
                 "@billingsdk/invoice-history",
                 "@billingsdk/usage-table",
                 "@billingsdk/payment-method-selector",
-                "@billingsdk/payment-method-manager"
+                "@billingsdk/payment-method-manager",
+                "@billingsdk/billing-setting"
             ]
         },
         {
@@ -573,6 +574,40 @@
               "label",
               "utils"
             ]
-          }
+          },
+        {
+            "name": "billing-settings",
+            "type": "registry:block",
+            "title": "Billing Settings",
+            "description": "A comprehensive billing settings component with tabs for general, payment methods, invoices, and usage limits",
+            "files": [
+                {
+                "path": "src/registry/billingsdk/billing-settings.tsx",
+                "type": "registry:component",
+                "target": "components/billingsdk/billing-settings.tsx"
+                },
+                {
+                "path": "src/registry/billingsdk/demo/billing-settings-demo.tsx",
+                "type": "registry:component",
+                "target": "components/billing-settings-demo.tsx"
+                }
+            ],
+            "dependencies": [
+                "lucide-react"
+                
+            ],
+             "registryDependencies": [
+                "button",
+                "card",
+                "switch",
+                "badge",
+                "dropdown-menu",
+                "dialog",
+                "input",
+                "label",
+                "sonner" 
+            ]
+        }
+
     ]
 }

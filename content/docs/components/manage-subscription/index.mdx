@@ -26,7 +26,7 @@ description: The Manage Subscription component provides a comprehensive interfac
 
 <Tabs items={['shadcn', 'billingSDK']} defaultValue="shadcn" className="bg-transparent border-none">
   <Tab value="shadcn" className="border-none bg-transparent p-0 mt-3">
-    <Tabs items={['npx', 'pnpm', 'yarn']} defaultValue="npx" groupId="installation-tabs">
+    <Tabs items={['npx', 'pnpm', 'yarn', 'bun']} defaultValue="npx" groupId="installation-tabs">
       <Tab value="npx">
         ```bash
         npx shadcn@latest add @billingsdk/subscription-management
@@ -39,13 +39,18 @@ description: The Manage Subscription component provides a comprehensive interfac
       </Tab>
       <Tab value="yarn">
         ```bash
-        npx shadcn@latest add @billingsdk/subscription-management
+        yarn dlx shadcn@latest add @billingsdk/subscription-management
+        ```
+      </Tab>
+      <Tab value="bun">
+        ```bash
+        bunx shadcn@latest add @billingsdk/subscription-management
         ```
       </Tab>
     </Tabs>
   </Tab>
   <Tab value="billingSDK" className="border-none bg-transparent p-0 mt-3">
-    <Tabs items={['npx', 'pnpm', 'yarn']} defaultValue="npx" groupId="billingsdk-cli-tabs">
+    <Tabs items={['npx', 'pnpm', 'yarn', 'bun']} defaultValue="npx" groupId="billingsdk-cli-tabs">
       <Tab value="npx">
         ```bash
         npx @billingsdk/cli add subscription-management
@@ -58,7 +63,12 @@ description: The Manage Subscription component provides a comprehensive interfac
       </Tab>
       <Tab value="yarn">
         ```bash
-        npx @billingsdk/cli add subscription-management
+        yarn dlx @billingsdk/cli add subscription-management
+        ```
+      </Tab>
+      <Tab value="bun">
+        ```bash
+        bunx @billingsdk/cli add subscription-management
         ```
       </Tab>
     </Tabs>
