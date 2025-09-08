@@ -23,7 +23,6 @@ import { UpdatePlanDialogDemo } from '@/components/update-plan-dialog-demo';
 import UsageMeterCircleDemo from '@/components/usage-meter-circle-demo';
 import UsageMeterLinearDemo from '@/components/usage-meter-linear-demo';
 import UsageTableDemo from '@/components/usage-table-demo';
-// Billing & Usage Components
 import * as TabsComponents from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
@@ -32,9 +31,7 @@ import dynamic from 'next/dynamic';
 const AlertsBannerDemo = dynamic(
 	() => import('@/components/billingsdk/alerts-banner-demo')
 );
-const BillingSettings2Demo = dynamic(
-	() => import('@/components/billingsdk/billing-settings-2-demo')
-);
+
 const BillingSummaryCardDemo = dynamic(
 	() => import('@/components/billingsdk/billing-summary-card-demo')
 );
@@ -89,7 +86,6 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
 		PaymentSuccessDialogDemo,
 		// Billing & Usage Components
 		AlertsBannerDemo,
-		BillingSettings2Demo,
 		BillingSummaryCardDemo,
 		DetailedUsageTableDemo,
 		InvoiceHistory2Demo,
