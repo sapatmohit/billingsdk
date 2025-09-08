@@ -1,0 +1,87 @@
+---
+title: Billing Settings 2
+description: Variant of Billing Settings matching the inline form layout with switches and actions.
+---
+
+import BillingSettings2Demo from '@/components/billingsdk/billing-settings-2-demo';
+
+    <Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
+    <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
+    <PreviewComponents registryName="billingsdk">
+    <BillingSettings2Demo />
+    </PreviewComponents>
+    </Tab>
+
+    <Tab value="Code" className="mt-3">
+    <include cwd lang="tsx" meta='title="src/components/billingsdk/billing-settings-2-demo.tsx"'>src/components/billingsdk/billing-settings-2-demo.tsx</include>
+    </Tab>
+    </Tabs>
+
+### Installation
+
+<Tabs
+	items={['shadcn', 'billingSDK']}
+	defaultValue="shadcn"
+	className="bg-transparent border-none"
+>
+	<Tab value="shadcn" className="border-none bg-transparent p-0 mt-3">
+		<Tabs
+			items={['npx', 'pnpm', 'yarn']}
+			defaultValue="npx"
+			groupId="installation-tabs"
+		>
+			<Tab value="npx">
+				```bash npx shadcn@latest add @billingsdk/billing-settings-2 ```
+			</Tab>
+			<Tab value="pnpm">
+				```bash pnpm dlx shadcn@latest add @billingsdk/billing-settings-2 ```
+			</Tab>
+			<Tab value="yarn">
+				```bash yarn dlx shadcn@latest add @billingsdk/billing-settings-2 ```
+			</Tab>
+		</Tabs>
+	</Tab>
+	<Tab value="billingSDK" className="border-none bg-transparent p-0 mt-3">
+		<Tabs
+			items={['npx', 'pnpm', 'yarn']}
+			defaultValue="npx"
+			groupId="billingsdk-cli-tabs"
+		>
+			<Tab value="npx">
+				```bash npx @billingsdk/cli add billing-settings-2 ```
+			</Tab>
+			<Tab value="pnpm">
+				```bash pnpm dlx @billingsdk/cli add billing-settings-2 ```
+			</Tab>
+			<Tab value="yarn">
+				```bash yarn dlx @billingsdk/cli add billing-settings-2 ```
+			</Tab>
+		</Tabs>
+	</Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { BillingSettings2 } from '@/components/billingsdk/billing-settings-2';
+```
+
+```tsx
+<BillingSettings2 />
+```
+
+<div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+	<div className="flex items-center justify-between">
+		<div>
+			<span className="text-sm text-gray-500 dark:text-gray-400">
+				Created by{' '}
+				<a
+					href="https://github.com/sapatmohit"
+					className="text-blue-600 hover:underline dark:text-blue-400"
+				>
+					Mohit Sapat
+				</a>
+			</span>
+		</div>
+	</div>
+</div>
