@@ -37,13 +37,19 @@ You can change the progress color of the usage meter to `default` or `usage`.
 			groupId="installation-tabs"
 		>
 			<Tab value="npx">
-				```bash npx shadcn@latest add @billingsdk/usage-meter-linear ```
+				```
+				bash npx shadcn@latest add @billingsdk/usage-meter-linear
+				```
 			</Tab>
 			<Tab value="pnpm">
-				```bash pnpm dlx shadcn@latest add @billingsdk/usage-meter-linear ```
+				```
+				bash pnpm dlx shadcn@latest add @billingsdk/usage-meter-linear
+				```
 			</Tab>
 			<Tab value="yarn">
-				``` bash yarn dlx shadcn@latest add @billingsdk/usage-meter-linear ```
+				```
+				bash yarn dlx shadcn@latest add @billingsdk/usage-meter-linear
+				```
 			</Tab>
 		</Tabs>
 	</Tab>
@@ -54,13 +60,19 @@ You can change the progress color of the usage meter to `default` or `usage`.
 			groupId="billingsdk-cli-tabs"
 		>
 			<Tab value="npx">
-				``` bash npx @billingsdk/cli add usage-meter-linear ```
+				```
+				bash npx @billingsdk/cli add usage-meter-linear
+				```
 			</Tab>
 			<Tab value="pnpm">
-				``` bash pnpm dlx @billingsdk/cli add usage-meter-linear ```
+				```
+				bash pnpm dlx @billingsdk/cli add usage-meter-linear
+				```
 			</Tab>
 			<Tab value="yarn">
-				``` bash yarn dlx @billingsdk/cli add usage-meter-linear ```
+				```
+				bash yarn dlx @billingsdk/cli add usage-meter-linear
+				```
 			</Tab>
 		</Tabs>
 	</Tab>
@@ -119,19 +131,19 @@ description="Your current usage across tracked limits"
 
 ## Props
 
-| Prop            | Type                   | Required | Description                                                                         |
-| --------------- | ---------------------- | -------- | ----------------------------------------------------------------------------------- |
-| `usage`         | `Usage[]`              | ✅       | Array of usage items `{ name?: string; usage: number; limit: number }`.             |
-| `className`     | `string`               | ❌       | Additional CSS classes to apply to the root card.                                   |
-| `variant`       | `"linear" \| "circle"` | ❌       | Visual style of the meter. Defaults to `"linear"`.                                  |
-| `size`          | `"sm" \| "md" \| "lg"` | ❌       | Component size mapping (bar/circle/text). Defaults to `"md"`.                       |
-| `title`         | `string`               | ❌       | Optional title rendered in the card header.                                         |
-| `description`   | `string`               | ❌       | Optional description rendered under the title.                                      |
+| Prop            | Type                   | Required | Description                                                                            |
+| --------------- | ---------------------- | -------- | -------------------------------------------------------------------------------------- |
+| `usage`         | `Usage[]`              | ✅       | Array of usage items `{ name?: string; usage: number; limit: number }`.                |
+| `className`     | `string`               | ❌       | Additional CSS classes to apply to the root card.                                      |
+| `variant`       | `"linear" \| "circle"` | ❌       | Visual style of the meter. Defaults to `"linear"`.                                     |
+| `size`          | `"sm" \| "md" \| "lg"` | ❌       | Component size mapping (bar/circle/text). Defaults to `"md"`.                          |
+| `title`         | `string`               | ❌       | Optional title rendered in the card header.                                            |
+| `description`   | `string`               | ❌       | Optional description rendered under the title.                                         |
 | `progressColor` | `"default" \| "usage"` | ❌       | Bar/ring color behavior. `"usage"` auto-colors by thresholds. Defaults to `"default"`. |
 
 ## Theming
 
-The usage meter liner component is styled using the `shadcn/ui` library. You can customize the colors and fonts by overriding the CSS variables. You can also get the theme from the [Theming](/docs/theming) page.
+The usage meter linear component is styled using the `shadcn/ui` library.
 
 ## Example
 

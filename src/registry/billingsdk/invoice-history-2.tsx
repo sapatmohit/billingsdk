@@ -78,20 +78,16 @@ export function InvoiceHistory2({
 	};
 
 	// Determine which actions are allowed
-	const actionWhitelist = ['download', 'view'] as const;
-	type AllowedAction = (typeof actionWhitelist)[number];
+	const isActionName = (v: string): v is ActionName =>
+		v === 'download' || v === 'view';
 
-	const normalizedActions: Array<'download' | 'view'> = Array.isArray(actions)
-		? actions.filter((action): action is AllowedAction =>
-				actionWhitelist.includes(action)
-		  )
+	const normalizedActions: ActionName[] = Array.isArray(actions)
+		? actions.filter(isActionName)
 		: typeof actions === 'string'
 		? actions
 				.split(',')
-				.map((a) => a.trim())
-				.filter((action): action is AllowedAction =>
-					actionWhitelist.includes(action as AllowedAction)
-				)
+				.map((s) => s.trim())
+				.filter(isActionName)
 		: ['download', 'view'];
 
 	const allowView = normalizedActions.includes('view');
@@ -160,7 +156,7 @@ export function InvoiceHistory2({
 														onClick={() => {
 															if (invoice.invoiceUrl) {
 																window.open(
-																	invoice.invoiceUrl!,
+																	invoice.invoiceUrl,
 																	'_blank',
 																	'noopener,noreferrer'
 																);
