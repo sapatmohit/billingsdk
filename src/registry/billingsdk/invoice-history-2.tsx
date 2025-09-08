@@ -31,6 +31,8 @@ export interface Invoice {
 	invoiceUrl?: string;
 }
 
+type ActionName = 'download' | 'view';
+
 export interface InvoiceHistory2Props {
 	className?: string;
 	title?: string;
@@ -42,7 +44,7 @@ export interface InvoiceHistory2Props {
 	 * Accepts comma-separated string (e.g., "download,view") or an array.
 	 * Defaults to both actions when omitted.
 	 */
-	actions?: Array<'download' | 'view'> | string;
+	actions?: ActionName[] | string;
 	/** Optional handler for view when no invoiceUrl is present */
 	onView?: (id: string) => void;
 }
@@ -50,7 +52,7 @@ export interface InvoiceHistory2Props {
 export function InvoiceHistory2({
 	className,
 	title = 'Invoice History',
-	description,
+	description = 'Your past invoices and payment receipts.',
 	invoices,
 	onDownload,
 	actions,
@@ -59,7 +61,11 @@ export function InvoiceHistory2({
 	const getStatusBadge = (status: Invoice['status']) => {
 		switch (status) {
 			case 'paid':
-				return <Badge variant="default">Paid</Badge>;
+				return (
+					<Badge className="bg-emerald-600 text-emerald-50 border-emerald-700/40">
+						Paid
+					</Badge>
+				);
 			case 'refunded':
 				return <Badge variant="secondary">Refunded</Badge>;
 			case 'open':
@@ -72,22 +78,32 @@ export function InvoiceHistory2({
 	};
 
 	// Determine which actions are allowed
-	const normalizedActions = Array.isArray(actions)
-		? actions
+	const actionWhitelist = ['download', 'view'] as const;
+	type AllowedAction = (typeof actionWhitelist)[number];
+
+	const normalizedActions: Array<'download' | 'view'> = Array.isArray(actions)
+		? actions.filter((action): action is AllowedAction =>
+				actionWhitelist.includes(action)
+		  )
 		: typeof actions === 'string'
-		? (actions
+		? actions
 				.split(',')
 				.map((a) => a.trim())
-				.filter(Boolean) as Array<'download' | 'view'>)
-		: (['download', 'view'] as Array<'download' | 'view'>);
+				.filter((action): action is AllowedAction =>
+					actionWhitelist.includes(action as AllowedAction)
+				)
+		: ['download', 'view'];
+
 	const allowView = normalizedActions.includes('view');
 	const allowDownload = normalizedActions.includes('download');
 
 	// Get aria-labels
 	const getViewAriaLabel = (invoice: Invoice) => {
+		const base = invoice.description || 'Invoice';
+		const amt = invoice.amount ? ` for ${invoice.amount}` : '';
 		return invoice.invoiceUrl
-			? `View invoice ${invoice.id} in new tab`
-			: `View invoice ${invoice.id}`;
+			? `View ${base} ${invoice.id}${amt} in new tab`
+			: `View ${base} ${invoice.id}${amt}`;
 	};
 
 	return (
@@ -99,7 +115,10 @@ export function InvoiceHistory2({
 			<CardContent>
 				<div className="overflow-x-auto">
 					<Table>
-						<TableCaption className="sr-only">Invoice history</TableCaption>
+						<TableCaption className="sr-only">
+							List of invoices with date, description, amount, status, and
+							available actions
+						</TableCaption>
 						<TableHeader>
 							<TableRow>
 								<TableHead>Date</TableHead>
