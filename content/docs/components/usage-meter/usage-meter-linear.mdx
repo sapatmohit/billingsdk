@@ -18,7 +18,7 @@ You can change the progress color of the usage meter to `default` or `usage`.
   </Tab>
 
   <Tab value="Code" className="mt-3">
-  <include cwd lang="tsx" meta='title="src/components/usage-meter-linear-demo.tsx"'>src/components/usage-meter-linear-demo.tsx</include>
+<include cwd lang="tsx" meta='title="src/registry/billingsdk/demo/usage-meter-linear-demo.tsx"'>src/registry/billingsdk/demo/usage-meter-linear-demo.tsx</include>
 
   </Tab>
 </Tabs>
@@ -37,18 +37,18 @@ You can change the progress color of the usage meter to `default` or `usage`.
 			groupId="installation-tabs"
 		>
 			<Tab value="npx">
-				```
-				bash npx shadcn@latest add @billingsdk/usage-meter-linear
+				```bash
+				npx shadcn@latest add @billingsdk/usage-meter-linear
 				```
 			</Tab>
 			<Tab value="pnpm">
-				```
-				bash pnpm dlx shadcn@latest add @billingsdk/usage-meter-linear
+				```bash
+				pnpm dlx shadcn@latest add @billingsdk/usage-meter-linear
 				```
 			</Tab>
 			<Tab value="yarn">
-				```
-				bash yarn dlx shadcn@latest add @billingsdk/usage-meter-linear
+				```bash
+				yarn dlx shadcn@latest add @billingsdk/usage-meter-linear
 				```
 			</Tab>
 		</Tabs>
@@ -60,18 +60,18 @@ You can change the progress color of the usage meter to `default` or `usage`.
 			groupId="billingsdk-cli-tabs"
 		>
 			<Tab value="npx">
-				```
-				bash npx @billingsdk/cli add usage-meter-linear
+				```bash 
+				npx @billingsdk/cli add usage-meter-linear
 				```
 			</Tab>
 			<Tab value="pnpm">
-				```
-				bash pnpm dlx @billingsdk/cli add usage-meter-linear
+				```bash 
+				pnpm dlx @billingsdk/cli add usage-meter-linear
 				```
 			</Tab>
 			<Tab value="yarn">
-				```
-				bash yarn dlx @billingsdk/cli add usage-meter-linear
+				```bash
+				yarn dlx @billingsdk/cli add usage-meter-linear
 				```
 			</Tab>
 		</Tabs>
@@ -120,12 +120,12 @@ import { UsageMeter } from '@/components/billingsdk/usage-meter';
     { name: 'API Requests', usage: 75, limit: 100 },
     { name: 'Storage (GB)', usage: 12, limit: 100 },
   ]}
-  title="Usage"
-description="Your current usage across tracked limits"
-  variant="linear"
-  size="md"
-  className="mx-auto"
-  progressColor="usage" // default, usage
+  	title="Usage"
+	description="Your current usage across tracked limits"
+	variant="linear"
+	size="md"
+	className="mx-auto"
+	progressColor="usage" // default, usage
 />
 ```
 
@@ -147,10 +147,12 @@ The usage meter linear component is styled using the `shadcn/ui` library.
 
 ## Example
 
+{' '}
+
 <include
 	cwd
 	lang="tsx"
-	meta='title="src/components/usage-meter-linear-demo.tsx"'
+	meta='title="src/registry/billingsdk/demo/usage-meter-linear-demo.tsx"'
 >
-	src/components/usage-meter-linear-demo.tsx
+	src/registry/billingsdk/demo/usage-meter-linear-demo.tsx
 </include>

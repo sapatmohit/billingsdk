@@ -6,7 +6,7 @@ Disallow: /llms.mdx/*
 Disallow: /llms-full.txt
 
 # Host
-Host: billingsdk.com
+Host: https://billingsdk.com
 
 # Sitemaps
 Sitemap: https://billingsdk.com/sitemap.xml
