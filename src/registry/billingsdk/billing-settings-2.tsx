@@ -32,26 +32,40 @@ export function BillingSettings2({ className }: BillingSettings2Props) {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div className="space-y-2">
 						<Label htmlFor="fullName">Full Name</Label>
-						<Input id="fullName" placeholder="John Doe" />
+						<Input id="fullName" placeholder="John Doe" autoComplete="name" />
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="billingEmail">Billing Email</Label>
-						<Input id="billingEmail" placeholder="user@example.com" />
+						<Input
+							id="billingEmail"
+							type="email"
+							autoComplete="email"
+							placeholder="user@example.com"
+						/>
 						<p className="text-xs text-muted-foreground">
 							Invoices will be sent to this email address
 						</p>
 					</div>
 
 					<div className="space-y-2">
-						<Label>Currency</Label>
+						<Label id="currency-label">Currency</Label>
 						<Select defaultValue="usd">
-							<SelectTrigger>
+							<SelectTrigger aria-labelledby="currency-label">
 								<SelectValue placeholder="Select currency" />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="usd">USD - US Dollar</SelectItem>
+								<SelectItem value="inr">INR - Indian Rupees</SelectItem>
 								<SelectItem value="eur">EUR - Euro</SelectItem>
 								<SelectItem value="gbp">GBP - British Pound</SelectItem>
+								<SelectItem value="jpy">JPY - Japanese Yen</SelectItem>
+								<SelectItem value="aud">AUD - Australian Dollar</SelectItem>
+								<SelectItem value="cad">CAD - Canadian Dollar</SelectItem>
+								<SelectItem value="cny">CNY - Chinese Yuan</SelectItem>
+								<SelectItem value="sgd">SGD - Singapore Dollar</SelectItem>
+								<SelectItem value="chf">CHF - Swiss Franc</SelectItem>
+								<SelectItem value="zar">ZAR - South African Rand</SelectItem>
+								<SelectItem value="aed">AED - UAE Dirham</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>
@@ -72,7 +86,7 @@ export function BillingSettings2({ className }: BillingSettings2Props) {
 								Automatically renew your subscription
 							</div>
 						</div>
-						<Switch />
+						<Switch aria-label="Auto-Renewal" />
 					</div>
 
 					<div className="flex items-center justify-between rounded-lg border p-4">
@@ -82,7 +96,7 @@ export function BillingSettings2({ className }: BillingSettings2Props) {
 								Receive emails when invoices are generated
 							</div>
 						</div>
-						<Switch />
+						<Switch aria-label="Invoice Emails" />
 					</div>
 
 					<div className="flex items-center justify-between rounded-lg border p-4">
@@ -92,7 +106,7 @@ export function BillingSettings2({ className }: BillingSettings2Props) {
 								Receive occasional updates about new features and offers
 							</div>
 						</div>
-						<Switch />
+						<Switch aria-label="Promotional Emails" />
 					</div>
 				</div>
 

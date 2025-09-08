@@ -49,19 +49,23 @@ import { InvoiceHistory2 } from '@/components/billingsdk/invoice-history-2';
 			// Action will use onDownload callback when invoiceUrl is not provided
 		},
 	]}
+	actions="download,view"
 	onDownload={(id) => console.log(`Download invoice ${id}`)}
+	onView={(id) => console.log(`View invoice ${id}`)}
 />;
 ```
 
 ## Props
 
-| Prop        | Type                   | Description                                      |
-| ----------- | ---------------------- | ------------------------------------------------ |
-| className   | `string`               | Additional CSS classes to apply to the component |
-| title       | `string`               | Title for the invoice history section            |
-| description | `string`               | Description for the invoice history section      |
-| invoices    | `Invoice[]`            | Array of invoice data                            |
-| onDownload  | `(id: string) => void` | Function called when download button is clicked  |
+| Prop        | Type                                 | Description                                                                                       |
+| ----------- | ------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| className   | `string`                             | Additional CSS classes to apply to the component                                                  |
+| title       | `string`                             | Title for the invoice history section                                                             |
+| description | `string`                             | Description for the invoice history section                                                       |
+| invoices    | `Invoice[]`                          | Array of invoice data                                                                             |
+| actions     | `('download' \| 'view')[] \| string` | Controls which action buttons are shown. Accepts array or comma string. Defaults to both actions. |
+| onDownload  | `(id: string) => void`               | Called when Download is clicked                                                                   |
+| onView      | `(id: string) => void`               | Called when View is clicked and no `invoiceUrl` is provided                                       |
 
 ### Invoice Object
 

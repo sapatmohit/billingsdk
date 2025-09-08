@@ -19,7 +19,7 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import { Download } from 'lucide-react';
+import { Download, Eye } from 'lucide-react';
 
 // Updated interface to match invoice-history.tsx
 export interface Invoice {
@@ -37,6 +37,14 @@ export interface InvoiceHistory2Props {
 	description?: string;
 	invoices: Invoice[];
 	onDownload?: (id: string) => void;
+	/**
+	 * Controls which action buttons are shown in the Action column.
+	 * Accepts comma-separated string (e.g., "download,view") or an array.
+	 * Defaults to both actions when omitted.
+	 */
+	actions?: Array<'download' | 'view'> | string;
+	/** Optional handler for view when no invoiceUrl is present */
+	onView?: (id: string) => void;
 }
 
 export function InvoiceHistory2({
@@ -45,6 +53,8 @@ export function InvoiceHistory2({
 	description,
 	invoices,
 	onDownload,
+	actions,
+	onView,
 }: InvoiceHistory2Props) {
 	const getStatusBadge = (status: Invoice['status']) => {
 		switch (status) {
@@ -61,25 +71,23 @@ export function InvoiceHistory2({
 		}
 	};
 
-	// Updated action handler to prefer invoiceUrl when available
-	const handleAction = (invoice: Invoice) => {
-		if (invoice.invoiceUrl) {
-			window.open(invoice.invoiceUrl, '_blank', 'noopener,noreferrer');
-		} else {
-			onDownload?.(invoice.id);
-		}
-	};
+	// Determine which actions are allowed
+	const normalizedActions = Array.isArray(actions)
+		? actions
+		: typeof actions === 'string'
+		? (actions
+				.split(',')
+				.map((a) => a.trim())
+				.filter(Boolean) as Array<'download' | 'view'>)
+		: (['download', 'view'] as Array<'download' | 'view'>);
+	const allowView = normalizedActions.includes('view');
+	const allowDownload = normalizedActions.includes('download');
 
-	// Determine if action button should be shown
-	const shouldShowAction = (invoice: Invoice) => {
-		return !!invoice.invoiceUrl || !!onDownload;
-	};
-
-	// Get aria-label for action button
-	const getActionAriaLabel = (invoice: Invoice) => {
+	// Get aria-labels
+	const getViewAriaLabel = (invoice: Invoice) => {
 		return invoice.invoiceUrl
 			? `View invoice ${invoice.id} in new tab`
-			: `Download invoice ${invoice.id}`;
+			: `View invoice ${invoice.id}`;
 	};
 
 	return (
@@ -125,17 +133,42 @@ export function InvoiceHistory2({
 											{getStatusBadge(invoice.status)}
 										</TableCell>
 										<TableCell className="text-right">
-											{shouldShowAction(invoice) && (
-												<Button
-													variant="outline"
-													size="sm"
-													onClick={() => handleAction(invoice)}
-													aria-label={getActionAriaLabel(invoice)}
-												>
-													<Download className="h-4 w-4 mr-1" />
-													{invoice.invoiceUrl ? 'View' : 'Download'}
-												</Button>
-											)}
+											<div className="flex items-center justify-end gap-2">
+												{allowView && (
+													<Button
+														variant="outline"
+														size="sm"
+														onClick={() => {
+															if (invoice.invoiceUrl) {
+																window.open(
+																	invoice.invoiceUrl!,
+																	'_blank',
+																	'noopener,noreferrer'
+																);
+															} else {
+																onView?.(invoice.id);
+															}
+														}}
+														aria-label={getViewAriaLabel(invoice)}
+														disabled={!invoice.invoiceUrl && !onView}
+													>
+														<Eye className="h-4 w-4 mr-1" />
+														View
+													</Button>
+												)}
+												{allowDownload && (
+													<Button
+														variant="outline"
+														size="sm"
+														onClick={() => onDownload?.(invoice.id)}
+														aria-label={`Download invoice ${invoice.id}`}
+														disabled={!onDownload}
+													>
+														<Download className="h-4 w-4 mr-1" />
+														Download
+													</Button>
+												)}
+											</div>
 										</TableCell>
 									</TableRow>
 								))
