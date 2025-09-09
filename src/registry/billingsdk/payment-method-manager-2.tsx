@@ -46,7 +46,7 @@ import {
 
 import React, { useId, useState } from 'react';
 
-const inputId = useId();
+// moved into PaymentMethodItem for per-instance stable ID
 
 export interface PaymentMethod2 {
 	id: string;
@@ -89,6 +89,7 @@ function PaymentMethodItem({
 	onSetDefault,
 	onViewDetails,
 }: PaymentMethodItemProps) {
+	const inputId = useId();
 	const [isRemoving, setIsRemoving] = useState(false);
 	const [showDetails, setShowDetails] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
@@ -129,13 +130,19 @@ function PaymentMethodItem({
 		return status.charAt(0).toUpperCase() + status.slice(1);
 	};
 
-	// Format expiry date
+	// Format expiry date accepting MM/YY, MM/YYYY, YYYY-MM, YYYY/MM
 	const formatExpiry = (expiry?: string) => {
 		if (!expiry) return 'N/A';
-		const norm = expiry.replace(/\s+/g, '').replace('-', '/');
-		const [month, year] = norm.split('/');
-		if (!month || !year) return expiry;
-		return `${month.padStart(2, '0')}/${year.slice(-2)}`;
+		const s = expiry.trim();
+		const m = s.match(/^(\d{1,4})\s*[-/]\s*(\d{1,4})$/);
+		if (!m) return s;
+		let a = parseInt(m[1], 10),
+			b = parseInt(m[2], 10);
+		// if first > 12 treat as YYYY-MM
+		const month = a > 12 ? b : a;
+		const year = a > 12 ? a : b;
+		if (!month || month > 12) return s;
+		return `${String(month).padStart(2, '0')}/${String(year).slice(-2)}`;
 	};
 
 	const handleEditSubmit = () => {

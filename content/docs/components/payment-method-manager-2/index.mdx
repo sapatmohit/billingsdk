@@ -25,17 +25,17 @@ The Payment Method Manager 2 component displays saved payment methods and provid
 </Tabs>
 ## Props
 
-| Prop           | Type                   | Description                                               |
-| -------------- | ---------------------- | --------------------------------------------------------- |
-| paymentMethods | `PaymentMethod2[]`     | Array of saved payment methods                            |
-| onAdd          | `() => void`           | (optional) Called when the add button is clicked          |
-| onEdit         | `(id: string) => void` | (optional) Called when the edit button is clicked         |
-| onRemove       | `(id: string) => void` | (optional) Called when the remove button is clicked       |
-| onSetDefault   | `(id: string) => void` | (optional) Called when the set default button is clicked  |
-| onViewDetails  | `(id: string) => void` | (optional) Called when the view details button is clicked |
-| className      | `string`               | (optional) Additional CSS classes                         |
-| isLoading      | `boolean`              | (optional) Whether the component is in a loading state    |
-| error          | `string \| null`       | (optional) Error message to display                       |
+| Prop           | Type                                                    | Description                                               |
+| -------------- | ------------------------------------------------------- | --------------------------------------------------------- |
+| paymentMethods | `PaymentMethod2[]`                                      | Array of saved payment methods                            |
+| onAdd          | `() => void`                                            | (optional) Called when the add button is clicked          |
+| onEdit         | (id: string, changes?: Partial<PaymentMethod2>) => void | (optional) Called when the edit button is clicked         |
+| onRemove       | `(id: string) => void`                                  | (optional) Called when the remove button is clicked       |
+| onSetDefault   | `(id: string) => void`                                  | (optional) Called when the set default button is clicked  |
+| onViewDetails  | `(id: string) => void`                                  | (optional) Called when the view details button is clicked |
+| className      | `string`                                                | (optional) Additional CSS classes                         |
+| isLoading      | `boolean`                                               | (optional) Whether the component is in a loading state    |
+| error          | `string \| null`                                        | (optional) Error message to display                       |
 
 ### Payment Method 2 Object
 
