@@ -1,3 +1,3 @@
-import { PaymentMethodManager2Demo } from '@/registry/billingsdk/demo/payment-method-manager-2-demo';
+'use client';
 
-export default PaymentMethodManager2Demo;
+export { PaymentMethodManager2Demo } from '@/registry/billingsdk/demo/payment-method-manager-2-demo';

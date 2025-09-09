@@ -43,7 +43,10 @@ import {
 	Star,
 	Trash2,
 } from 'lucide-react';
-import React, { useState } from 'react';
+
+import React, { useId, useState } from 'react';
+
+const inputId = useId();
 
 export interface PaymentMethod2 {
 	id: string;
@@ -61,7 +64,7 @@ export interface PaymentMethod2 {
 export interface PaymentMethodManager2Props {
 	paymentMethods: PaymentMethod2[];
 	onAdd?: () => void;
-	onEdit?: (id: string) => void;
+	onEdit?: (id: string, changes?: Partial<PaymentMethod2>) => void;
 	onRemove?: (id: string) => void;
 	onSetDefault?: (id: string) => void;
 	onViewDetails?: (id: string) => void;
@@ -73,7 +76,7 @@ export interface PaymentMethodManager2Props {
 // Payment Method Item Component
 interface PaymentMethodItemProps {
 	method: PaymentMethod2;
-	onEdit: (id: string) => void;
+	onEdit: (id: string, changes?: Partial<PaymentMethod2>) => void;
 	onRemove: (id: string) => void;
 	onSetDefault: (id: string) => void;
 	onViewDetails: (id: string) => void;
@@ -122,7 +125,7 @@ function PaymentMethodItem({
 	};
 
 	// Get status text with proper capitalization
-	const getStatusText = (status: string) => {
+	const getStatusText = (status: PaymentMethod2['status']) => {
 		return status.charAt(0).toUpperCase() + status.slice(1);
 	};
 
@@ -138,7 +141,7 @@ function PaymentMethodItem({
 	const handleEditSubmit = () => {
 		// In a real app, this would call an API to update the payment method
 		console.log('Updating payment method:', method.id, editForm);
-		onEdit(method.id);
+		onEdit(method.id, { cardholderName: editForm.cardholderName });
 		setIsEditing(false);
 	};
 
@@ -187,6 +190,8 @@ function PaymentMethodItem({
 							onClick={toggleDetails}
 							className="h-8 w-8 rounded-full hover:bg-muted"
 							aria-label={showDetails ? 'Hide details' : 'Show details'}
+							aria-expanded={showDetails}
+							aria-controls={`pm-details-${method.id}`}
 						>
 							{showDetails ? (
 								<EyeOff className="h-4 w-4" />
@@ -248,7 +253,10 @@ function PaymentMethodItem({
 					</div>
 
 					{showDetails && (
-						<div className="mt-4 pt-4 border-t border-border animate-in slide-in-from-top-2 duration-300">
+						<div
+							id={`pm-details-${method.id}`}
+							className="mt-4 pt-4 border-t border-border animate-in slide-in-from-top-2 duration-300"
+						>
 							<h4 className="text-sm font-semibold mb-2">Details</h4>
 							<div className="text-xs text-muted-foreground space-y-1">
 								<p className="flex justify-between">
@@ -430,9 +438,9 @@ function PaymentMethodItem({
 						</div>
 
 						<div className="space-y-2">
-							<Label htmlFor="cardholderName">Cardholder Name</Label>
+							<Label htmlFor={inputId}>Cardholder Name</Label>
 							<Input
-								id="cardholderName"
+								id={inputId}
 								value={editForm.cardholderName}
 								onChange={(e) =>
 									setEditForm({ ...editForm, cardholderName: e.target.value })
@@ -567,8 +575,8 @@ export function PaymentMethodManager2({
 		if (onAdd) onAdd();
 	};
 
-	const handleEdit = (id: string) => {
-		if (onEdit) onEdit(id);
+	const handleEdit = (id: string, changes?: Partial<PaymentMethod2>) => {
+		if (onEdit) onEdit(id, changes);
 	};
 
 	const handleRemove = (id: string) => {
@@ -606,7 +614,9 @@ export function PaymentMethodManager2({
 				return a.type === 'credit' ? -1 : 1;
 			}
 
-			return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+			const ta = Date.parse(a.createdAt) || 0;
+			const tb = Date.parse(b.createdAt) || 0;
+			return tb - ta;
 		});
 
 		return result;

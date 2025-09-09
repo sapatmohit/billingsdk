@@ -116,10 +116,14 @@ export function PaymentMethodManager2Demo() {
 		setIsAddDialogOpen(true);
 	};
 
-	const handleEdit = (id: string) => {
-		console.log('Edit payment method', id);
+	const handleEdit = (id: string, changes?: Partial<PaymentMethod2>) => {
+		console.log('Edit payment method', id, changes);
 		// In a real app, this would open a dialog or redirect to a payment method edit flow
-		alert(`Opening edit dialog for payment method ${id}...`);
+		alert(
+			`Opening edit dialog for payment method ${id} with changes: ${JSON.stringify(
+				changes
+			)}...`
+		);
 	};
 
 	const handleRemove = (id: string) => {
@@ -169,7 +173,10 @@ export function PaymentMethodManager2Demo() {
 			id: `pm_${Date.now()}`, // Generate a unique ID
 			type: newPaymentMethod.type,
 			last4: newPaymentMethod.last4,
-			expiry: newPaymentMethod.expiry,
+			expiry:
+				newPaymentMethod.type === 'credit' && newPaymentMethod.expiry
+					? newPaymentMethod.expiry
+					: undefined,
 			isDefault: paymentMethods.length === 0, // First payment method is default
 			brand: newPaymentMethod.brand || undefined,
 			bankName: newPaymentMethod.bankName || undefined,
@@ -225,7 +232,9 @@ export function PaymentMethodManager2Demo() {
 							<Label htmlFor="type">Payment Type</Label>
 							<Select
 								value={newPaymentMethod.type}
-								onValueChange={(value: string) => handleSelectChange('type', value)}
+								onValueChange={(value: string) =>
+									handleSelectChange('type', value)
+								}
 							>
 								<SelectTrigger>
 									<SelectValue placeholder="Select type" />
@@ -269,16 +278,18 @@ export function PaymentMethodManager2Demo() {
 										onChange={handleInputChange}
 										placeholder="4242"
 										maxLength={4}
+										inputMode="numeric"
+										pattern="[0-9]{4}"
 									/>
 								</div>
 								<div className="space-y-2">
-									<Label htmlFor="expiry">Expiry (MM/YY)</Label>
+									<Label htmlFor="expiry">Expiry (MM/YYYY)</Label>
 									<Input
 										id="expiry"
 										name="expiry"
 										value={newPaymentMethod.expiry}
 										onChange={handleInputChange}
-										placeholder="12/27"
+										placeholder="12/2027"
 									/>
 								</div>
 							</>
@@ -303,6 +314,8 @@ export function PaymentMethodManager2Demo() {
 										onChange={handleInputChange}
 										placeholder="4321"
 										maxLength={4}
+										inputMode="numeric"
+										pattern="[0-9]{4}"
 									/>
 								</div>
 							</>
