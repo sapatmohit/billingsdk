@@ -1,0 +1,139 @@
+---
+title: Invoice History 2
+---
+
+import { InvoiceHistory2Demo } from '@/registry/billingsdk/demo/invoice-history-2-demo';
+
+The Invoice History 2 component displays a list of past invoices with details such as date, description, amount, status, and action buttons for viewing or downloading invoices. The component now supports optional invoice URLs and flexible action handling.
+
+<Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
+  <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
+    <PreviewComponents registryName="billingsdk">
+      <InvoiceHistory2Demo />
+    </PreviewComponents>
+  </Tab>
+
+<Tab value="Code" className="mt-3">
+	<include
+		cwd
+		lang="tsx"
+		meta='title="src/registry/billingsdk/demo/invoice-history-2-demo.tsx"'
+	>
+		src/registry/billingsdk/demo/invoice-history-2-demo.tsx
+	</include>
+</Tab>
+
+</Tabs>
+
+```tsx
+import { InvoiceHistory2 } from '@/components/billingsdk/invoice-history-2';
+
+<InvoiceHistory2
+	title="Billing History"
+	description="Your past invoices and payment records"
+	invoices={[
+		{
+			id: '1',
+			date: '2025-08-15',
+			description: 'Pro Plan (Monthly)',
+			amount: '$29.00',
+			status: 'paid',
+			invoiceUrl: 'https://example.com/invoice/1', // Optional URL for direct viewing
+		},
+		{
+			id: '2',
+			date: '2025-07-15',
+			// description is now optional
+			amount: '$29.00',
+			status: 'paid',
+			// Action will use onDownload callback when invoiceUrl is not provided
+		},
+	]}
+	actions="download,view"
+	onDownload={(id) => console.log(`Download invoice ${id}`)}
+	onView={(id) => console.log(`View invoice ${id}`)}
+/>;
+```
+
+## Props
+
+| Prop        | Type                                 | Description                                                                                       |
+| ----------- | ------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| className   | `string`                             | Additional CSS classes to apply to the component                                                  |
+| title       | `string`                             | Title for the invoice history section                                                             |
+| description | `string`                             | Description for the invoice history section                                                       |
+| invoices    | `Invoice[]`                          | Array of invoice data                                                                             |
+| actions     | `('download' \| 'view')[] \| string` | Controls which action buttons are shown. Accepts array or comma string. Defaults to both actions. |
+| onDownload  | `(id: string) => void`               | Called when Download is clicked                                                                   |
+| onView      | `(id: string) => void`               | Called when View is clicked and no `invoiceUrl` is provided                                       |
+
+### Invoice Object
+
+| Property    | Type                                       | Description                                         |
+| ----------- | ------------------------------------------ | --------------------------------------------------- |
+| id          | `string`                                   | Unique identifier for the invoice                   |
+| date        | `string`                                   | Date of the invoice                                 |
+| description | `string` _optional_                        | Description of the invoice                          |
+| amount      | `string`                                   | Amount of the invoice                               |
+| status      | `"paid" \| "refunded" \| "open" \| "void"` | Status of the invoice                               |
+| invoiceUrl  | `string` _optional_                        | URL to view the invoice directly (takes precedence) |
+
+```tsx
+<InvoiceHistory2
+	title="Invoice History"
+	description="All your billing records"
+	invoices={[
+		{
+			id: 'inv-001',
+			date: '2025-09-15',
+			description: 'Enterprise Plan (Annual)',
+			amount: '$1188.00',
+			status: 'paid',
+			invoiceUrl: 'https://example.com/invoice/inv-001',
+		},
+		{
+			id: 'inv-002',
+			date: '2025-08-15',
+			description: 'Enterprise Plan (Annual)',
+			amount: '$1188.00',
+			status: 'refunded',
+		},
+		{
+			id: 'inv-003',
+			date: '2025-07-15',
+			// description is optional
+			amount: '$1188.00',
+			status: 'open',
+			invoiceUrl: 'https://example.com/invoice/inv-003',
+		},
+	]}
+	onDownload={(invoiceId) => {
+		// Handle invoice download
+		downloadInvoice(invoiceId);
+	}}
+/>
+```
+
+<div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+	<div className="flex items-center justify-between">
+		<div>
+			<span className="text-sm text-gray-500 dark:text-gray-400">
+				Created by{' '}
+				<a
+					href="https://github.com/sapatmohit"
+					className="text-blue-600 hover:underline dark:text-blue-400"
+				>
+					Mohit Sapat
+				</a>
+			</span>
+		</div>
+		<div className="flex items-center space-x-2">
+			<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+				Billing
+			</span>
+			<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+				UI Component
+			</span>
+		</div>
+	</div>
+</div>
