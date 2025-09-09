@@ -7,26 +7,18 @@ import { useState } from 'react';
 
 interface AlertProps {
 	variant?: 'default' | 'destructive';
-	title: string;
-	description?: string;
 	className?: string;
 	children?: React.ReactNode;
 }
 
-function Alert({
-	variant = 'default',
-	title,
-	description,
-	className,
-	children,
-}: AlertProps) {
+function Alert({ variant = 'default', className, children }: AlertProps) {
 	const isDestructive = variant === 'destructive';
 
 	return (
 		<div
 			className={cn(
 				'relative w-full rounded-lg border p-4',
-				variant === 'destructive'
+				isDestructive
 					? 'bg-destructive/80 text-destructive-foreground border-destructive/50'
 					: 'bg-background text-foreground border',
 				className
@@ -34,15 +26,7 @@ function Alert({
 			role={isDestructive ? 'alert' : 'status'}
 			aria-live={isDestructive ? 'assertive' : 'polite'}
 		>
-			<div className="flex items-start">
-				<div className="flex-1">
-					<div className="font-medium">{title}</div>
-					{description && (
-						<div className="text-sm opacity-90 mt-1">{description}</div>
-					)}
-					{children}
-				</div>
-			</div>
+			{children}
 		</div>
 	);
 }
@@ -113,8 +97,6 @@ export function Alerts({ className, alerts, onDismiss }: AlertsBannerProps) {
 				<Alert
 					key={alert.id}
 					variant={getAlertVariant(alert.type)}
-					title={alert.title}
-					description={alert.message}
 					className="relative"
 				>
 					<div className="flex items-start">
@@ -122,6 +104,10 @@ export function Alerts({ className, alerts, onDismiss }: AlertsBannerProps) {
 							{getAlertIcon(alert.type)}
 						</div>
 						<div className="ml-3 flex-1">
+							<div className="font-medium">{alert.title}</div>
+							{alert.message && (
+								<div className="text-sm opacity-90 mt-1">{alert.message}</div>
+							)}
 							{alert.actionText && alert.onAction && (
 								<div className="mt-3">
 									<Button
@@ -132,6 +118,7 @@ export function Alerts({ className, alerts, onDismiss }: AlertsBannerProps) {
 										}
 										size="sm"
 										onClick={alert.onAction}
+										type="button"
 									>
 										{alert.actionText}
 									</Button>

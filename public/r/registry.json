@@ -546,6 +546,54 @@
 			],
 			"dependencies": ["lucide-react"],
 			"registryDependencies": ["button", "utils"]
+		},
+		{
+			"name": "payment-method-manager",
+			"type": "registry:block",
+			"title": "Payment Method Manager",
+			"description": "A component for managing payment methods including credit cards and ACH accounts with add, edit, remove, and default setting capabilities",
+			"files": [
+				{
+					"path": "src/registry/billingsdk/payment-method-manager.tsx",
+					"type": "registry:component",
+					"target": "components/billingsdk/payment-method-manager.tsx"
+				},
+				{
+					"path": "src/registry/billingsdk/demo/payment-method-manager-demo.tsx",
+					"type": "registry:component",
+					"target": "components/payment-method-manager-demo.tsx"
+				}
+			],
+			"dependencies": ["lucide-react"],
+			"registryDependencies": [
+				"button",
+				"card",
+				"badge",
+				"dialog",
+				"separator",
+				"tooltip",
+				"utils"
+			]
+		},
+		{
+			"name": "usage-table",
+			"type": "registry:block",
+			"title": "Usage Table",
+			"description": "A component for displaying detailed usage history in a tabular format with support for cost tracking and totals",
+			"files": [
+				{
+					"path": "src/registry/billingsdk/usage-table.tsx",
+					"type": "registry:component",
+					"target": "components/billingsdk/usage-table.tsx"
+				},
+				{
+					"path": "src/registry/billingsdk/demo/usage-table-demo.tsx",
+					"type": "registry:component",
+					"target": "components/usage-table-demo.tsx"
+				}
+			],
+			"dependencies": ["lucide-react"],
+			"registryDependencies": ["card", "table", "utils"]
 		}
 	]
 }
