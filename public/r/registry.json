@@ -40,7 +40,7 @@
 				"@billingsdk/usage-table",
 				"@billingsdk/payment-method-selector",
 				"@billingsdk/payment-method-manager",
-				"@billingsdk/billing-setting",
+				"@billingsdk/billing-settings",
 				"@billingsdk/proration-preview",
 				"@billingsdk/alerts"
 			]
@@ -437,35 +437,6 @@
 			"dependencies": ["lucide-react", "motion"],
 			"registryDependencies": ["button", "utils"]
 		},
-
-		{
-			"name": "payment-method-selector",
-			"type": "registry:block",
-			"title": "Payment Method Selector",
-			"description": "A payment method selector component with support for cards, digital wallets, UPI, and BNPL services",
-			"files": [
-				{
-					"path": "src/registry/billingsdk/payment-method-selector.tsx",
-					"type": "registry:component",
-					"target": "components/billingsdk/payment-method-selector.tsx"
-				},
-				{
-					"path": "src/registry/billingsdk/demo/payment-method-selector-demo.tsx",
-					"type": "registry:component",
-					"target": "components/payment-method-selector-demo.tsx"
-				}
-			],
-			"dependencies": ["lucide-react", "motion"],
-			"registryDependencies": [
-				"button",
-				"dialog",
-				"tooltip",
-				"card",
-				"input",
-				"label",
-				"utils"
-			]
-		},
 		{
 			"name": "payment-method-selector",
 			"type": "registry:block",
@@ -524,7 +495,6 @@
 				"sonner"
 			]
 		},
-
 		{
 			"name": "proration-preview",
 			"type": "registry:block",

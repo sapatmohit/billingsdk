@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { AlertCircle, CheckCircle, Info, X } from 'lucide-react';
+import { AlertTriangle, CircleCheck, Info, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface AlertProps {
@@ -74,13 +74,13 @@ export function Alerts({ className, alerts, onDismiss }: AlertsBannerProps) {
 	const getAlertIcon = (type: AlertItem['type']) => {
 		switch (type) {
 			case 'warning':
-				return <AlertCircle className="h-4 w-4" />;
+				return <AlertTriangle className="h-4 w-4" />;
 			case 'success':
-				return <CheckCircle className="h-4 w-4" />;
+				return <CircleCheck className="h-4 w-4" />;
 			case 'info':
 				return <Info className="h-4 w-4" />;
 			case 'error':
-				return <AlertCircle className="h-4 w-4" />;
+				return <AlertTriangle className="h-4 w-4" />;
 			default:
 				return <Info className="h-4 w-4" />;
 		}
