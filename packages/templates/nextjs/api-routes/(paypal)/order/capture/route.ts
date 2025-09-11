@@ -1,5 +1,5 @@
-import { capturePayPalOrder } from '@/lib/paypal';
 import { NextRequest } from 'next/server';
+import { capturePayPalOrder } from '../../../../lib/paypal';
 
 /**
  * Capture a PayPal order

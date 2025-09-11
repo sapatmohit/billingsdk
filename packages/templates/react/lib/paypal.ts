@@ -1,4 +1,4 @@
-import { environment, PayPalHttpClient } from '@paypal/checkout-server-sdk';
+import { CheckoutPaymentIntent, Client, Environment, OrdersController } from '@paypal/paypal-server-sdk';
 
 /**
  * PayPal SDK configuration
@@ -7,23 +7,17 @@ import { environment, PayPalHttpClient } from '@paypal/checkout-server-sdk';
  * based on the PAYPAL_ENV environment variable.
  */
 
-// Determine PayPal environment based on PAYPAL_ENV
-const getPayPalEnvironment = () => {
-  const clientId = process.env.PAYPAL_CLIENT_ID;
-  const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
-  
-  if (!clientId || !clientSecret) {
-    throw new Error('PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET must be set in environment variables');
-  }
-  
-  if (process.env.PAYPAL_ENV === 'live') {
-    return new environment.LiveEnvironment(clientId, clientSecret);
-  }
-  return new environment.SandboxEnvironment(clientId, clientSecret);
-};
-
 // Create PayPal client
-export const paypalClient = new PayPalHttpClient(getPayPalEnvironment());
+const paypalClient = new Client({
+  clientCredentialsAuthCredentials: {
+    oAuthClientId: process.env.PAYPAL_CLIENT_ID || '',
+    oAuthClientSecret: process.env.PAYPAL_CLIENT_SECRET || '',
+  },
+  environment: process.env.PAYPAL_ENV === 'live' ? Environment.Production : Environment.Sandbox,
+});
+
+// Create orders controller
+const ordersController = new OrdersController(paypalClient);
 
 /**
  * Create a PayPal order
@@ -38,31 +32,27 @@ export const createPayPalOrder = async (
   currency: string = 'USD',
   description: string = 'BillingSDK Purchase'
 ) => {
-  const request = {
-    intent: 'CAPTURE',
-    purchase_units: [
-      {
-        description,
-        amount: {
-          currency_code: currency,
-          value: amount,
+  try {
+    const order = await ordersController.createOrder({
+      body: {
+        intent: CheckoutPaymentIntent.Capture,
+        purchaseUnits: [
+          {
+            description,
+            amount: {
+              currencyCode: currency,
+              value: amount,
+            },
+          },
+        ],
+        applicationContext: {
+          cancelUrl: `${process.env.REACT_APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/cancel`,
+          returnUrl: `${process.env.REACT_APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/return`,
         },
       },
-    ],
-    application_context: {
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/return`,
-    },
-  };
-
-  try {
-    const response = await paypalClient.execute({
-      path: '/v2/checkout/orders',
-      method: 'POST',
-      body: request,
     });
     
-    return response.result.id;
+    return order.result.id;
   } catch (error) {
     console.error('Error creating PayPal order:', error);
     throw error;
@@ -77,12 +67,10 @@ export const createPayPalOrder = async (
  */
 export const capturePayPalOrder = async (orderId: string) => {
   try {
-    const response = await paypalClient.execute({
-      path: `/v2/checkout/orders/${orderId}/capture`,
-      method: 'POST',
+    const capture = await ordersController.captureOrder({
+      id: orderId,
     });
-    
-    return response.result;
+    return capture.result;
   } catch (error) {
     console.error('Error capturing PayPal order:', error);
     throw error;
@@ -97,12 +85,10 @@ export const capturePayPalOrder = async (orderId: string) => {
  */
 export const getPayPalOrder = async (orderId: string) => {
   try {
-    const response = await paypalClient.execute({
-      path: `/v2/checkout/orders/${orderId}`,
-      method: 'GET',
+    const order = await ordersController.getOrder({
+      id: orderId,
     });
-    
-    return response.result;
+    return order.result;
   } catch (error) {
     console.error('Error retrieving PayPal order:', error);
     throw error;

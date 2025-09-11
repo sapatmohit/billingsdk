@@ -11,6 +11,7 @@ npx @billingsdk/cli --help
 ```
 
 This command provides two setup options:
+
 - **UI Components**: Sets up shadcn/ui components
 - **Framework Setup**: Configures your framework (Next.js, Express.js, or React) with payment provider integration
 
@@ -23,6 +24,7 @@ npx @billingsdk/cli init
 ```
 
 This interactive command will:
+
 - Automatically detect your framework (Next.js, Express.js, or React) from your project dependencies
 - Guide you through framework selection if auto-detection fails or you prefer manual selection
 - Help you choose a payment provider (Dodo Payments or PayPal)
@@ -50,6 +52,7 @@ npx @billingsdk/cli add usage-meter-circle
 Initialize a new billing project with complete setup.
 
 **Options:**
+
 - Automatic framework detection (Next.js, Express.js, React) from project dependencies
 - Interactive framework selection as fallback or when preferred
 - Payment provider configuration (Dodo Payments or PayPal)
@@ -59,6 +62,7 @@ Initialize a new billing project with complete setup.
 **Generated Structures:**
 
 *Next.js (App Router):*
+
 ```
 your-project/
 ├── app/api/(provider)/
@@ -74,6 +78,7 @@ your-project/
 ```
 
 *Express.js:*
+
 ```
 your-project/
 ├── src/
@@ -90,6 +95,7 @@ your-project/
 ```
 
 *React (Client-side only):*
+
 ```
 your-project/
 ├── hooks/
@@ -104,12 +110,12 @@ your-project/
 Add individual billing components to your existing project.
 
 **Examples:**
+
 ```bash
 npx @billingsdk/cli add pricing-table-one
 npx @billingsdk/cli add subscription-management
 npx @billingsdk/cli add usage-meter-circle
 ```
-
 
 ## Configuration
 
@@ -137,8 +143,9 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ### Dependencies Installed
 
 The CLI automatically installs:
+
 - `dodopayments` - Payment processing library (when Dodo Payments selected)
-- `@paypal/checkout-server-sdk` - PayPal SDK (when PayPal selected)
+- `@paypal/paypal-server-sdk` - PayPal SDK (when PayPal selected)
 - `standardwebhooks` - Webhook verification
 - `zod` - TypeScript schema validation
 
@@ -157,12 +164,14 @@ The CLI automatically detects your framework based on your project dependencies 
 - 🚧 **Hono** - Coming soon
 
 **Auto-Detection Process:**
+
 1. Scans your `package.json` for framework-specific dependencies
 2. Checks for framework configuration files in your project root
 3. Presents detected framework as the default option during setup
 4. Falls back to manual selection if no framework is detected
 
 ### Payment Providers
+
 - ✅ **Dodo Payments** - Fully supported
 - ✅ **PayPal** - Fully supported
 - 🚧 **Stripe** - Coming soon
@@ -189,18 +198,21 @@ npm run dev
 ### Common Issues
 
 **Command not found**
+
 ```bash
 # Ensure you're using npx correctly
 npx @billingsdk/cli --help
 ```
 
 **Permission errors**
+
 ```bash
 # On Unix systems
 chmod +x node_modules/.bin/@billingsdk/cli
 ```
 
 **Network issues**
+
 ```bash
 # Check internet connection
 # CLI downloads templates from billingsdk.com

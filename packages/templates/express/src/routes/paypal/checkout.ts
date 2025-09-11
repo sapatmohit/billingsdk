@@ -6,7 +6,7 @@
  */
 
 import { Router } from 'express';
-import { createPayPalOrder } from '../lib/paypal';
+import { createPayPalOrder } from '../../lib/paypal';
 
 const checkoutRouter = Router();
 

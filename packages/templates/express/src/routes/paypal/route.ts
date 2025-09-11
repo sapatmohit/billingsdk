@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { capturePayPalOrder, createPayPalOrder, getPayPalOrder } from '../lib/paypal';
+import { capturePayPalOrder, createPayPalOrder, getPayPalOrder } from '../../lib/paypal';
 
 const paypalRouter = Router();
 

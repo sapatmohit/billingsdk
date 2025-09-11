@@ -165,7 +165,7 @@
                 }
             ],
             "dependencies": [
-                "@paypal/checkout-server-sdk",
+                "@paypal/paypal-server-sdk",
                 "standardwebhooks",
                 "zod"
             ]
@@ -213,7 +213,7 @@
                 }
             ],
             "dependencies": [
-                "@paypal/checkout-server-sdk",
+                "@paypal/paypal-server-sdk",
                 "standardwebhooks",
                 "zod",
                 "express",
@@ -245,7 +245,7 @@
                 }
             ],
             "dependencies": [
-                "@paypal/checkout-server-sdk",
+                "@paypal/paypal-server-sdk",
                 "react"
             ]
         }

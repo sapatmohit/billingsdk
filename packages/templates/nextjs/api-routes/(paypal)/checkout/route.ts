@@ -1,5 +1,5 @@
-import { createPayPalOrder } from '@/lib/paypal';
 import { NextRequest } from 'next/server';
+import { createPayPalOrder } from '../../../lib/paypal';
 
 /**
  * Create a PayPal order for checkout

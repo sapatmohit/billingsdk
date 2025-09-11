@@ -1,42 +1,51 @@
 import { confirm, spinner } from '@clack/prompts';
-import { execFileSync } from 'child_process';
+import { execFileSync, execSync } from 'child_process';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { Result } from '../types/registry.js';
 
+// Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 /**
- * Adds files for the specified framework and provider.
- * Fetches template files from either a remote URL or local file system.
- * Handles file conflicts and dependency installation.
+ * Adds files from a template to the current project based on the specified framework and provider.
+ * This function fetches template files either from a remote registry or a local fallback,
+ * then writes them to the appropriate locations in the project directory.
  *
- * @param framework - The target framework ('nextjs', 'express', or 'react')
- * @param provider - The payment provider ('dodopayments' or 'paypal')
- * @returns Promise that resolves when all files are added
+ * @param framework - The framework to use for the template ('nextjs', 'express', or 'react')
+ * @param provider - The payment provider to use for the template ('dodopayments' or 'paypal')
+ * @returns A promise that resolves when all files have been added
+ * @throws {Error} If neither remote nor local templates are available
  */
 export const addFiles = async (
 	framework: 'nextjs' | 'express' | 'react',
 	provider: 'dodopayments' | 'paypal'
 ) => {
 	/**
-	 * Attempts to fetch template from remote URL.
-	 * Falls back to local template if remote fetch fails.
+	 * Fetches a template from the remote registry or falls back to a local template.
+	 *
+	 * @returns A promise that resolves to the template result
+	 * @throws {Error} If neither remote nor local templates are available or parseable
 	 */
 	const fetchTemplate = async (): Promise<Result> => {
 		const remoteUrl = `https://billingsdk.com/tr/${framework}-${provider}.json`;
-		const localPath = path.join(
-			__dirname,
-			'..',
-			'..',
-			'..',
-			'..',
-			'public',
-			'tr',
-			`${framework}-${provider}.json`
-		);
+		
+		// Multiple candidate paths to handle different execution contexts
+		const candidatePaths = [
+			// Standard path when CLI is run from project root (packages/cli)
+			path.join(__dirname, '..', '..', '..', 'public', 'tr', `${framework}-${provider}.json`),
+			// Path when CLI is run from packages/cli directory (alternative)
+			path.join(process.cwd(), '..', '..', 'public', 'tr', `${framework}-${provider}.json`),
+			// Path when CLI is run from one directory up
+			path.join(__dirname, '..', '..', '..', '..', 'billingsdk', 'public', 'tr', `${framework}-${provider}.json`),
+			// Additional fallback paths based on current working directory
+			path.join(process.cwd(), 'public', 'tr', `${framework}-${provider}.json`),
+			path.join(process.cwd(), 'packages', 'cli', 'public', 'tr', `${framework}-${provider}.json`),
+		];
+
+		const localPath = candidatePaths.find(p => fs.existsSync(p));
 
 		try {
 			const response = await fetch(remoteUrl);
@@ -48,19 +57,20 @@ export const addFiles = async (
 			const errorMessage =
 				error instanceof Error ? error.message : String(error);
 			try {
-				if (fs.existsSync(localPath)) {
+				if (localPath && fs.existsSync(localPath)) {
 					const localContent = fs.readFileSync(localPath, 'utf8');
 					return JSON.parse(localContent) as Result;
 				} else {
+					const allPaths = candidatePaths.map(p => `\n  - ${p}`).join('');
 					throw new Error(
-						`Local template not found at ${localPath}. Remote template failed with: ${errorMessage}`
+						`Local template not found at any of the expected paths:${allPaths}\n\nRemote template failed with: ${errorMessage}`
 					);
 				}
 			} catch (readError) {
 				const readErrorMessage =
 					readError instanceof Error ? readError.message : String(readError);
 				throw new Error(
-					`Failed to read or parse local template at ${localPath}. Error: ${readErrorMessage}. Remote template failed with: ${errorMessage}`
+					`Failed to read or parse local template at ${localPath || 'unknown path'}. Error: ${readErrorMessage}. Remote template failed with: ${errorMessage}`
 				);
 			}
 		}
@@ -73,11 +83,7 @@ export const addFiles = async (
 	for (const file of result.files) {
 		// Validate and sanitize file.target to prevent path traversal
 		const baseDir = path.resolve(process.cwd(), addToPath ?? '.');
-		const dest = path.resolve(
-			process.cwd(),
-			addToPath ?? '.',
-			file.target
-		);
+		const dest = path.resolve(process.cwd(), addToPath ?? '.', file.target);
 		const relativePath = path.relative(baseDir, dest);
 		const insideBase =
 			!path.isAbsolute(file.target) &&
@@ -85,9 +91,7 @@ export const addFiles = async (
 			!path.isAbsolute(relativePath) &&
 			dest.startsWith(baseDir + path.sep);
 		if (!insideBase) {
-			console.error(
-				`Skipping file ${file.target}: Path traversal detected`
-			);
+			console.error(`Skipping file ${file.target}: Path traversal detected`);
 			continue;
 		}
 
@@ -166,29 +170,11 @@ export const addFiles = async (
 		}
 	}
 
-	/**
-	 * Determines the package manager being used based on the npm_config_user_agent environment variable.
-	 *
-	 * @returns The name of the package manager ('bun', 'pnpm', 'yarn', or 'npm')
-	 */
-	function getPackageManager(): string {
-		const userAgent = process.env.npm_config_user_agent || '';
-
-		if (userAgent.startsWith('bun')) {
-			return 'bun';
-		} else if (userAgent.startsWith('pnpm')) {
-			return 'pnpm';
-		} else if (userAgent.startsWith('yarn')) {
-			return 'yarn';
-		} else {
-			return 'npm';
-		}
-	}
-
 	if (result.dependencies && process.env.BILLINGSDK_SKIP_INSTALL !== '1') {
 		const s = spinner();
 		s.start('Installing dependencies...');
 		try {
+			// Use execFileSync instead of execSync to prevent shell injection
 			const packageManager = getPackageManager();
 			const mkArgs = (pm: string, deps: string[]) => {
 				switch (pm) {
@@ -203,14 +189,55 @@ export const addFiles = async (
 				}
 			};
 			const args = mkArgs(packageManager, result.dependencies);
+			
+			// Run the command from the correct directory (project root)
+			const projectRoot = path.join(__dirname, '..', '..', '..');
+			
+			// Check if the package manager exists before trying to run it
+			try {
+				execSync(`${packageManager} --version`, { stdio: 'ignore' });
+			} catch (versionError) {
+				throw new Error(`Package manager '${packageManager}' not found in PATH. Please ensure it is installed and available in your system PATH.`);
+			}
+			
 			execFileSync(packageManager, args, {
 				stdio: 'inherit',
-				timeout: 5 * 60 * 1000,
+				cwd: projectRoot, // Run from project root
 			});
 			s.stop('Dependencies installed successfully!');
 		} catch (error) {
 			s.stop('Dependency installation failed.');
-			console.error('Failed to install dependencies:', error);
+			console.error('Failed to install dependencies:', error instanceof Error ? error.message : String(error));
+			
+			// Provide more helpful error message
+			const packageManager = getPackageManager();
+			const args = ['install', ...result.dependencies];
+			console.log('\nNote: You may need to manually install the required dependencies:');
+			console.log(`\n${packageManager} ${args.join(' ')}`);
+			console.log(`\nRun this command from the project root: ${path.join(__dirname, '..', '..', '..')}`);
+			console.log('\nIf you continue to have issues, please ensure that:');
+			console.log('1. The package manager is installed and in your system PATH');
+			console.log('2. You have the necessary permissions to install packages');
+			console.log('3. Your internet connection is working properly');
 		}
 	}
 };
+
+/**
+ * Determines the package manager being used based on the npm_config_user_agent environment variable.
+ *
+ * @returns The name of the package manager ('bun', 'pnpm', 'yarn', or 'npm')
+ */
+function getPackageManager(): string {
+	const userAgent = process.env.npm_config_user_agent || '';
+
+	if (userAgent.startsWith('bun')) {
+		return 'bun';
+	} else if (userAgent.startsWith('pnpm')) {
+		return 'pnpm';
+	} else if (userAgent.startsWith('yarn')) {
+		return 'yarn';
+	} else {
+		return 'npm';
+	}
+}
