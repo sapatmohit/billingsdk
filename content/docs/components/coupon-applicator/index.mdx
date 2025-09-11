@@ -74,16 +74,22 @@ import {
 ```
 
 ```tsx
-const handleApply = async (code: string): Promise<ValidationResult> => {
-	// Validate coupon code (e.g., call your API)
-	const response = await fetch(`/api/coupons/${code}`);
-	const data = await response.json();
-
-	return {
-		isValid: data.valid,
-		discount: data.valid ? data.discount : undefined,
-		message: data.message,
-	};
+const handleApply = async (rawCode: string): Promise<ValidationResult> => {
+	try {
+		const code = encodeURIComponent(rawCode.trim());
+		const res = await fetch(`/api/coupons/${code}`, { method: 'GET' });
+		if (!res.ok) {
+			return { isValid: false, message: 'Unable to validate coupon. Please try again.' };
+		}
+		const data = await res.json();
+		return {
+			isValid: data.valid,
+			discount: data.valid ? data.discount : undefined,
+			message: data.message,
+		};
+	} catch {
+		return { isValid: false, message: 'Network error. Please try again.' };
+	}
 };
 
 <CouponApplicator
