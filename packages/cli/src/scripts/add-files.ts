@@ -190,8 +190,8 @@ export const addFiles = async (
 			};
 			const args = mkArgs(packageManager, result.dependencies);
 			
-			// Run the command from the correct directory (project root)
-			const projectRoot = path.join(__dirname, '..', '..', '..');
+			// Run from the user's project root
+			const projectRoot = process.cwd();
 			
 			// Check if the package manager exists before trying to run it
 			try {
