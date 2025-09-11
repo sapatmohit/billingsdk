@@ -6,10 +6,124 @@
       "content": "import { PayPalSDK } from '@paypal/paypal-server-sdk';\n\n/**\n * PayPal SDK configuration\n * \n * This file sets up the PayPal client with the appropriate environment\n * based on the PAYPAL_ENV environment variable.\n */\n\n// Create PayPal client\nconst paypalClient = new PayPalSDK({\n  clientId: process.env.PAYPAL_CLIENT_ID || '',\n  clientSecret: process.env.PAYPAL_CLIENT_SECRET || '',\n  environment: process.env.PAYPAL_ENV === 'live' ? 'live' : 'sandbox',\n});\n\n/**\n * Create a PayPal order\n * \n * @param amount - The amount to charge\n * @param currency - The currency code (e.g., 'USD')\n * @param description - Description of the purchase\n * @returns Promise resolving to the order ID\n */\nexport const createPayPalOrder = async (\n  amount: string,\n  currency: string = 'USD',\n  description: string = 'BillingSDK Purchase'\n) => {\n  try {\n    const order = await paypalClient.createOrder({\n      intent: 'CAPTURE',\n      purchase_units: [\n        {\n          description,\n          amount: {\n            currency_code: currency,\n            value: amount,\n          },\n        },\n      ],\n      application_context: {\n        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,\n        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/return`,\n      },\n    });\n    \n    return order.id;\n  } catch (error) {\n    console.error('Error creating PayPal order:', error);\n    throw error;\n  }\n};\n\n/**\n * Capture a PayPal order\n * \n * @param orderId - The PayPal order ID to capture\n * @returns Promise resolving to the capture result\n */\nexport const capturePayPalOrder = async (orderId: string) => {\n  try {\n    const capture = await paypalClient.capturePaymentForOrder(orderId);\n    return capture;\n  } catch (error) {\n    console.error('Error capturing PayPal order:', error);\n    throw error;\n  }\n};\n\n/**\n * Get order details\n * \n * @param orderId - The PayPal order ID to retrieve\n * @returns Promise resolving to the order details\n */\nexport const getPayPalOrder = async (orderId: string) => {\n  try {\n    const order = await paypalClient.getOrder(orderId);\n    return order;\n  } catch (error) {\n    console.error('Error retrieving PayPal order:', error);\n    throw error;\n  }\n};"
     },
     {
-      "path": "packages/templates/nextjs/hooks/usePayPal.ts",
-      "target": "hooks/usePayPal.ts",
-      "content": "import { useState } from 'react';\n\n/**\n * Custom React hook for managing PayPal integration\n * \n * This hook provides functions and state management for integrating\n * PayPal payments into your React application.\n */\n\ninterface PayPalOrder {\n  id: string;\n  status: string;\n  amount: string;\n  currency: string;\n}\n\nexport const usePayPal = () => {\n  const [order, setOrder] = useState<PayPalOrder | null>(null);\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState<string | null>(null);\n\n  /**\n   * Create a PayPal order\n   * \n   * @param amount - The amount to charge\n   * @param currency - The currency code (e.g., 'USD')\n   * @param description - Description of the purchase\n   */\n  const createOrder = async (\n    amount: string,\n    currency: string = 'USD',\n    description: string = 'BillingSDK Purchase'\n  ) => {\n    setLoading(true);\n    setError(null);\n    \n    try {\n      const response = await fetch('/api/(paypal)/checkout', {\n        method: 'POST',\n        headers: {\n          'Content-Type': 'application/json',\n        },\n        body: JSON.stringify({ amount, currency, description }),\n      });\n      \n      if (!response.ok) {\n        throw new Error('Failed to create PayPal order');\n      }\n      \n      const data = await response.json();\n      setOrder({\n        id: data.id,\n        status: 'CREATED',\n        amount,\n        currency,\n      });\n      \n      return data.id;\n    } catch (err) {\n      const errorMessage = err instanceof Error ? err.message : 'Unknown error';\n      setError(errorMessage);\n      throw err;\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  /**\n   * Capture a PayPal order\n   * \n   * @param orderId - The PayPal order ID to capture\n   */\n  const captureOrder = async (orderId: string) => {\n    setLoading(true);\n    setError(null);\n    \n    try {\n      const response = await fetch(`/api/(paypal)/order/${orderId}/capture`, {\n        method: 'POST',\n      });\n      \n      if (!response.ok) {\n        throw new Error('Failed to capture PayPal order');\n      }\n      \n      const data = await response.json();\n      setOrder(prev => prev ? { ...prev, status: 'CAPTURED' } : null);\n      \n      return data;\n    } catch (err) {\n      const errorMessage = err instanceof Error ? err.message : 'Unknown error';\n      setError(errorMessage);\n      throw err;\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  /**\n   * Reset the hook state\n   */\n  const reset = () => {\n    setOrder(null);\n    setLoading(false);\n    setError(null);\n  };\n\n  return {\n    order,\n    loading,\n    error,\n    createOrder,\n    captureOrder,\n    reset,\n  };\n};"
-    },
+import { useState } from 'react';
+
+/**
+ * Custom React hook for managing PayPal integration
+ * 
+ * This hook provides functions and state management for integrating
+ * PayPal payments into your React application.
+ */
+
+interface PayPalOrder {
+  id: string;
+  status: string;
+  amount: string;
+  currency: string;
+}
+
+export const usePayPal = () => {
+  const [order, setOrder] = useState<PayPalOrder | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  /**
+   * Create a PayPal order
+   * 
+   * @param amount - The amount to charge
+   * @param currency - The currency code (e.g., 'USD')
+   * @param description - Description of the purchase
+   */
+  const createOrder = async (
+    amount: string,
+    currency: string = 'USD',
+    description: string = 'BillingSDK Purchase'
+  ) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount, currency, description }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create PayPal order');
+      }
+      
+      const data = await response.json();
+      setOrder({
+        id: data.id,
+        status: 'CREATED',
+        amount,
+        currency,
+      });
+      
+      return data.id;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Capture a PayPal order
+   * 
+   * @param orderId - The PayPal order ID to capture
+   */
+  const captureOrder = async (orderId: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/order/capture', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to capture PayPal order');
+      }
+      
+      const data = await response.json();
+      setOrder(prev => prev ? { ...prev, status: data?.status ?? 'CAPTURED' } : null);
+      
+      return data;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Reset the hook state
+   */
+  const reset = () => {
+    setOrder(null);
+    setLoading(false);
+    setError(null);
+  };
+
+  return {
+    order,
+    loading,
+    error,
+    createOrder,
+    captureOrder,
+    reset,
+  };
+};
     {
       "path": "packages/templates/nextjs/api-routes/(paypal)/checkout/route.ts",
       "target": "app/api/(paypal)/checkout/route.ts",
