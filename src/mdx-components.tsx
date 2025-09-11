@@ -3,6 +3,7 @@ import type { MDXComponents } from 'mdx/types';
 import * as TabsComponents from 'fumadocs-ui/components/tabs';
 import { PreviewComponents } from '@/components/preview/preview-components';
 import { CancelSubscriptionCardDemo } from '@/components/cancel-subscription-card-demo';
+import { CancelSubscriptionCardTwoDemo } from '@/components/cancel-subscription-card-two-demo';
 import { CancelSubscriptionDialogDemo } from '@/components/cancel-subscription-dialog-demo';
 import { PricingTableOneDemo } from '@/components/pricing-table-one-demo';
 import { PricingTableOneMinimalDemo } from '@/components/pricing-table-one-minimal-demo';
@@ -30,6 +31,8 @@ import { PaymentSuccessDialogDemo } from '@/components/payment-success-dialog-de
 import { PricingTableFiveDemo } from '@/components/pricing-table-five-demo';
 import { PricingTableFiveDemoMinimal } from '@/components/pricing-table-five-minimal-demo';
 import { ProrationPreviewDemo } from '@/components/proration-preview-demo';
+import { CouponDemo } from '@/components/coupon-demo';
+import { BillingSummaryCardDemo } from '@/components/billing-summary-card-demo';
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -47,6 +50,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     PricingTableFiveDemo,
     PricingTableFiveDemoMinimal,
     CancelSubscriptionCardDemo,
+    CancelSubscriptionCardTwoDemo,
     CancelSubscriptionDialogDemo,
     SubscriptionManagementDemo,
     UpdatePlanDialogDemo,
@@ -66,5 +70,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     PaymentMethodManagerDemo,
     PaymentSuccessDialogDemo,
     ProrationPreviewDemo,
+    CouponDemo,
+	 BillingSummaryCardDemo
   };
 }

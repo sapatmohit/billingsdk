@@ -71,7 +71,7 @@ export default function GitHubStarBadge() {
           const initial = formatApprox(data.stars);
           setDisplay({ kind: "stars", text: initial });
         }
-      } catch (error) {
+      } catch {
         // Only clear display if component is still mounted and request wasn't aborted
         // Don't clobber existing display on error
         if (!cancelled && controller && !controller.signal.aborted) {
