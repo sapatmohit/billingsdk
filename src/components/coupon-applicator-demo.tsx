@@ -11,9 +11,10 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import {
-	CouponApplicator,
-	type ValidationResult,
-} from '@/registry/billingsdk/coupon-applicator';
+import {
+  CouponApplicator,
+  type ValidationResult,
+} from '@/components/billingsdk/coupon-applicator';
 import { useState } from 'react';
 
 // Predefined coupon codes
