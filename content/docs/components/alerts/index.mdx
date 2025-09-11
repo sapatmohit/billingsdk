@@ -1,14 +1,11 @@
 ---
 title: Alerts
+description: The Alerts component displays important notifications and warnings to users, such as high usage alerts or plan expiration warnings. It supports different alert types and includes action buttons and dismiss functionality.
 ---
-
-import AlertsDemo from '@/components/alerts-demo';
-
-The Alerts component displays important notifications and warnings to users, such as high usage alerts or plan expiration warnings. It supports different alert types and includes action buttons and dismiss functionality.
 
 <Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
   <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
-    <PreviewComponents>
+    <PreviewComponents registryName="alerts">
       <AlertsDemo />
     </PreviewComponents>
   </Tab>
@@ -20,9 +17,56 @@ The Alerts component displays important notifications and warnings to users, suc
   </Tab>
 </Tabs>
 
-```tsx
-import { Alerts } from '@/components/billingsdk/alerts';
+## Installation
 
+<Tabs items={['shadcn', 'billingSDK']} defaultValue="shadcn" className="bg-transparent border-none">
+  <Tab value="shadcn" className="border-none bg-transparent p-0 mt-3">
+    <Tabs items={['npx', 'pnpm', 'yarn']} defaultValue="npx" groupId="installation-tabs">
+      <Tab value="npx">
+        ```bash
+        npx shadcn@latest add @billingsdk/alerts
+        ```
+      </Tab>
+      <Tab value="pnpm">
+        ```bash
+        pnpm dlx shadcn@latest add @billingsdk/alerts
+        ```
+      </Tab>
+      <Tab value="yarn">
+        ```bash
+        yarn dlx shadcn@latest add @billingsdk/alerts
+        ```
+      </Tab>
+    </Tabs>
+  </Tab>
+  <Tab value="billingSDK" className="border-none bg-transparent p-0 mt-3">
+    <Tabs items={['npx', 'pnpm', 'yarn']} defaultValue="npx" groupId="billingsdk-cli-tabs">
+      <Tab value="npx">
+        ```bash
+        npx @billingsdk/cli add alerts
+        ```
+      </Tab>
+      <Tab value="pnpm">
+        ```bash
+        pnpm dlx @billingsdk/cli add alerts
+        ```
+      </Tab>
+      <Tab value="yarn">
+        ```bash
+        yarn dlx @billingsdk/cli add alerts
+        ```
+      </Tab>
+    </Tabs>
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { Alerts } from "@/components/billingsdk/alerts";
+```
+
+```tsx
 <Alerts
 	alerts={[
 		{
@@ -103,18 +147,6 @@ import { Alerts } from '@/components/billingsdk/alerts';
 />
 ```
 
-<div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
-	<div className="flex items-center justify-between">
-		<div>
-			<span className="text-sm text-gray-500 dark:text-gray-400">
-				Created by{' '}
-				<a
-					href="https://github.com/sapatmohit"
-					className="text-blue-600 hover:underline dark:text-blue-400"
-				>
-					Mohit Sapat
-				</a>
-			</span>
-		</div>
-	</div>
-</div>
+### Credits
+
+- Created by [@sapatmohit](https://github.com/sapatmohit)

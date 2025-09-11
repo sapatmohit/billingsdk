@@ -1,6 +1,6 @@
 'use client';
 
-import { Alerts } from '@/registry/billingsdk/alerts';
+import { Alerts } from '@/components/billingsdk/alerts';
 
 export default function AlertsDemo() {
 	return (
