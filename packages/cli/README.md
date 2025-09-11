@@ -12,7 +12,7 @@ npx @billingsdk/cli --help
 
 This command provides two setup options:
 - **UI Components**: Sets up shadcn/ui components
-- **Framework Setup**: Configures your framework (Next.js, Express.js, or React) with Dopayments integration
+- **Framework Setup**: Configures your framework (Next.js, Express.js, or React) with payment provider integration
 
 ## Quick Start
 
@@ -25,7 +25,7 @@ npx @billingsdk/cli init
 This interactive command will:
 - Automatically detect your framework (Next.js, Express.js, or React) from your project dependencies
 - Guide you through framework selection if auto-detection fails or you prefer manual selection
-- Help you choose a payment provider (Dodo Payments)
+- Help you choose a payment provider (Dodo Payments or PayPal)
 - Set up complete project structure with API routes (for full-stack frameworks) or hooks/utilities (for React)
 - Install all necessary dependencies
 - Generate configuration files and boilerplate code
@@ -52,7 +52,7 @@ Initialize a new billing project with complete setup.
 **Options:**
 - Automatic framework detection (Next.js, Express.js, React) from project dependencies
 - Interactive framework selection as fallback or when preferred
-- Payment provider configuration
+- Payment provider configuration (Dodo Payments or PayPal)
 - Automatic dependency installation
 - Template-based file generation
 
@@ -61,15 +61,15 @@ Initialize a new billing project with complete setup.
 *Next.js (App Router):*
 ```
 your-project/
-├── app/api/(dodopayments)/
+├── app/api/(provider)/
 │   ├── checkout/route.ts
-│   ├── customer/route.ts
-│   ├── products/route.ts
+│   ├── order/[orderId]/route.ts
+│   ├── order/capture/route.ts
 │   └── webhook/route.ts
 ├── hooks/
-│   └── useBilling.ts
+│   └── useBilling.ts (or usePayPal.ts)
 ├── lib/
-│   └── dodopayments.ts
+│   └── provider.ts (dodopayments.ts or paypal.ts)
 └── .env.example
 ```
 
@@ -78,14 +78,12 @@ your-project/
 your-project/
 ├── src/
 │   ├── lib/
-│   │   └── dodopayments.ts
+│   │   └── provider.ts (dodopayments.ts or paypal.ts)
 │   └── routes/
-│       └── dodopayments/
+│       └── provider/
 │           ├── checkout.ts
-│           ├── customer.ts
-│           ├── payments.ts
-│           ├── products.ts
-│           ├── subscriptions.ts
+│           ├── order.ts
+│           ├── route.ts
 │           └── webhook.ts
 ├── .env.example
 └── package.json
@@ -95,9 +93,9 @@ your-project/
 ```
 your-project/
 ├── hooks/
-│   └── useBilling.ts
+│   └── useBilling.ts (or usePayPal.ts)
 ├── lib/
-│   └── dodopayments.ts
+│   └── provider.ts (dodopayments.ts or paypal.ts)
 └── .env.example
 ```
 
@@ -123,16 +121,24 @@ After running `init`, configure your environment:
 # Copy the generated .env.example to .env.local
 cp .env.example .env.local
 
-# Add your Dodo Payments credentials
+# For Dodo Payments
 DODO_PAYMENTS_API_KEY=your_api_key_here
 DODO_PAYMENTS_WEBHOOK_SECRET=your_webhook_secret_here
+
+# For PayPal
+PAYPAL_CLIENT_ID=your_client_id_here
+PAYPAL_CLIENT_SECRET=your_client_secret_here
+PAYPAL_WEBHOOK_ID=your_webhook_id_here
+PAYPAL_ENV=sandbox # or live
+
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ### Dependencies Installed
 
 The CLI automatically installs:
-- `dodopayments` - Payment processing library
+- `dodopayments` - Payment processing library (when Dodo Payments selected)
+- `@paypal/checkout-server-sdk` - PayPal SDK (when PayPal selected)
 - `standardwebhooks` - Webhook verification
 - `zod` - TypeScript schema validation
 
@@ -158,6 +164,7 @@ The CLI automatically detects your framework based on your project dependencies 
 
 ### Payment Providers
 - ✅ **Dodo Payments** - Fully supported
+- ✅ **PayPal** - Fully supported
 - 🚧 **Stripe** - Coming soon
 - 🚧 **Additional providers** - Based on community demand
 
@@ -196,7 +203,7 @@ chmod +x node_modules/.bin/@billingsdk/cli
 **Network issues**
 ```bash
 # Check internet connection
-# CLI downloads templates from @billingsdk/cli.com
+# CLI downloads templates from billingsdk.com
 ```
 
 ### Getting Help
