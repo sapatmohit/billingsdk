@@ -40,6 +40,12 @@ export const initCommand = new Command()
 	.action(async (options) => {
 		try {
 			intro('Welcome to Billing SDK Setup!');
+			const major = Number.parseInt(process.versions.node.split('.')[0] || '0', 10);
+			if (!Number.isFinite(major) || major < 18) {
+				cancel('Node.js >= 18 is required. Please upgrade to run this command.');
+				process.exitCode = 1;
+				return;
+			}
 
 			const detectedFramework = detectFramework();
 			const framework = await select({
