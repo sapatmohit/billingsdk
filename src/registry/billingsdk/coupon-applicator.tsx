@@ -161,26 +161,34 @@ export function CouponApplicator({
 		}).format(amount);
 	};
 
-	// Calculate discount values
-	const calculateDiscount = () => {
-		if (!validationResult?.discount || status !== 'success') return null;
+// Calculate discount values
+const calculateDiscount = () => {
+	if (!validationResult?.discount || status !== 'success') return null;
 
-		const { type, value } = validationResult.discount;
-		const savings =
-			type === 'percentage'
-				? currentPrice * (value / 100)
-				: Math.min(value, currentPrice);
+	const { type, value } = validationResult.discount;
+	const serverSavings = validationResult.savings;
+	const serverNewTotal = validationResult.newTotal;
+	let savings =
+		type === 'percentage'
+			? currentPrice * (value / 100)
+			: Math.min(value, currentPrice);
 
-		const newTotal = Math.max(0, currentPrice - savings);
+	if (typeof serverSavings === 'number' && !Number.isNaN(serverSavings)) {
+		savings = serverSavings;
+	}
+	const computedNewTotal = Math.max(0, currentPrice - savings);
+	const newTotal =
+		typeof serverNewTotal === 'number' && !Number.isNaN(serverNewTotal)
+			? Math.max(0, serverNewTotal)
+			: computedNewTotal;
 
-		return {
-			savings,
-			newTotal,
-			displaySavings: formatCurrency(savings),
-			displayNewTotal: formatCurrency(newTotal),
-		};
+	return {
+		savings,
+		newTotal,
+		displaySavings: formatCurrency(savings),
+		displayNewTotal: formatCurrency(newTotal),
 	};
-
+};
 	const discountInfo = calculateDiscount();
 
 	// Handle apply
