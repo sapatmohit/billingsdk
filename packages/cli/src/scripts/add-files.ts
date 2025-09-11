@@ -200,11 +200,30 @@ export const addFiles = async (
 				throw new Error(`Package manager '${packageManager}' not found in PATH. Please ensure it is installed and available in your system PATH.`);
 			}
 			
-			execFileSync(packageManager, args, {
-				stdio: 'inherit',
-				cwd: projectRoot, // Run from project root
-			});
-			s.stop('Dependencies installed successfully!');
+			// Try to execute the command, with fallback for Windows
+			try {
+				execFileSync(packageManager, args, {
+					stdio: 'inherit',
+					cwd: projectRoot, // Run from project root
+				});
+				s.stop('Dependencies installed successfully!');
+			} catch (execError) {
+				// On Windows, try with shell option as fallback
+				if (process.platform === 'win32') {
+					try {
+						execFileSync(packageManager, args, {
+							stdio: 'inherit',
+							cwd: projectRoot,
+							shell: true, // Use shell on Windows
+						});
+						s.stop('Dependencies installed successfully!');
+					} catch (shellError) {
+						throw new Error(`Failed to execute command with shell fallback: ${shellError instanceof Error ? shellError.message : String(shellError)}`);
+					}
+				} else {
+					throw execError;
+				}
+			}
 		} catch (error) {
 			s.stop('Dependency installation failed.');
 			console.error('Failed to install dependencies:', error instanceof Error ? error.message : String(error));
@@ -219,6 +238,8 @@ export const addFiles = async (
 			console.log('1. The package manager is installed and in your system PATH');
 			console.log('2. You have the necessary permissions to install packages');
 			console.log('3. Your internet connection is working properly');
+			console.log('\nAlternatively, you can skip dependency installation by setting the environment variable:');
+			console.log('BILLINGSDK_SKIP_INSTALL=1');
 		}
 	}
 };

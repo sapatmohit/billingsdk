@@ -53,11 +53,12 @@ Initialize a new billing project with complete setup.
 
 **Options:**
 
-- Automatic framework detection (Next.js, Express.js, React) from project dependencies
+- Automatic framework detection (Next.js, Express.js, or React) from project dependencies
 - Interactive framework selection as fallback or when preferred
 - Payment provider configuration (Dodo Payments or PayPal)
 - Automatic dependency installation
 - Template-based file generation
+- `--skip-deps` - Skip automatic dependency installation (useful for troubleshooting)
 
 **Generated Structures:**
 
@@ -177,73 +178,27 @@ The CLI automatically detects your framework based on your project dependencies 
 - 🚧 **Stripe** - Coming soon
 - 🚧 **Additional providers** - Based on community demand
 
-## Development
-
-### Building the CLI
-
-```bash
-cd packages/cli
-npm run build
-```
-
-### Development Mode
-
-```bash
-cd packages/cli
-npm run dev
-```
-
 ## Troubleshooting
+
+### Dependency Installation Issues
+
+If you encounter issues with automatic dependency installation (particularly on Windows), you can:
+
+1. Skip automatic installation and install dependencies manually:
+
+   ```bash
+   npx @billingsdk/cli init --skip-deps
+   # Then manually install dependencies as instructed
+   ```
+
+2. Set an environment variable to skip installation:
+
+   ```bash
+   BILLINGSDK_SKIP_INSTALL=1 npx @billingsdk/cli init
+   ```
+
+3. Ensure your package manager (npm, yarn, pnpm, bun) is properly installed and in your system PATH
 
 ### Common Issues
 
 **Command not found**
-
-```bash
-# Ensure you're using npx correctly
-npx @billingsdk/cli --help
-```
-
-**Permission errors**
-
-```bash
-# On Unix systems
-chmod +x node_modules/.bin/@billingsdk/cli
-```
-
-**Network issues**
-
-```bash
-# Check internet connection
-# CLI downloads templates from billingsdk.com
-```
-
-### Getting Help
-
-```bash
-# Show all commands
-npx @billingsdk/cli --help
-
-# Get help for specific command
-npx @billingsdk/cli init --help
-```
-
-## Contributing
-
-The CLI is part of the Billing SDK monorepo. See the main [CONTRIBUTING.md](../CONTRIBUTING.md) for development setup and contribution guidelines.
-
-### Adding New Commands
-
-1. Create a new command file in `src/commands/`
-2. Export the command from `src/index.ts`
-3. Update this README with documentation
-
-### Adding New Components
-
-1. Add component templates to `packages/templates/`
-2. Update the registry configuration
-3. Run `@billingsdk/cli build` to generate new registry files
-
-## License
-
-This project is licensed under the GNU General Public License (GPL). See the main [LICENSE](../LICENSE) file for details.

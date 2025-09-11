@@ -1,6 +1,7 @@
 {
   "name": "@billingsdk/cli",
   "version": "0.7.0",
+  "description": "A command-line tool for managing billing components and framework integration. Built with TypeScript and designed to work seamlessly with React, Next.js, Express.js, and other popular frameworks.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dodopayments/billingsdk.git"
@@ -17,6 +18,19 @@
     "build": "tsup src/index.ts --format esm --dts",
     "dev": "tsup src/index.ts --format esm --dts --watch"
   },
+  "keywords": [
+    "billing",
+    "payments",
+    "sdk",
+    "cli",
+    "react",
+    "nextjs",
+    "express",
+    "paypal",
+    "dodopayments"
+  ],
+  "author": "Dodo Payments Inc.",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@clack/prompts": "^0.11.0",
     "@paypal/paypal-server-sdk": "^1.1.0",

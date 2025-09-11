@@ -1,10 +1,10 @@
 import {
-    cancel,
-    intro,
-    isCancel,
-    outro,
-    select,
-    spinner,
+  cancel,
+  intro,
+  isCancel,
+  outro,
+  select,
+  spinner,
 } from '@clack/prompts';
 import { Command } from 'commander';
 import { detectFramework } from '../scripts/detect-framework.js';
@@ -36,7 +36,8 @@ export const initCommand = new Command()
 	.name('init')
 	.description('Initialize a new billing project')
 	.summary('Set up billing components and framework integration')
-	.action(async () => {
+	.option('--skip-deps', 'Skip dependency installation', false)
+	.action(async (options) => {
 		try {
 			intro('Welcome to Billing SDK Setup!');
 
@@ -92,6 +93,11 @@ export const initCommand = new Command()
 				process.exit(0);
 			}
 			const provider = providerChoice as Provider;
+
+			// Set environment variable to skip dependency installation if requested
+			if (options.skipDeps) {
+				process.env.BILLINGSDK_SKIP_INSTALL = '1';
+			}
 
 			const s = spinner();
 			s.start('Setting up your billing project...');
