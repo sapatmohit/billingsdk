@@ -11,7 +11,6 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import {
-import {
   CouponApplicator,
   type ValidationResult,
 } from '@/components/billingsdk/coupon-applicator';
