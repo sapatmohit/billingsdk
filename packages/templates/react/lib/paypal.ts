@@ -46,8 +46,8 @@ export const createPayPalOrder = async (
           },
         ],
         applicationContext: {
-          cancelUrl: `${process.env.REACT_APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/cancel`,
-          returnUrl: `${process.env.REACT_APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/return`,
+          cancelUrl: `${process.env.VITE_APP_URL || process.env.REACT_APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/cancel`,
+          returnUrl: `${process.env.VITE_APP_URL || process.env.REACT_APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/return`,
         },
       },
     });
