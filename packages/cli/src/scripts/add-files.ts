@@ -77,9 +77,15 @@ export const addFiles = async (
 	};
 
 	const result = await fetchTemplate();
-	let srcExists = fs.existsSync(path.join(process.cwd(), 'src'));
-	const addToPath = srcExists ? 'src' : '';
-
+	let addToPath = '';
+	if (framework === 'nextjs') {
+	  if (fs.existsSync(path.join(process.cwd(), 'src', 'app'))) addToPath = 'src';
+	  else if (fs.existsSync(path.join(process.cwd(), 'app'))) addToPath = 'app';
+	  else if (fs.existsSync(path.join(process.cwd(), 'src'))) addToPath = 'src';
+	  else addToPath = '';
+	} else {
+	  addToPath = fs.existsSync(path.join(process.cwd(), 'src')) ? 'src' : '';
+	}
 	for (const file of result.files) {
 		// Validate and sanitize file.target to prevent path traversal
 		const baseDir = path.resolve(process.cwd(), addToPath ?? '.');
