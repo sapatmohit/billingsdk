@@ -79,8 +79,8 @@ export const addFiles = async (
 	const result = await fetchTemplate();
 	let addToPath = '';
 	if (framework === 'nextjs') {
+	  // Prefer placing under src when src/app or src exists; never prefix with 'app'
 	  if (fs.existsSync(path.join(process.cwd(), 'src', 'app'))) addToPath = 'src';
-	  else if (fs.existsSync(path.join(process.cwd(), 'app'))) addToPath = 'app';
 	  else if (fs.existsSync(path.join(process.cwd(), 'src'))) addToPath = 'src';
 	  else addToPath = '';
 	} else {
@@ -88,8 +88,14 @@ export const addFiles = async (
 	}
 	for (const file of result.files) {
 		// Validate and sanitize file.target to prevent path traversal
-		const baseDir = path.resolve(process.cwd(), addToPath ?? '.');
-		const dest = path.resolve(process.cwd(), addToPath ?? '.', file.target);
+		const baseDir = path.resolve(process.cwd());
+		const normalizedTarget = file.target.replace(/^[./]+/, '');
+		// If addToPath === 'src', prefix unless target already starts with 'src/'
+		let targetRel = normalizedTarget;
+		if (addToPath === 'src' && !normalizedTarget.startsWith('src/')) {
+		  targetRel = path.join('src', normalizedTarget);
+		}
+		const dest = path.resolve(process.cwd(), targetRel);
 		const relativePath = path.relative(baseDir, dest);
 		const insideBase =
 			!path.isAbsolute(file.target) &&
@@ -103,9 +109,7 @@ export const addFiles = async (
 
 		const filePath = dest;
 		const dirPath = path.dirname(filePath);
-		const displayPath = addToPath
-			? path.join(addToPath, file.target)
-			: file.target;
+		const displayPath = targetRel;
 
 		try {
 			fs.mkdirSync(dirPath, { recursive: true });
