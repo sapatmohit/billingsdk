@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { ArrowLeft, Copy, Scissors, Share2 } from "lucide-react"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 
 export interface CouponGeneratorProps {
     companyName: string
@@ -41,7 +41,7 @@ export function CouponGenerator({
     onGenerate,
     onCopy,
     onShare,
-    className: _className,
+    className,
     cardClassName,
     generateButtonClassName,
     defaultCode,
@@ -128,7 +128,7 @@ export function CouponGenerator({
         setGenerated(true)
     }
 
-    const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleDiscountChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         if (value === "") {
             setDiscount("");
@@ -149,7 +149,7 @@ export function CouponGenerator({
     };
 
     return (
-        <>
+        <div className={className}>
             {generated ? (
                 <Card
                     className={`w-full max-w-md animate-in fade-in-0 slide-in-from-bottom-4 duration-700 
@@ -353,6 +353,6 @@ export function CouponGenerator({
                     </CardFooter>
                 </Card>
             )}
-        </>
+        </div>
     )
 }

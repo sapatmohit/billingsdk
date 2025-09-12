@@ -1,9 +1,5 @@
 'use client';
 
-import {
-	CouponApplicator,
-	type ValidationResult,
-} from '@/components/billingsdk/coupon-applicator';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +10,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
+import {
+import {
+  CouponApplicator,
+  type ValidationResult,
+} from '@/components/billingsdk/coupon-applicator';
 import { useState } from 'react';
 
 // Predefined coupon codes
