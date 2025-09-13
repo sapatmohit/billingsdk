@@ -1,21 +1,23 @@
 "use client"
-import { useState, useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
-import { PreviewComponents } from "@/components/preview/preview-components";
-import { PricingTableOne } from "@/components/billingsdk/pricing-table-one";
-import { plans } from "@/lib/billingsdk-config";
 import { Banner } from "@/components/billingsdk/banner";
+import { PricingTableOne } from "@/components/billingsdk/pricing-table-one";
 import { UsageMeter } from "@/components/billingsdk/usage-meter";
+import { PreviewComponents } from "@/components/preview/preview-components";
+import { ProrationPreviewDemo } from "@/components/proration-preview-demo";
 import { SubscriptionManagementDemo } from "@/components/subscription-management-demo";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UpdatePlanCardDemo } from "@/components/update-plan-card-demo";
+import { plans } from "@/lib/billingsdk-config";
+import { cn } from "@/lib/utils";
 import { CancelSubscriptionCard } from "@/registry/billingsdk/cancel-subscription-card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { AiOutlineDollar } from "react-icons/ai";
-import { FiSettings } from "react-icons/fi";
-import { BsBell } from "react-icons/bs";
-import { BiBarChartAlt2, BiArrowToTop } from "react-icons/bi";
-import { MdClose } from "react-icons/md";
 import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { AiOutlineDollar } from "react-icons/ai";
+import { BiArrowToTop, BiBarChartAlt2 } from "react-icons/bi";
+import { BsBell } from "react-icons/bs";
+import { FaCalculator } from "react-icons/fa";
+import { FiSettings } from "react-icons/fi";
+import { MdClose } from "react-icons/md";
 
 export function ComponentsSection() {
     return (
@@ -47,6 +49,7 @@ function ComponentsShowcase() {
         { id: "usage", label: "Usage Meters", icon: BiBarChartAlt2 },
         { id: "updates", label: "Plan Updates", icon: BiArrowToTop },
         { id: "cancellation", label: "Cancellation Flow", icon: MdClose },
+        { id: "proration", label: "Proration Calculator", icon: FaCalculator },
     ];
 
     useEffect(() => {
@@ -134,7 +137,7 @@ function ComponentsShowcase() {
                                             "hover:bg-muted/50 w-full sm:w-auto justify-start sm:justify-center cursor-pointer"
                                         )}
                                     >
-                                        <IconComponent className="h-4 w-4" />
+                                        <IconComponent className="h-3 w-3" />
                                         <span className="hidden sm:inline text-[10px] leading-tight">
                                             {item.label.split(' ')[0]}
                                         </span>
@@ -274,6 +277,15 @@ function ComponentsShowcase() {
                                             }}
                                             className="max-w-4xl"
                                         />
+                                    </div>
+                                </PreviewComponents>
+                            </TabsContent>
+
+                            {/* Add this new TabsContent for proration */}
+                            <TabsContent value="proration" className="mt-0">
+                                <PreviewComponents className="duration-300 animate-in fade-in text-sm max-w-none w-full border-none border rounded-lg border-fd-primary/10 bg-background min-h-[500px] md:min-h-[900px] px-0">
+                                    <div className="flex items-center justify-center w-full p-4">
+                                        <ProrationPreviewDemo />
                                     </div>
                                 </PreviewComponents>
                             </TabsContent>
