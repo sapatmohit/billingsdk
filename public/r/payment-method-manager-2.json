@@ -1,0 +1,8 @@
+{
+  "name": "payment-method-manager-2",
+  "type": "registry:block",
+  "files": [
+    "src/registry/billingsdk/payment-method-manager-2.tsx",
+    "src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx"
+  ]
+}

@@ -40,6 +40,7 @@
                 "@billingsdk/usage-table",
                 "@billingsdk/payment-method-selector",
                 "@billingsdk/payment-method-manager",
+                "@billingsdk/payment-method-manager-2",
                 "@billingsdk/billing-settings",
                 "@billingsdk/proration-preview",
                 "@billingsdk/coupon"
@@ -671,6 +672,70 @@
                 "badge",
                 "separator",
                 "tabs",
+                "utils"
+            ]
+        },
+        {
+            "name": "payment-method-manager",
+            "type": "registry:block",
+            "title": "Payment Method Manager",
+            "description": "A payment method manager component",
+            "files": [
+                {
+                    "path": "src/registry/billingsdk/payment-method-manager.tsx",
+                    "type": "registry:component",
+                    "target": "components/billingsdk/payment-method-manager.tsx"
+                },
+                {
+                    "path": "src/registry/billingsdk/demo/payment-method-manager-demo.tsx",
+                    "type": "registry:component",
+                    "target": "components/payment-method-manager-demo.tsx"
+                }
+            ],
+            "dependencies": [
+                "lucide-react"
+            ],
+            "registryDependencies": [
+                "card",
+                "button",
+                "badge",
+                "input",
+                "label",
+                "separator",
+                "dialog",
+                "tooltip",
+                "utils"
+            ]
+        },
+        {
+            "name": "payment-method-manager-2",
+            "type": "registry:block",
+            "title": "Payment Method Manager 2",
+            "description": "An enhanced payment method manager with improved UI and additional features",
+            "files": [
+                {
+                    "path": "src/registry/billingsdk/payment-method-manager-2.tsx",
+                    "type": "registry:component",
+                    "target": "components/billingsdk/payment-method-manager-2.tsx"
+                },
+                {
+                    "path": "src/registry/billingsdk/demo/payment-method-manager-2-demo.tsx",
+                    "type": "registry:component",
+                    "target": "components/payment-method-manager-2-demo.tsx"
+                }
+            ],
+            "dependencies": [
+                "lucide-react"
+            ],
+            "registryDependencies": [
+                "card",
+                "button",
+                "badge",
+                "input",
+                "label",
+                "separator",
+                "dialog",
+                "tooltip",
                 "utils"
             ]
         }
