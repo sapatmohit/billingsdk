@@ -675,7 +675,7 @@ export function PaymentMethodManager2({
 				)}
 
 				{/* Error State */}
-				{error && <ErrorState error={error} />}
+				{error ? <ErrorState error={error} /> : null}
 
 				{/* Loading State */}
 				{isLoading && paymentMethods.length === 0 && <LoadingSkeleton />}
