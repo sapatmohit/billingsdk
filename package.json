@@ -67,7 +67,6 @@
 		"@types/express": "^5.0.3",
 		"@eslint/js": "^9.14.0",
 		"@next/eslint-plugin-next": "^15.5.0",
-		"@types/next": "^15.5.0",
 		"@tailwindcss/postcss": "^4.1.11",
 		"@types/inquirer": "^9.0.9",
 		"@types/mdx": "^2.0.13",
