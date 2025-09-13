@@ -22,8 +22,9 @@
     "@billingsdk/usage-table",
     "@billingsdk/payment-method-selector",
     "@billingsdk/payment-method-manager",
-    "@billingsdk/billing-setting",
-    "@billingsdk/proration-preview"
+    "@billingsdk/billing-settings",
+    "@billingsdk/proration-preview",
+    "@billingsdk/coupon"
   ],
   "files": []
 }
