@@ -118,12 +118,9 @@ export function PaymentMethodManager2Demo() {
 
    const handleEdit = (id: string, changes?: Partial<PaymentMethod2>) => {
       console.log('Edit payment method', id, changes);
-      // In a real app, this would open a dialog or redirect to a payment method edit flow
-      alert(
-         `Opening edit dialog for payment method ${id} with changes: ${JSON.stringify(
-            changes
-         )}...`
-      );
+      if (changes && Object.keys(changes).length) {
+         setPaymentMethods(prev => prev.map(m => (m.id === id ? { ...m, ...changes } : m)));
+      }
    };
 
    const handleRemove = (id: string) => {
