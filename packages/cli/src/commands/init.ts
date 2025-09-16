@@ -1,5 +1,5 @@
-import { Command } from "commander";
 import { cancel, intro, isCancel, outro, select, spinner } from "@clack/prompts";
+import { Command } from "commander";
 import { addFiles } from "../scripts/add-files.js";
 import { detectFramework } from "../scripts/detect-framework.js";
 
@@ -22,23 +22,34 @@ export const initCommand = new Command()
         initialValue: detectedFramework ?? undefined  // cursor will already be on detected framework
       });
 
+      // Dynamically determine payment provider options based on selected framework
+      // PayPal is currently only available for Express framework
+      const providerOptions = framework === "express"
+        ? [
+            { value: "dodopayments", label: "Dodo Payments" },
+            { value: "paypal", label: "PayPal" }
+          ]
+        : [
+            { value: "dodopayments", label: "Dodo Payments" }
+          ];
+
       const providerChoice = await select({
         message: "Which payment provider would you like to use? (Adding more providers soon)",
-        options: [
-          { value: "dodopayments", label: "Dodo Payments" },
-        ],
+        options: providerOptions,
       });
 
       if (isCancel(providerChoice)) {
         cancel("Setup cancelled.");
         process.exit(0);
       }
-      const provider = providerChoice as "dodopayments";
 
       const s = spinner();
       s.start("Setting up your billing project...");
       try {
-        await addFiles(framework as "nextjs" | "express" | "react", provider as "dodopayments");
+        await addFiles(
+          framework as "nextjs" | "express" | "react", 
+          providerChoice as "dodopayments" | "paypal"
+        );
         s.stop("Setup completed successfully!");
       } catch (error) {
         s.stop("Setup failed!");
