@@ -9,11 +9,13 @@ import { CancelSubscriptionDialog } from "@/components/billingsdk/cancel-subscri
 import { UpdatePlanCard } from "@/components/billingsdk/update-plan-card";
 import { UpdatePlanDialog } from "@/components/billingsdk/update-plan-dialog";
 import { SubscriptionManagement } from "@/components/billingsdk/subscription-management";
+import { UsageBasedPricing } from "@/components/billingsdk/usage-based-pricing";
 import { UsageMeter } from "@/components/billingsdk/usage-meter";
 import { UsageTable } from "@/components/billingsdk/usage-table";
 import { InvoiceHistory } from "@/components/billingsdk/invoice-history";
 import { PaymentMethodSelector } from "@/components/billingsdk/payment-method-selector";
 import { PricingTableFive } from "@/components/billingsdk/pricing-table-five";
+import { PricingTableSix } from "@/components/billingsdk/pricing-table-six";
 
 export const componentRegistry: ComponentConfig[] = [
   {
@@ -41,6 +43,35 @@ export const componentRegistry: ComponentConfig[] = [
       autoDismiss: 5000,
       onDismiss: () => console.log("Banner dismissed"),
     },
+  },
+  {
+    id: "usage-based-pricing",
+    name: "Usage Based Pricing",
+    description: "Interactive usage pricing slider with ruler ticks and animated price",
+    category: "subscription",
+    component: UsageBasedPricing,
+    imports: ["@/components/billingsdk/usage-based-pricing"],
+    defaultCode: `<UsageBasedPricing
+  min={4000}
+  max={25000}
+  step={250}
+  defaultValue={4000}
+  currency="$"
+  basePrice={39.99}
+  includedCredits={4000}
+  unitPricePerCredit={0.01}
+/>`,
+    defaultProps: {
+      min: 4000,
+      max: 25000,
+      step: 250,
+      defaultValue: 4000,
+      currency: "$",
+      basePrice: 39.99,
+      includedCredits: 4000,
+      unitPricePerCredit: 0.01,
+    },
+  
   },
   {
     id: "pricing-table-one",
@@ -711,6 +742,112 @@ export const componentRegistry: ComponentConfig[] = [
     ],
       title: "Pricing Plans",
       description: "Find the right plan for your business",
+      onPlanSelect: (planId: string) => console.log('Selected plan:', planId),
+    },
+  },
+  {
+    id: "pricing-table-six",
+    name: "Pricing Table Six",
+    description: "Modern pricing table with contact us plan",
+    category: "pricing",
+    component: PricingTableSix,
+    imports: ["@/components/billingsdk/pricing-table-six"],
+    defaultCode: `<PricingTableSix
+  plans={[
+        {
+          id: "basic",
+          title: "Starter",
+          description: "Best for individuals and small teams",
+          monthlyPrice: 0,
+          yearlyPrice: 0,
+          features: [
+            "Core tools with modest usage allowances",
+            "Getting-started guides to launch quickly",
+            "Fundamental analytics and reports",
+            "Standard email assistance",
+          ]
+        },
+        {
+          id: "premium",
+          title: "Growth",
+          description: "Built for expanding teams",
+          monthlyPrice: 50,
+          yearlyPrice: 500,
+          isFeatured: true,
+          features: [
+            "Advanced tools with priority updates",
+            "Onboarding guides to ramp fast",
+            "Live chat support access",
+            "Automation to streamline workflows",
+            "Premium tutorials and webinars access",
+          ]
+        },
+        {
+          id: "custom",
+          title: "Enterprise",
+          description: "Tailored for specialized requirements",
+          monthlyPrice: 99,
+          yearlyPrice: 990,
+          isCustom: true,
+          features: [
+            "Unlimited users, projects, and data",
+            "Resources that scale with your needs",
+            "24/7 priority support",
+            "White-label reports, dashboards, and UIs",
+            "Support for custom API integrations",
+            "Works with advanced or proprietary systems",
+          ]
+        },
+      ]}
+  onPlanSelect={(planId) => console.log('Selected plan:', planId)}
+/>`,
+    defaultProps: {
+      plans: [
+        {
+          id: "basic",
+          title: "Starter",
+          description: "Best for individuals and small teams",
+          monthlyPrice: 0,
+          yearlyPrice: 0,
+          features: [
+            "Core tools with modest usage allowances",
+            "Getting-started guides to launch quickly",
+            "Fundamental analytics and reports",
+            "Standard email assistance",
+          ]
+        },
+        {
+          id: "premium",
+          title: "Growth",
+          description: "Built for expanding teams",
+          monthlyPrice: 50,
+          yearlyPrice: 500,
+          isFeatured: true,
+          features: [
+            "Advanced tools with priority updates",
+            "Onboarding guides to ramp fast",
+            "Live chat support access",
+            "Automation to streamline workflows",
+            "Premium tutorials and webinars access",
+          ]
+        },
+        {
+          id: "custom",
+          title: "Enterprise",
+          description: "Tailored for specialized requirements",
+          monthlyPrice: 99,
+          yearlyPrice: 990,
+          isCustom: true,
+          features: [
+            "Unlimited users, projects, and data",
+            "Resources that scale with your needs",
+            "24/7 priority support",
+            "White-label reports, dashboards, and UIs",
+            "Support for custom API integrations",
+            "Works with advanced or proprietary systems",
+          ]
+        },
+      ],
       onPlanSelect: (planId: string) => console.log('Selected plan:', planId),
     },
   },
