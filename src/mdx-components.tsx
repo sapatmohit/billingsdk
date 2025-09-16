@@ -86,12 +86,11 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     PaymentDetailsDemo,
     ProrationPreviewDemo,
     CouponDemo,
-	 BillingSummaryCardDemo,
-	 CouponApplicatorDemo,
-	  BillingSummaryCardDemo,
+    BillingSummaryCardDemo,
+    CouponApplicatorDemo,
     UpcomingChargesDemo,
-	  PricingTableSixDemo,
-	 BillingSettings2Demo,
+    PricingTableSixDemo,
+    BillingSettings2Demo,
     UsageBasedPricingDemo
   };
 }
