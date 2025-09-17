@@ -34,9 +34,27 @@
       "content": "import { NextRequest } from 'next/server';\nimport { getPayPalOrder } from '../../../../lib/paypal';\n\n/**\n * Get PayPal order details\n * GET /api/(paypal)/order/[orderId]\n * \n * Path parameters:\n * - orderId: string (required)\n */\nexport async function GET(\n  req: NextRequest,\n  { params }: { params: { orderId: string } }\n) {\n  try {\n    const { orderId } = params;\n    \n    if (!orderId) {\n      return new Response(\n        JSON.stringify({ error: 'Order ID is required' }),\n        { status: 400, headers: { 'Content-Type': 'application/json' } }\n      );\n    }\n    \n    const order = await getPayPalOrder(orderId);\n    \n    return new Response(\n      JSON.stringify(order),\n      { status: 200, headers: { 'Content-Type': 'application/json' } }\n    );\n  } catch (error) {\n    console.error('Error retrieving PayPal order:', error);\n    \n    return new Response(\n      JSON.stringify({ error: 'Failed to retrieve PayPal order' }),\n      { status: 500, headers: { 'Content-Type': 'application/json' } }\n    );\n  }\n}\n"
     },
     {
-      "target": "app/api/(paypal)/webhook/route.ts",
-      "type": "template",
-      "content": "import { NextResponse } from \"next/server\";\n\n// Minimal webhook receiver for PayPal events. Typically you'd verify the\n// transmission using PayPal's verification API. Here we log and acknowledge.\nexport async function POST(request: Request) {\n  try {\n    const body = await request.json().catch(() => ({}));\n    // In a real implementation, verify the transmission and signature headers here.\n    console.log(\"[paypal webhook] event:\", body);\n    return NextResponse.json({ received: true });\n  } catch (error) {\n    console.error(\"[paypal webhook] error:\", error);\n    return NextResponse.json({ error: \"Webhook processing failed\" }, { status: 500 });\n  }\n}\n"
+import { NextResponse } from "next/server";
+
+// Minimal webhook receiver for PayPal events. Typically you'd verify the
+// transmission using PayPal's verification API. Here we log and acknowledge.
+export async function POST(request: Request) {
+  try {
+    const body = await request.json().catch(() => ({}));
+    const webhookId = process.env.PAYPAL_WEBHOOK_ID;
+    if (!webhookId) {
+      console.warn("[paypal webhook] PAYPAL_WEBHOOK_ID not set; refusing to accept events.");
+      return NextResponse.json({ error: "Webhook verification not configured" }, { status: 501 });
+    }
+    // TODO: Verify PayPal webhook signature here before acknowledging.
+    console.log("[paypal webhook] event headers:", Object.fromEntries((request as any).headers ?? []));
+    console.log("[paypal webhook] event body:", body);
+    return NextResponse.json({ received: true });
+  } catch (error) {
+    console.error("[paypal webhook] error:", error);
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
+  }
+}
     },
     {
       "target": ".env.example",
