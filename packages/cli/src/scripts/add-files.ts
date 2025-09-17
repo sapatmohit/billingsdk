@@ -1,12 +1,49 @@
 import path from "path";
 import fs from "fs";
+import { fileURLToPath } from "node:url";
 import { Result } from "../types/registry.js";
 import { confirm, spinner } from "@clack/prompts";
 import { execSync } from "child_process";
 
-export const addFiles = async (framework: "nextjs" | "express" | "react" | "fastify" | "hono", provider: "dodopayments" | "stripe") => {
-    const result = await fetch(`https://billingsdk.com/tr/${framework}-${provider}.json`)
-        .then(res => res.json()) as Result;
+export const addFiles = async (
+  framework: "nextjs" | "express" | "react" | "fastify" | "hono",
+  provider: "dodopayments" | "stripe" | "paypal"
+) => {
+    // __dirname is not available in ESM; derive it from import.meta.url
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    // Resolve registry source (local only)
+    const filename = `${framework}-${provider}.json`;
+    const explicitLocal = process.env.BILLINGSDK_REGISTRY_LOCAL_PATH;
+    const candidates = [
+        explicitLocal,
+        path.join(process.cwd(), "public", "tr"),
+        path.join(process.cwd(), "..", "..", "public", "tr"),
+        path.join(__dirname, "..", "..", "..", "public", "tr"),
+        path.join(__dirname, "..", "..", "public", "tr"),
+    ].filter(Boolean) as string[];
+
+    let result: Result | null = null;
+    for (const base of candidates) {
+        const localPath = path.join(base, filename);
+        try {
+            if (fs.existsSync(localPath)) {
+                const raw = fs.readFileSync(localPath, "utf8");
+                result = JSON.parse(raw) as Result;
+                break;
+            }
+        } catch {
+            // try next candidate silently
+        }
+    }
+    if (!result) {
+        throw new Error(
+            `Unable to load local registry file "${filename}".\n` +
+            `Set BILLINGSDK_REGISTRY_LOCAL_PATH to your registry directory or ensure public/tr exists near your CWD.`
+        );
+    }
+    if (!result) {
+        throw new Error("Failed to load template registry result");
+    }
     let srcExists = fs.existsSync(path.join(process.cwd(), "src"));
     const addToPath = srcExists ? "src" : "";
 

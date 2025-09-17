@@ -35,4 +35,4 @@ program.addCommand(addCommand);
 program.addCommand(buildCommand);
 
 // Parse arguments
-program.parse();
+await program.parseAsync();
