@@ -8,6 +8,15 @@ import { CheckoutPaymentIntent, Client, Environment, OrdersController } from '@p
  */
 
 // Create PayPal client
+const missing = [
+  !process.env.PAYPAL_CLIENT_ID && "PAYPAL_CLIENT_ID",
+  !process.env.PAYPAL_CLIENT_SECRET && "PAYPAL_CLIENT_SECRET",
+  !process.env.PAYPAL_ENV && "PAYPAL_ENV",
+].filter(Boolean);
+if (missing.length) {
+  throw new Error(`Missing required PayPal env vars: ${missing.join(", ")}`);
+}
+
 const paypalClient = new Client({
   clientCredentialsAuthCredentials: {
     oAuthClientId: process.env.PAYPAL_CLIENT_ID || '',
