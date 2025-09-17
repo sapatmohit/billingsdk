@@ -29,6 +29,7 @@
                 "@billingsdk/pricing-table-four",
                 "@billingsdk/pricing-table-five",
                 "@billingsdk/pricing-table-six",
+                "@billingsdk/pricing-table-seven",
                 "@billingsdk/cancel-subscription-dialog",
                 "@billingsdk/cancel-subscription-card",
                 "@billingsdk/update-plan-dialog",
@@ -293,6 +294,38 @@
             "dependencies": [
                 "lucide-react",
                 "class-variance-authority",
+                "framer-motion"
+            ],
+            "registryDependencies": [
+                "button",
+                "card",
+                "utils"
+            ]
+        },
+        {
+            "name": "pricing-table-seven",
+            "type": "registry:block",
+            "title": "Pricing Table Seven",
+            "description": "A modern pricing table component with contact us plan",
+            "files": [
+                {
+                    "path": "src/registry/billingsdk/pricing-table-seven.tsx",
+                    "type": "registry:component",
+                    "target": "components/billingsdk/pricing-table-seven.tsx"
+                },
+                {
+                    "path": "src/registry/billingsdk/demo/pricing-table-seven-demo.tsx",
+                    "type": "registry:component",
+                    "target": "components/pricing-table-seven-demo.tsx"
+                },
+                {
+                    "path": "src/registry/lib/billingsdk-config.ts",
+                    "type": "registry:lib",
+                    "target": "lib/billingsdk-config.ts"
+                }
+            ],
+            "dependencies": [
+                "lucide-react",
                 "framer-motion"
             ],
             "registryDependencies": [

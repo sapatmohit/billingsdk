@@ -11,6 +11,7 @@
     "@billingsdk/pricing-table-four",
     "@billingsdk/pricing-table-five",
     "@billingsdk/pricing-table-six",
+    "@billingsdk/pricing-table-seven",
     "@billingsdk/cancel-subscription-dialog",
     "@billingsdk/cancel-subscription-card",
     "@billingsdk/update-plan-dialog",
