@@ -134,9 +134,47 @@ export const usePayPal = () => {
       "content": "import { NextResponse } from \"next/server\";\n\n// Provides PayPal client configuration for the frontend.\n// In many integrations, a client token can be generated via PayPal APIs,\n// but for basic button SDK usage, exposing the client ID is sufficient.\nexport async function GET() {\n  try {\n    const clientId = process.env.PAYPAL_CLIENT_ID || \"\";\n    if (!clientId) {\n      return NextResponse.json({ error: \"PAYPAL_CLIENT_ID is not set\" }, { status: 500 });\n    }\n    return NextResponse.json({ clientId });\n  } catch (error) {\n    console.error(\"[paypal client-token] error:\", error);\n    return NextResponse.json({ error: \"Failed to get client token\" }, { status: 500 });\n  }\n}\n"
     },
     {
-      "target": "app/api/(paypal)/checkout/route.ts",
-      "type": "template",
-      "content": "import { NextRequest } from 'next/server';\nimport { createPayPalOrder } from '../../../lib/paypal';\n\n/**\n * Create a PayPal order for checkout\n * POST /api/(paypal)/checkout\n * \n * This endpoint is called by the frontend to create a PayPal order\n * before redirecting the user to PayPal for approval.\n * \n * Request body:\n * - amount: string (required)\n * - currency: string (optional, defaults to 'USD')\n * - description: string (optional)\n */\nexport async function POST(req: NextRequest) {\n  try {\n    const { amount, currency = 'USD', description = 'BillingSDK Purchase' } = await req.json();\n    \n    if (!amount) {\n      return new Response(\n        JSON.stringify({ error: 'Amount is required' }),\n        { status: 400, headers: { 'Content-Type': 'application/json' } }\n      );\n    }\n    \n    const orderId = await createPayPalOrder(amount, currency, description);\n    \n    return new Response(\n      JSON.stringify({ id: orderId }),\n      { status: 200, headers: { 'Content-Type': 'application/json' } }\n    );\n  } catch (error) {\n    console.error('Error creating PayPal checkout order:', error);\n    \n    return new Response(\n      JSON.stringify({ error: 'Failed to create PayPal checkout order' }),\n      { status: 500, headers: { 'Content-Type': 'application/json' } }\n    );\n  }\n}\n"
+import { NextRequest } from 'next/server';
+import { createPayPalOrder } from '../../../../lib/paypal';
+
+/**
+ * Create a PayPal order for checkout
+ * POST /api/(paypal)/checkout
+ * 
+ * This endpoint is called by the frontend to create a PayPal order
+ * before redirecting the user to PayPal for approval.
+ * 
+ * Request body:
+ * - amount: string (required)
+ * - currency: string (optional, defaults to 'USD')
+ * - description: string (optional)
+ */
+export async function POST(req: NextRequest) {
+  try {
+    const { amount, currency = 'USD', description = 'BillingSDK Purchase' } = await req.json();
+    
+    if (!amount) {
+      return new Response(
+        JSON.stringify({ error: 'Amount is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const orderId = await createPayPalOrder(amount, currency, description);
+    
+    return new Response(
+      JSON.stringify({ id: orderId }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
+  } catch (error) {
+    console.error('Error creating PayPal checkout order:', error);
+    
+    return new Response(
+      JSON.stringify({ error: 'Failed to create PayPal checkout order' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+}
     },
     {
 import { NextRequest } from 'next/server';
