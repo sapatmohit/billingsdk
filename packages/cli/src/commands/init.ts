@@ -30,16 +30,16 @@ export const initCommand = new Command()
       }
 
       const frameworkValue = framework as "nextjs" | "express" | "react" | "fastify" | "hono";
-
-      const providerOptions =
-        frameworkValue === "express" || frameworkValue === "hono"
-          ? [
-              { value: "dodopayments", label: "Dodo Payments" },
-              { value: "stripe", label: "Stripe payments" },
-            ]
-          : [
-              { value: "dodopayments", label: "Dodo Payments" },
-            ];
+      // Build provider options. On this branch, expose PayPal for Next.js only.
+      const providerOptions: { value: "dodopayments" | "stripe" | "paypal"; label: string }[] = [
+        { value: "dodopayments", label: "Dodo Payments" }
+      ];
+      if (frameworkValue === "express" || frameworkValue === "hono") {
+        providerOptions.push({ value: "stripe", label: "Stripe payments" });
+      }
+      if (frameworkValue === "nextjs") {
+        providerOptions.push({ value: "paypal", label: "PayPal" });
+      }
 
       const providerChoice = await select({
         message: "Which payment provider would you like to use? (Adding more providers soon)",
@@ -50,7 +50,7 @@ export const initCommand = new Command()
         cancel("Setup cancelled.");
         process.exit(0);
       }
-      const provider = providerChoice as "dodopayments" | "stripe";
+      const provider = providerChoice as "dodopayments" | "stripe" | "paypal";
 
       const s = spinner();
       s.start("Setting up your billing project...");
