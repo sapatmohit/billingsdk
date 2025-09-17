@@ -72,7 +72,7 @@ export default function CouponApplicatorDemo() {
 
 	return (
 		<div className="flex w-full flex-col items-center justify-center p-4">
-			<Card className="w-full max-w-md border-border shadow-lg">
+			<Card className="w-full max-w-3xl border-border shadow-lg">
 				<CardHeader className="pb-4">
 					<div className="flex items-start justify-between">
 						<div className="space-y-1">
@@ -92,9 +92,9 @@ export default function CouponApplicatorDemo() {
 					</div>
 				</CardHeader>
 
-				<CardContent className="space-y-6">
+				<CardContent className="grid gap-6 md:grid-cols-2">
 					{/* Order Summary */}
-					<div className="rounded-xl border bg-gradient-to-r from-primary/5 to-primary/10 p-5 space-y-4">
+					<div className="rounded-xl border border-border bg-card p-5 space-y-4">
 						<div className="flex items-center justify-between">
 							<span className="text-muted-foreground">Subtotal</span>
 							<span className="font-medium">${subtotal.toFixed(2)}</span>

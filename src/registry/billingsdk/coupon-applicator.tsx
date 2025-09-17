@@ -246,7 +246,7 @@ const calculateDiscount = () => {
 	}, []);
 
 	return (
-		<div className={cn('w-full max-w-md', className)}>
+		<div className={cn('w-full', className)}>
 			<div className="space-y-5">
 				<div className="flex items-center gap-3">
 					<div className="rounded-lg bg-primary/10 p-2">
@@ -323,16 +323,16 @@ const calculateDiscount = () => {
 					</div>
 				) : (
 					<div className="space-y-4">
-						<div className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+						<div className="flex items-center justify-between p-4 rounded-lg border border-border bg-muted/50 text-foreground border-l-4 border-l-emerald-500">
 							<div className="flex items-center gap-3">
-								<div className="rounded-full bg-emerald-100 dark:bg-emerald-900/50 p-2">
+								<div className="rounded-full bg-emerald-500/10 p-2">
 									<CheckCircleIcon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
 								</div>
 								<div>
-									<p className="font-semibold text-emerald-800 dark:text-emerald-200">
+									<p className="font-semibold">
 										Coupon Applied
 									</p>
-									<p className="text-sm text-emerald-600 dark:text-emerald-400 font-mono">
+									<p className="text-sm text-muted-foreground font-mono">
 										{code.toUpperCase()}
 									</p>
 								</div>
@@ -349,7 +349,7 @@ const calculateDiscount = () => {
 						</div>
 
 						{discountInfo && (
-							<div className="rounded-xl border bg-gradient-to-br from-muted/50 to-muted/30 p-5 space-y-4 shadow-sm">
+							<div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-sm">
 								<div className="flex justify-between items-center">
 									<span className="text-muted-foreground">Discount</span>
 									<span className="font-semibold text-lg">
@@ -392,12 +392,12 @@ const calculateDiscount = () => {
 								className={cn(
 									'rounded-lg border p-4 text-sm flex items-start gap-3',
 									status === 'error'
-										? 'border-destructive/50 bg-destructive/5 text-destructive'
-										: 'border-emerald-500/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+										? 'border-destructive/50 bg-destructive/5 text-destructive border-l-4 border-l-destructive'
+										: 'border border-border bg-muted/50 text-foreground border-l-4 border-l-emerald-500'
 								)}
 							>
 								{status === 'success' ? (
-									<CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+									<CheckCircleIcon className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
 								) : status === 'error' ? (
 									<XCircleIcon className="h-5 w-5 flex-shrink-0 mt-0.5 text-destructive" />
 								) : null}
