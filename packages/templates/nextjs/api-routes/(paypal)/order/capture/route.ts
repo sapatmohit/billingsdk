@@ -8,26 +8,27 @@ import { capturePayPalOrder } from '../../../../lib/paypal';
  * Request body:
  * - orderId: string (required)
  */
-export async function POST(req: NextRequest) {
+import { NextRequest } from 'next/server';
+import { capturePayPalOrder } from '../../../../../lib/paypal';
+
+export async function POST(_req: NextRequest, { params }: { params: { orderId?: string } }) {
   try {
-    const { orderId } = await req.json();
-    
+    const orderId = params?.orderId;
     if (!orderId) {
       return new Response(
         JSON.stringify({ error: 'Order ID is required' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
-    
     const capture = await capturePayPalOrder(orderId);
-    
+
     return new Response(
       JSON.stringify(capture),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
     console.error('Error capturing PayPal order:', error);
-    
+
     return new Response(
       JSON.stringify({ error: 'Failed to capture PayPal order' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
