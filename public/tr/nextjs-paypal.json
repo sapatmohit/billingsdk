@@ -144,9 +144,45 @@ export const usePayPal = () => {
       "content": "import { NextRequest } from 'next/server';\nimport { capturePayPalOrder } from '../../../../lib/paypal';\n\n/**\n * Capture a PayPal order\n * POST /api/(paypal)/order/capture\n * \n * Request body:\n * - orderId: string (required)\n */\nexport async function POST(req: NextRequest) {\n  try {\n    const { orderId } = await req.json();\n    \n    if (!orderId) {\n      return new Response(\n        JSON.stringify({ error: 'Order ID is required' }),\n        { status: 400, headers: { 'Content-Type': 'application/json' } }\n      );\n    }\n    \n    const capture = await capturePayPalOrder(orderId);\n    \n    return new Response(\n      JSON.stringify(capture),\n      { status: 200, headers: { 'Content-Type': 'application/json' } }\n    );\n  } catch (error) {\n    console.error('Error capturing PayPal order:', error);\n    \n    return new Response(\n      JSON.stringify({ error: 'Failed to capture PayPal order' }),\n      { status: 500, headers: { 'Content-Type': 'application/json' } }\n    );\n  }\n}\n"
     },
     {
-      "target": "app/api/(paypal)/order/[orderId]/route.ts",
-      "type": "template",
-      "content": "import { NextRequest } from 'next/server';\nimport { getPayPalOrder } from '../../../../lib/paypal';\n\n/**\n * Get PayPal order details\n * GET /api/(paypal)/order/[orderId]\n * \n * Path parameters:\n * - orderId: string (required)\n */\nexport async function GET(\n  req: NextRequest,\n  { params }: { params: { orderId: string } }\n) {\n  try {\n    const { orderId } = params;\n    \n    if (!orderId) {\n      return new Response(\n        JSON.stringify({ error: 'Order ID is required' }),\n        { status: 400, headers: { 'Content-Type': 'application/json' } }\n      );\n    }\n    \n    const order = await getPayPalOrder(orderId);\n    \n    return new Response(\n      JSON.stringify(order),\n      { status: 200, headers: { 'Content-Type': 'application/json' } }\n    );\n  } catch (error) {\n    console.error('Error retrieving PayPal order:', error);\n    \n    return new Response(\n      JSON.stringify({ error: 'Failed to retrieve PayPal order' }),\n      { status: 500, headers: { 'Content-Type': 'application/json' } }\n    );\n  }\n}\n"
+import { NextRequest } from 'next/server';
+import { getPayPalOrder } from '../../../../../lib/paypal';
+
+/**
+ * Get PayPal order details
+ * GET /api/(paypal)/order/[orderId]
+ * 
+ * Path parameters:
+ * - orderId: string (required)
+ */
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { orderId: string } }
+) {
+  try {
+    const { orderId } = params;
+    
+    if (!orderId) {
+      return new Response(
+        JSON.stringify({ error: 'Order ID is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const order = await getPayPalOrder(orderId);
+    
+    return new Response(
+      JSON.stringify(order),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
+  } catch (error) {
+    console.error('Error retrieving PayPal order:', error);
+    
+    return new Response(
+      JSON.stringify({ error: 'Failed to retrieve PayPal order' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+}
     },
     {
 import { NextResponse } from "next/server";
