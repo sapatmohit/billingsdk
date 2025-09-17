@@ -1,6 +1,3 @@
-import { NextRequest } from 'next/server';
-import { capturePayPalOrder } from '../../../../lib/paypal';
-
 /**
  * Capture a PayPal order
  * POST /api/(paypal)/order/capture
@@ -9,7 +6,7 @@ import { capturePayPalOrder } from '../../../../lib/paypal';
  * - orderId: string (required)
  */
 import { NextRequest } from 'next/server';
-import { capturePayPalOrder } from '../../../../../lib/paypal';
+import { capturePayPalOrder } from '../../../../lib/paypal';
 
 export async function POST(_req: NextRequest, { params }: { params: { orderId?: string } }) {
   try {
