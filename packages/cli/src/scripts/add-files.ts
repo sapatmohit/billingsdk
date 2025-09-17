@@ -5,12 +5,6 @@ import { Result } from "../types/registry.js";
 import { confirm, spinner } from "@clack/prompts";
 import { execSync } from "child_process";
 
-// packages/cli/src/types/registry.ts (excerpt)
-export type Result = {
-  // ... other fields ...
-  framework: "nextjs" | "express" | "react" | "fastify" | "hono";
-  // ... other fields ...
-};
     // __dirname is not available in ESM; derive it from import.meta.url
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     // Resolve registry source (local only)
